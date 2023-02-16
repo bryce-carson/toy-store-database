@@ -58,3 +58,7 @@ Until files are created and checked into the Git repository, GitHub and Git will
 
 23 directories
 </pre>
+
+<div align="center">
+<img src="https://i.kym-cdn.com/photos/images/newsfeed/002/126/158/acc.png">
+</div>
