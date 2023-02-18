@@ -47,7 +47,7 @@ public class BoardGame extends Toy {
 	public BoardGame(String serialNumber, String name, String brand, double price, int availableCount, int appropriateAge, String numOfPlayers, String designer) {
 		super(serialNumber, name, brand, price, availableCount, appropriateAge);
 		
-		String[] numOfPlayersStrArray = numOfPlayers.split(numOfPlayers, 2); // "Parse-out" no more than two strings.
+		String[] numOfPlayersStrArray = numOfPlayers.split("-", 2); // "Parse-out" no more than two strings.
 		this.minNumOfPlayers = Integer.parseInt(numOfPlayersStrArray[0]);
 		this.maxNumOfPlayers = Integer.parseInt(numOfPlayersStrArray[1]);
 		
@@ -79,6 +79,6 @@ public class BoardGame extends Toy {
 
 	@Override
 	public String format() {
-		return super.toString() + getMinNumPlayers() + "," + getMaxNumPlayers() + ";" + getDesigner();
+		return super.toString() + getMinNumPlayers() + "-" + getMaxNumPlayers() + ";" + getDesigner();
 	}
 }
