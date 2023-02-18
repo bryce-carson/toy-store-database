@@ -9,7 +9,7 @@ package ca.cyberscientist.toystoredb.model;
  */
 public abstract class Toy {
 
-	private int serialNumber;
+	private String serialNumber;
 	private String name;
 	private String brand;
 	private double price;
@@ -20,16 +20,8 @@ public abstract class Toy {
 	 * @return the serialNumber
 	 */
 	
-	public int getSerialNumber() {
+	public String getSerialNumber() {
 		return serialNumber;
-	}
-	
-	/**
-	 * @param serialNumber the serialNumber to set
-	 */
-	
-	public void setSerialNumber(int serialNumber) {
-		this.serialNumber = serialNumber;
 	}
 	
 	/**
@@ -39,12 +31,6 @@ public abstract class Toy {
 		return name;
 	}
 	
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	/**
 	 * @return the brand
@@ -53,25 +39,12 @@ public abstract class Toy {
 		return brand;
 	}
 	
-	/**
-	 * @param brand the brand to set
-	 */
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
 	
 	/**
 	 * @return the price
 	 */
 	public double getPrice() {
 		return price;
-	}
-	
-	/**
-	 * @param price the price to set
-	 */
-	public void setPrice(double price) {
-		this.price = price;
 	}
 	
 	/**
@@ -96,11 +69,46 @@ public abstract class Toy {
 	}
 	
 	/**
-	 * @param appropriateAge the appropriateAge to set
+	 * @param serialNumber		The serial number to associate with the toy.
+	 * @param name 				The name to associate with the toy. 
+	 * @param brand				The brand name (manufacturer) to associate with the toy.
+	 * @param price				The cost of the toy in dollars and cents.
+	 * @param availableCount	The number of this toy in inventory.
+	 * @param appropriateAge	The minimum recommended age for this toy.
 	 */
-	public void setAppropriateAge(int appropriateAge) {
+	public Toy(String serialNumber, String name, String brand, double price, int availableCount, int appropriateAge) {
+		this.serialNumber = serialNumber;
+		this.name = name;
+		this.brand = brand;
+		this.price = price;
+		this.availableCount = availableCount;
 		this.appropriateAge = appropriateAge;
 	}
+
+	/** A constructor to use for generating a place-holder Animal.
+	 * 
+	 */
+	public Toy() {
+		// Helpfully, this doesn't need to do anything.
+	}
+
+	/**The toString method of all toys, providing a drier way to format each object for saving to disk. Ends with a semicolon so each toy type can merely append the next item.
+	 * @return String the pretty-printable form of the object.
+	 */
+	@Override
+	public String toString() {
+		return getSerialNumber() + ";" +
+				getName() + ";" +
+				getBrand() + ";" +
+				getPrice() + ";" +
+				getAvailableCount() + ";" +
+				getAppropriateAge() + ";";
+	}
 	
-	// TODO Ensure that every sub-class' constructor uses these fields; this is done with an abstract constructor, right?
+	/** Ensure that each subclass implements a format method to call the super.toString() method and append the subclass-specific information for saving to disk.
+	 * @return The formatted string which will be used when saving the object to disk. 
+	 */
+	public abstract String format();
 }
+
+
