@@ -63,17 +63,34 @@ public class Database {
 		
 		return searchResults;
 	}
-	
+
+	/**Search the database records for toys with a given minimum age recommendation.
+	 *
+	 * @param query The query for the database, an integer, which is the toy's minimum age recommendation.
+	 * @return
+	 */
+	public ArrayList<Toy> searchRecords(int age, ArrayList<Toy> toyList) {
+
+		ArrayList<Toy> searchResults = new ArrayList<Toy>();
+
+		iterateOverRecords: for(Toy toy : toyList) {
+			if(toy.getAppropriateAge() >= age)
+				searchResults.add(toy);
+		}
+
+		return searchResults;
+	}
+
 	/**Search the database records for toys of a particular type.
 	 * 
 	 * @param query The type of toy to search for, one of 'a', 'b', 'f', or 'p'.
 	 * @return
 	 */
-	public ArrayList<Toy> searchRecords(char query) throws InvalidToyTypeQueryException {
+	public ArrayList<Toy> searchRecords(char query, ArrayList<Toy> toyList) throws InvalidToyTypeQueryException {
 		
 		ArrayList<Toy> searchResults = new ArrayList<Toy>();
 		
-		for(Toy toy : this.records) {
+		for(Toy toy : toyList) {
 			switch(query) {
 			case 'a':
 				if(toy instanceof Animal)
@@ -104,6 +121,15 @@ public class Database {
 	 */
 	public void addRecord(Toy newToy) {
 		this.records.add(newToy);
+	}
+
+	public void purchaseToy(Toy toy) {
+		if(this.records.get(toy) != null) {
+			Toy record = this.records.get(toy);
+			record.setAvailableCount(record.getAvailableCount() - 1);
+		} else {
+			throw new UnaccountedToyException(); // Indicate that the toy does not exist in the database.
+		}
 	}
 	
 	private ArrayList<Toy> toyListFromFile(String filename) throws FileNotFoundException {

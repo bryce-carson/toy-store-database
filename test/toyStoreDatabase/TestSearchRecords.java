@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.FileNotFoundException;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import ca.cyberscientist.toystoredb.model.Database;
@@ -16,6 +17,17 @@ import ca.cyberscientist.toystoredb.model.Database;
  *
  */
 class TestSearchRecords {
+	
+	private Database records;
+	
+	/**Create a single database for these tests.
+	 * @throws FileNotFoundException 
+	 * 
+	 */
+	@BeforeAll
+	void initializeDatabaseObject() throws FileNotFoundException {
+		this.records = new Database();
+	}
 
 	/**Ensure that a search for toys of type Figure returns thirty-eight results when using the provided, unedited toys.txt file.
 	 * Test method for {@link ca.cyberscientist.toystoredb.model.Database#searchRecords(char)}.
@@ -23,8 +35,7 @@ class TestSearchRecords {
 	 */
 	@Test
 	void testSearchRecordsByTypeFor38Figures() throws FileNotFoundException {
-		Database records = new Database();
-		assertTrue(records.searchRecords('f').size() == 38);
+		assertTrue(this.records.searchRecords('f').size() == 38);
 	}
 	
 	/**Ensure that only one result is returned when searching for the name "Amish doll".
@@ -33,8 +44,7 @@ class TestSearchRecords {
 	 */
 	@Test
 	void testSearchRecordsByNameForOneName() throws FileNotFoundException {
-		Database records = new Database();
-		assertTrue(records.searchRecords("Amish doll", 'n').size() == 1);
+		assertTrue(this.records.searchRecords("Amish doll", 'n').size() == 1);
 	}
 	
 	/**Ensure that two results are returned when searching with the query "Ball".
@@ -43,8 +53,7 @@ class TestSearchRecords {
 	 */
 	@Test
 	void testSearchRecordsByNameForTwoNames() throws FileNotFoundException {
-		Database records = new Database();
-		assertTrue(records.searchRecords("Ball", 'n').size() == 2);
+		assertTrue(this.records.searchRecords("Ball", 'n').size() == 2);
 	}
 	
 	/**Ensure that only one result is returned when searching by a serial number.
@@ -53,8 +62,7 @@ class TestSearchRecords {
 	 */
 	@Test
 	void testSearchRecordsBySerialNumber() throws FileNotFoundException {
-		Database records = new Database();
-		assertTrue(records.searchRecords("3131436838", 's').size() == 1);
+		assertTrue(this.records.searchRecords("3131436838", 's').size() == 1);
 	}
 
 }
