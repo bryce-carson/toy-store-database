@@ -123,6 +123,11 @@ public class Database {
 		this.records.add(newToy);
 	}
 
+  // TODO: Write a test for this functionality!
+  public void removeRecord(Toy existingToy) {
+    this.records.remove(existingToy);
+  }
+
 	public void purchaseToy(Toy toy) {
 		if(this.records.get(toy) != null) {
 			Toy record = this.records.get(toy);
