@@ -12,7 +12,7 @@ import ca.cyberscientist.toystoredb.view.*;
  * The toy store class, which instantiates a model of the toy store's inventory,
  * a view for user interaction with the toy store inventory, and throws any
  * pre-defined or custom exceptions.
- * 
+ *
  * @author Bryce Carson, Koddy Rae Madriaga
  *
  */
@@ -24,7 +24,7 @@ public class ToyStore {
 	/**
 	 * TODO: check this when view is being implemented for name changes of methods
 	 * Constructor for the toy store object
-	 * 
+	 *
 	 * @throws FileNotFoundException Exception thrown in case of error when file not
 	 *                               found in instantiating db
 	 **/
@@ -47,7 +47,7 @@ public class ToyStore {
 					break;
 				case 'R':
 					Menu.searchBySerialNumber();
-						
+
 					// db.removeToyFromList();
 					break;
 				case 'Q':
