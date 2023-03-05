@@ -11,6 +11,8 @@ public class SearchResultsTable extends View {
     private final int NUMBER_PRINTABLE_FIELDS = 7;
     private int[] minimumFieldWidths = new int[NUMBER_PRINTABLE_FIELDS];
 
+    private final ArrayList<Toy> searchResultsToyList;
+
     private void ascertainFieldWidths(ArrayList<Toy> toyList) {
         // The array is holds, at most, seven fields worth of data; the -1th (or
         // 8th, both nonexistent) field is the length of all the serial numbers,
@@ -92,13 +94,11 @@ public class SearchResultsTable extends View {
         // Overwrite the object's array with the local data.
         minimumFieldWidths = fieldWidths;
 
-        // Unfortunately, this table is one short than what we actually need to
-        // print. I don't want to edit it now, though.
-        //      ╒════════════╤═══╤═══╤═══╤═══╤═══╤═══╕      printTableHeader: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
-        //   01═╪ 4831187177 │ b │ c │ d │ e │ f │ g │      printTableRow: 
-        //      ╞════════════╪═══╪═══╪═══╪═══╪═══╪═══╡      printTableRowSeparator: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
-        //   02═╪ 9336740135 │ i │ j │ k │ l │ m │ n │      printTableRow:
-        //      ╘════════════╧═══╧═══╧═══╧═══╧═══╧═══╛      printTableFooter: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        //      ╒════════════╤═══╤═══╤═══╤═══╤═══╤═══╤═══╕      printTableHeader: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        //   01═╪ 4831187177 │ b │ c │ d │ e │ f │ g │ h │      printTableRow: 
+        //      ╞════════════╪═══╪═══╪═══╪═══╪═══╪═══╪═══╡      printTableRowSeparator: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        //   02═╪ 9336740135 │ j │ k │ l │ m │ n │ o │ p │      printTableRow:
+        //      ╘════════════╧═══╧═══╧═══╧═══╧═══╧═══╧═══╛      printTableFooter: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
         // The width of a row is 1 + 7 * (3 + xᵢ.length()), however, that is not
         // a direct translation to algorithm because different parts of the
         // table have different printing needs; some Toys must be printed with
@@ -107,18 +107,18 @@ public class SearchResultsTable extends View {
         // numbers and then also the selection for that row.
     }
 
-    private void printSearchResultsTable(ArrayList<Toy> toyList) {
+    private void printSearchResultsTable() {
         // Acquire the information needed for table display.
-        ascertainFieldWidths(toyList);
+        ascertainFieldWidths(this.searchResultsToyList);
 
         // Remove the last toy from the list so that each toy can be printed by
         // the toy row printer, then a separator printed. The final toy is
         // printed manually followed by an end of table separator.
-        Toy finalToy = toyList.remove(toyList.size());
+        Toy finalToy = toyList.remove(this.searchResultsToyList.size());
 
         printTableHeader();
 
-        for (Toy toy : toyList) {
+        for (Toy toy : this.searchResultsToyList) {
             printTableRow(toy); // TODO: implement method.
             printTableRowSeparator(); // TODO: implement method.
         }
@@ -167,8 +167,8 @@ public class SearchResultsTable extends View {
      *         the
      *         in-progress transaction.
      */
-    public int promptPurchaseToyOrQuit(ArrayList<Toy> toyList) {
-        printSearchResultsTable(toyList);
+    public int promptPurchaseToyOrQuit() {
+        printSearchResultsTable();
 
         Scanner keyboard = new Scanner(System.in);
 
@@ -202,7 +202,7 @@ public class SearchResultsTable extends View {
 
     }
 
-    private SearchResultsTable(ArrayList<Toy> toyList) {
-        promptPurchaseToyOrQuit(toyList);
+    public SearchResultsTable(ArrayList<Toy> toyList) {
+        this.searchResultsToyList = toyList;
     }
 }

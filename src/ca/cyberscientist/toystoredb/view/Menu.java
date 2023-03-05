@@ -45,15 +45,15 @@ public class Menu extends View {
 		return searchMethodOrQuitFlag;
 	}
 
-	private void searchMenuSerialNumber() {
+	public String promptSerialNumber() {
 		boolean exceptionOccured; // Did an exception occur while getting user input?
 
-		String userInput;
+		String userInput = "0123456789";
 
-		getValidSerialNumber: do {
+		do {
 			try {
 				System.out.println("Enter a ten digit serial number.");
-				String userInput = getValidSerialNumber("Serial number: ");
+				userInput = getSerialNumber("Serial number: ");
 				exceptionOccured = false; // Not reached if an exception occurs.
 			} catch (InvalidSerialNumberException e) {
 				System.out.println("[EXCEPTION] " + e.getMessage());
@@ -64,17 +64,20 @@ public class Menu extends View {
 		// The first character of the user's input. This is used to permit filtering the
 		// records by type before searching by serial number for efficiency sake.
 		this.toyTypeFilter = Integer.parseInt(userInput.substring(0, 1));
+    return userInput;
 	}
 
 	// The only case in which we are logically allowed to, and necessarily must,
 	// indicate a method throws an exception in a method header in this
 	// assignment.
-	private String getValidSerialNumber(String prompt) throws InvalidSerialNumberException {
+	private String getSerialNumber(String prompt) throws InvalidSerialNumberException {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.print(prompt);
 		String serialNumber = keyboard.nextLine();
 
 		boolean isDigits = (serialNumber.matches("\\d*")) ? true : false;
+
+		keyboard.close();
 
 		// If the user's input is incorrect we raise an exception, per the assignment
 		// instructions.
@@ -85,8 +88,21 @@ public class Menu extends View {
 		}
 	}
 
-	public char getToyTypeFilter() {
+    public String promptToyName() {
+        Scanner keyboard = new Scanner(System.in);
+
+        System.out.print("Enter a toy's name to search for it: ");
+        String toyName = keyboard.nextLine();
+
+        keyboard.close();
+        
+        return toyName;
+    }
+
+	public char promptToyType() {
 		char filter = 'A';
+
+
 
 		switch (this.toyTypeFilter) {
 			// FIXME: ensure character is correct for these numbers.

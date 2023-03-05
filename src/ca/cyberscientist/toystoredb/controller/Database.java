@@ -24,6 +24,8 @@ import ca.cyberscientist.toystoredb.model.Puzzle;
  *
  */
 public class Database {
+    public final char SEARCH_BY_SERIAL_NUMBER = 's';
+    public final char SEARCH_BY_TOY_NAME = 'n';
 
     private final String FILENAME = "res/toys.txt";
 
@@ -88,11 +90,11 @@ public class Database {
      *              minimum age recommendation.
      * @return
      */
-    public ArrayList<Toy> searchRecords(int age, ArrayList<Toy> toyList) {
+    public ArrayList<Toy> searchRecords(int age) {
 
         ArrayList<Toy> searchResults = new ArrayList<Toy>();
 
-        for (Toy toy : toyList) {
+        for (Toy toy : this.records) {
             if (toy.getAppropriateAge() >= age)
                 searchResults.add(toy);
         }
@@ -106,11 +108,11 @@ public class Database {
      * @param query The type of toy to search for, one of 'a', 'b', 'f', or 'p'.
      * @return
      */
-    public ArrayList<Toy> searchRecords(char query, ArrayList<Toy> toyList) throws InvalidToyTypeQueryException {
+    public ArrayList<Toy> searchRecords(char query) throws InvalidToyTypeQueryException {
 
         ArrayList<Toy> searchResults = new ArrayList<Toy>();
 
-        for (Toy toy : toyList) {
+        for (Toy toy : this.records) {
             switch (query) {
                 case 'a':
                     if (toy instanceof Animal)

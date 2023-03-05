@@ -4,9 +4,12 @@
 package ca.cyberscientist.toystoredb.controller;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
-// The model is imported in the Database class.
+// The model is imported in the Database class, moreover, the Database is in the
+// same package and doesn't need to be imported.
 import ca.cyberscientist.toystoredb.view.*;
+import ca.cyberscientist.toystoredb.model.*;
 
 /**
  * The toy store class, which instantiates a model of the toy store's inventory,
@@ -33,58 +36,78 @@ public class ToyStore {
 									// input.
 		DATABASE_HANDLER = new Database(); // Instantiate the database.
 
-		boolean exitCheck = false;
+		boolean continueLooping = true;
 
 		do { // do while because we need to see the menu atleast once
-				char mainMenuChoice = STORE_MENU.promptMainMenu(); // change this later to the proper main menu prompt in view
+			char mainMenuChoice = STORE_MENU.promptMainMenu(); // change this later to the proper main menu prompt in
+																// view
 
 			switch (mainMenuChoice) {
 				case 'S':
 					searchAndPurchaseMenu();
 					break;
+
 				case 'A':
 					// menu.promptAddNewToy uncomment when implemented, this calls db.addToy
 					break;
+
 				case 'R':
-					Menu.searchBySerialNumber();
+					String serialNumberToScrub = STORE_MENU.promptSerialNumber();
 
 					// db.removeToyFromList();
 					break;
+
 				case 'Q':
-					// menu.exitMenu(); uncomment when implemented // FIXME: huh.jpg
-					DATABASE_HANDLER.writeToDisk(); // this can probably be put in view but its here for now
-					exitCheck = true;
+					DATABASE_HANDLER.writeToDisk();
+					continueLooping = false;
 					break;
 			}
 
-		} while (!exitCheck); // Checker to exit the loop
+		} while(continueLooping); // Semantic flag for whether or not to continue looping.
 	}
 
 	/**
 	 * Method for the submenu of searching and purchasing a toy
 	 *
-	 * TODO: check this when view is being implemented for name changes of methods
 	 */
 	private void searchAndPurchaseMenu() {
-		int searchMenuChoice = 0; // switch when method for searchMenu is implemented
+		char searchMethod = STORE_MENU.promptSearchMenu();
 
-		switch (searchMenuChoice) {
-			case 1: // case 1 will most likely change depending on how you want to do this (we
-					// should probably talk about it)
-				// STORE_MENU.promptSerialNumber(); uncomment when implemented
-				// STORE_MENU.promptPurchaseChoice(); //method for purchase menu
-				// STORE_MENU.promptEnterToContinue();
+		// Initialized by one of the search methodologies; declared here because we
+		// must have one.
+		ArrayList<Toy> searchResultsToyList;
+		SearchResultsTable searchResultsTable;
+
+		// Search by serial number, name, or type.
+		switch (searchMethod) {
+			case 'S':
+				String serialNumber = STORE_MENU.promptSerialNumber();
+				searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber,
+						DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
+
+				searchResultsTable = new SearchResultsTable(searchResultsToyList);
+				searchResultsTable.promptPurchaseToyOrQuit();
 				break;
-			case 2:
-				// STORE_MENU.promptToyName();
-				// STORE_MENU.promptEnterToContinue();
+
+			case 'N':
+				String toyName = STORE_MENU.promptToyName();
+
+				searchResultsToyList = DATABASE_HANDLER.searchRecords(toyName, DATABASE_HANDLER.SEARCH_BY_TOY_NAME);
+
+				searchResultsTable = new SearchResultsTable(searchResultsToyList);
+				searchResultsTable.promptPurchaseToyOrQuit();
 				break;
-			case 3:
-				// STORE_MENU.promptToyType();
-				// STORE_MENU.promptEnterToContinue();
+
+			case 'T':
+				char toyType = STORE_MENU.promptToyType();
+				searchResultsToyList = DATABASE_HANDLER.searchRecords(toyType);
+
+				searchResultsTable = new SearchResultsTable(searchResultsToyList);
+				searchResultsTable.promptPurchaseToyOrQuit();
+
 				break;
-			case 4:
-				// STORE_MENU.promptEnterToContinue();
+
+			case 'Q':
 				break;
 		}
 	}
