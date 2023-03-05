@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 import ca.cyberscientist.toystoredb.exceptions.InvalidSearchMethodException;
 import ca.cyberscientist.toystoredb.exceptions.InvalidToyTypeQueryException;
-
+import ca.cyberscientist.toystoredb.exceptions.ToyExistsInDatabaseException;
 // Import all of the toy stuff
 import ca.cyberscientist.toystoredb.model.Toy;
 import ca.cyberscientist.toystoredb.model.Animal;
@@ -152,11 +152,17 @@ public class Database {
     }
 
     public void purchaseToy(Toy toy) {
-        if (this.records.get(toy) != null) {
-            Toy record = this.records.get(toy);
+        /* If the toy exists in the database (it should always exist in the
+        database if we are purchasing, given the program logic) retrieve its
+        index in the records array list, obtain the toy itself, althought the
+        parameter TOY should already be the same object (in memory). Change its
+        count on the shelf. */
+        if (this.records.contains(toy)) {
+            int indexOfToy = this.records.indexOf(toy);
+            Toy record = this.records.get(indexOfToy);
             record.setAvailableCount(record.getAvailableCount() - 1);
         } else {
-            throw new UnaccountedToyException(); // Indicate that the toy does not exist in the database.
+            throw new ToyExistsInDatabaseException(); // Indicate that the toy does not exist in the database.
         }
     }
 
