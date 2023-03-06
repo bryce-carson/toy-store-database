@@ -183,18 +183,66 @@ public class SearchResultsTable extends View {
             // FIXME: think hard about the calculation. It shouldn't be less the padding, the padding actually needs to be added to the length of the cell content.
             System.out.print(headerFieldString + " ".repeat(minimumFieldWidths[i] - headerFieldString.length() - 1)); // field width, less the field string length, less the left padding
         }
+
+        System.out.println(); // Just advance the line, do not print any content.
     };
 
     // TODO: this method is more complex than the others. It must account for
     // different toy types, and calculate the amount of padding to print from
     // the table cell data and minimum field widths.
+    // NOTE: this is a necessary and acceptable violation of the MVC pattern. In
+    // this case, the controller cannot suitably generate the information to
+    // pass to the view without introducing and undue amount of code which would
+    // be more difficult to maintain and debug.
     private void printTableRow(Toy toy) {
-        System.out.print("\u2551"); // Left-most separator w/out padding
-        // This works well for every toy except board games, which need a
-        // comma-separated list of designers printed pretty, as well as the
-        // number of players printed well.
-        for(String s : toy.toString().split(";")) {
-            System.out.print("  " + s + "  \u2551"); // Padding left, element, padding right, separator
+        // Setup
+        String rowSelectorDigitLength = String.format("%02d", searchResultsToyList.length()).length(); // The first element is indexed with zero, but here we must not change the return value of the length method because we will not be using this number for indexing.
+
+        // Part one: printing the information common to all toys.
+        // Row selector and serial number: ␠###═╪␠##########␠
+        System.out.print(String.format(" %02d", searchResultsToyList.indexOf(toy) + 1) + "\u2550\u256a "); // ␠###═╪
+        System.out.print(toy.getSerialNumber() + " "); // ##########␠.
+
+        // Other common fields
+        System.out.print ("\u2502 " +        toy.getName() + " ".repeat (minimumFieldWidths[0] -        toy.getName().length () + 1)); // │␠        toy.getName()Ά␠
+        System.out.print ("\u2502 " +       toy.getBrand() + " ".repeat (minimumFieldWidths[1] -       toy.getBrand().length () + 1)); // │␠       toy.getBrand()Β␠
+        System.out.print ("\u2502 " +       toy.getPrice() + " ".repeat (minimumFieldWidths[2] -       toy.getPrice().length () + 1)); // │␠       toy.getPrice()Γ␠
+        System.out.print ("\u2502 " +   toy.getAvailable() + " ".repeat (minimumFieldWidths[3] -   toy.getAvailable().length () + 1)); // │␠   toy.getAvailable()Δ␠
+        System.out.print ("\u2502 " +  toy.getMinimumAge() + " ".repeat (minimumFieldWidths[4] -  toy.getMinimumAge().length () + 1)); // │␠ toy.getMiniumumAge()Ɛ␠
+ 
+  
+        // TODO: Part two: subclass-specific Misc. info 1 and Misc. info 2
+        // The most rudimentary reflection; equivalent in complexity to instanceof, which was taught in class. Does not require an import.
+        // NOTE: Board games are the only class which has a double-height row, so the printing is otherwise the same in each case.
+        switch(toy.getClass())  {
+        case Animal.class:
+            Animal a = (Animal)toy;
+            String material = a.getMaterial();
+            String size = a.getSize();
+            // TODO: print the material and size.
+            break;
+
+        case BoardGame.class:
+            BoardGame b = (BoardGame)toy;
+            String players = b.getMinimumPlayers() + "-" + b.getMaximumPlayers();
+            String[] designers = b.getDesigner().split(",");
+            for(int i = 0 ; i < designers.length ; i++) {
+                designers[i] = designers[i].trim(); // Ensure there are no leading or trailing spaces in the string containing the name.
+            }
+            // Print the players and the designers. NOTE: the designers, if longer than 1, requires multi-line printing and we must print the rows in a loop.
+            break;
+
+        case Figure.class:
+            Figure f = (Figure)toy;
+            String classification = f.getClassification();
+            // TODO: print the classification and the empty Misc. info 2 table cell.
+            break;
+
+        case Puzzle.class:
+            Puzzle p = (Puzzle)toy;
+            String puzzleType = p.getPuzzleType();
+            // TODO: print the puzzle type and the empty Misc. info 2 table cell.
+            break;
         }
     };
 
