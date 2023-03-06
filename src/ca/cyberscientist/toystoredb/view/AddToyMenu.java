@@ -7,7 +7,7 @@ import java.util.Scanner;
  * @author koddy
  *
  */
-public class addToyMenu extends View{
+public class AddToyMenu extends View{
 	Scanner input = new Scanner(System.in);
 	
 	private String promptAddSerialNumber() {
