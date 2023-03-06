@@ -11,6 +11,9 @@ public class SearchResultsTable extends View {
     private final int NUMBER_PRINTABLE_FIELDS = 7;
     private int[] minimumFieldWidths = new int[NUMBER_PRINTABLE_FIELDS]; // FIXME: this needs to be initialized as the widths of the header strings.
 
+    // NOTE: TODO: The length of this array is important for printing the table.
+    // The length must be consumed when determining the amount of padding to
+    // print to the left of the table in each method.
     private final ArrayList<Toy> searchResultsToyList;
 
     private void ascertainFieldWidths() {
@@ -182,6 +185,9 @@ public class SearchResultsTable extends View {
         }
     };
 
+    // TODO: this method is more complex than the others. It must account for
+    // different toy types, and calculate the amount of padding to print from
+    // the table cell data and minimum field widths.
     private void printTableRow(Toy toy) {
         System.out.print("\u2551"); // Left-most separator w/out padding
         // This works well for every toy except board games, which need a
