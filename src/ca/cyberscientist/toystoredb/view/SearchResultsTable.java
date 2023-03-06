@@ -94,20 +94,28 @@ public class SearchResultsTable extends View {
         // Overwrite the object's array with the local data.
         minimumFieldWidths = fieldWidths;
 
-        //      ╒════════════╤═══╤═══╤═══╤═══╤═══╤═══╤═══╕      printTableHeader: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
-        //   01═╪ 4831187177 │ b │ c │ d │ e │ f │ g │ h │      printTableRow: 
-        //      ╞════════════╪═══╪═══╪═══╪═══╪═══╪═══╪═══╡      printTableRowSeparator: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
-        //   02═╪ 9336740135 │ j │ k │ l │ m │ n │ o │ p │      printTableRow:
-        //      ╘════════════╧═══╧═══╧═══╧═══╧═══╧═══╧═══╛      printTableFooter: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        // Headers define the actual minimum size of the table, but the cell content can expand a given field's width.
+        //␠␠␠␠╒════════════╤═════Ά╤══════Β╤══════Γ╤══════════Δ╤════════════Ɛ╤═══════════Ζ╤═══════════Η╕                printTableHeader: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        //␠␠␠␠│ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│ Misc. infoΗ│                ....
+        //␠␠␠␠╞════════════╪═════Ά╪══════Β╪══════Γ╪══════════Δ╪════════════Ɛ╪═══════════Ζ╪═══════════Η╡                printTableRowSeparator
+        //␠01═╪ 0113513686 │ Toy soldier │ Gamen │ $ 14.06 │ 2 │ 5 │ Action figure │  │                                              printTableRow: 
+        //    ╞════════════╪═══════════════════════════════╪═══════════╪══════════╪═══╪═══╪═════╪═════════════════╡      printTableRowSeparator: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        // 02═╪ 8685655988 │ Betrayal at House on the Hill │ Gamegenix │ $ 131.52 │ 9 │ 6 │ 2-6 │ 1. Barney Lugo  │      printTableRow:
+        //    │            │                               │           │          │   │   │     │ 2. Yu Zimmerman │      printTableRow:
+        //    ╘════════════╧═══════════════════════════════╧═══════════╧══════════╧═══╧═══╧═════╧═════════════════╛      printTableFooter: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
         // The width of a row is 1 + 7 * (3 + xᵢ.length()), however, that is not
         // a direct translation to algorithm because different parts of the
         // table have different printing needs; some Toys must be printed with
         // double height rows, or algorithmically determined row heights to fit
         // in designers. There is also the issue of needing to print serial
         // numbers and then also the selection for that row.
+        // Seven spacing variables, alpha, beta, gamma, delta, epsilon, zeta, eta; the first field, containing serial number, always has the same width. All variables begin with a value of three (padding for an empty value, printed as " ").
+        // The name column (ones are padding around data):
+        // 1 + fieldWidth[0] + 1 = Ά
+        // " " + cellData + " ".repeat(Ά - cellData.length() - 1)
     }
 
-    private void printSearchResultsTable() {
+    private void printSearchResultsTable(ArrayList<Toy> toyList) {
         // Acquire the information needed for table display.
         ascertainFieldWidths(this.searchResultsToyList);
 
@@ -127,13 +135,49 @@ public class SearchResultsTable extends View {
         printTableFooter();
     }
 
-    // FIXME: this won't be correct if I add padding in the implementation of
-    // printTableRow, which I am doing.
     private void printTableHeader() {
+        // Part One: printing the header separator (top border)
         System.out.print("\u2554");
-        // System.out.print("╒")
+        // ╔
+        System.out.print("\u2554".repeat(12));
+        // ═
+        System.out.print("\u2564");
+        // ╤ end of field 0: Serial No.
+
+        // Algorithm for printing the header according to field widths 1:7
+        for(int fieldWidth : minimumFieldWidths) {
+            System.out.print("\u2554".repeat(fieldWidth));
+            // ═
+
+            System.out.print("\u2564");
+            // ╤ end of i field
+        }
 
         System.out.print("\u2557");
+        // ╗
+
+        // Part Two: printing the header row table cells
+        // │ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│ Misc. infoΗ│
+        System.out.print("\u2502 Serial No. "); // │␠Serial No.␠
+
+        // Field separator and padding, │␠, field name, padding
+        for(int i = 0 ; i < minimumFieldWidths.length ; i++ ) {
+            String headerFieldString = "";
+
+            // Which string to use
+            switch(i) {
+            case 0: headerFieldString = "Name";
+            case 1: headerFieldString = "Brand";
+            case 2: headerFieldString = "Price";
+            case 3: headerFieldString = "Available";
+            case 4: headerFieldString = "Minimum age";
+            case 5:
+            case 6: headerFieldString = "Misc. info";
+            }
+
+            System.out.print("\u2502 "); // Table cell separator: │␠
+            System.out.print(headerFieldString + " ".repeat(minimumFieldWidths[i] - headerFieldString.length() - 1)); // field width, less the field string length, less the left padding
+        }
     };
 
     private void printTableRow(Toy toy) {
