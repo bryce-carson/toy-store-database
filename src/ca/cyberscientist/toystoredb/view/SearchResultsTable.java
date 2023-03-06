@@ -203,7 +203,7 @@ public class SearchResultsTable extends View {
         }
 
         // Part three: table end
-        System.out.println("\u2551") // ╡
+        System.out.println("\u2551"); // ╡
     };
 
     private void printTableFooter() {

@@ -7,10 +7,12 @@ package ca.cyberscientist.toystoredb.exceptions;
 public class InvalidSerialNumberException extends NumberFormatException {
     public InvalidSerialNumberException() {
         // Empty, no-args constructor.
+    	super();
     }
 
     // TODO: implement a proper exception constructor.
     public InvalidSerialNumberException(String message) {
+    	super(message);
     }
-
+    
 }
