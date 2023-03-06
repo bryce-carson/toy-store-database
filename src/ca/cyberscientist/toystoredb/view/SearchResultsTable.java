@@ -207,6 +207,17 @@ public class SearchResultsTable extends View {
     };
 
     private void printTableFooter() {
+        // Part one: print the Serial No. field
+        System.out.print("\u2558" + "\u2550".repeat(12)); // ╘════════════
+
+        // Part two: variable field widths
+        for (int i = 0; i < minimumFieldWidths.length; i++) {
+            System.out.print("\u2567"); // ╧
+            System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // Minimum plus padding
+        }
+
+        // Part three: table end
+        System.out.println("\u255b"); // ╛
 
     };
 
