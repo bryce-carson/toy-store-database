@@ -9,22 +9,22 @@ public class SearchResultsTable extends View {
 
     // Set by the constructor and only used privately.
     private final int NUMBER_PRINTABLE_FIELDS = 7;
-    private int[] minimumFieldWidths = new int[NUMBER_PRINTABLE_FIELDS];
+    private int[] minimumFieldWidths = new int[NUMBER_PRINTABLE_FIELDS]; // FIXME: this needs to be initialized as the widths of the header strings.
 
     private final ArrayList<Toy> searchResultsToyList;
 
-    private void ascertainFieldWidths(ArrayList<Toy> toyList) {
+    private void ascertainFieldWidths() {
         // The array is holds, at most, seven fields worth of data; the -1th (or
         // 8th, both nonexistent) field is the length of all the serial numbers,
         // which will always be ten. Therefore there is no point allocating
         // memory for that, or using cycles ensuring this fact when it is
         // already accounted for upon loading the database or updating it.
-        int[][] workingArray = new int[7][toyList.size()];
+        int[][] workingArray = new int[7][this.searchResultsToyList.size()];
 
         // Leverage polymorphic references and type coercion to our advantage to reduce
         // code duplication.
-        for (Toy toy : toyList) {
-            int arrayIndex = toyList.indexOf(toy);
+        for (Toy toy : this.searchResultsToyList) {
+            int arrayIndex = this.searchResultsToyList.indexOf(toy);
 
             int nameLength = toy.getName().length();
             int brandLength = toy.getBrand().length();
@@ -86,7 +86,7 @@ public class SearchResultsTable extends View {
         // Determine the maximum through simple iteration. There's a better way, of
         // course, but this is dead simple.
         for (int i = 0; i < workingArray.length; i++) {
-            for (int j = 0; j < toyList.size(); j++) {
+            for (int j = 0; j < this.searchResultsToyList.size(); j++) {
                 fieldWidths[i] = (workingArray[i][j] > fieldWidths[i]) ? workingArray[i][j] : fieldWidths[i];
             }
         }
@@ -98,7 +98,7 @@ public class SearchResultsTable extends View {
         //␠␠␠␠╒════════════╤═════Ά╤══════Β╤══════Γ╤══════════Δ╤════════════Ɛ╤═══════════Ζ╤═══════════Η╕                printTableHeader: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
         //␠␠␠␠│ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│ Misc. infoΗ│                ....
         //␠␠␠␠╞════════════╪═════Ά╪══════Β╪══════Γ╪══════════Δ╪════════════Ɛ╪═══════════Ζ╪═══════════Η╡                printTableRowSeparator
-        //␠01═╪ 0113513686 │ Toy soldier │ Gamen │ $ 14.06 │ 2 │ 5 │ Action figure │  │                                              printTableRow: 
+        //␠01═╪ 0113513686 │ Toy soldier │ Gamen │ $ 14.06 │ 2 │ 5 │ Action figure │  │                                              printTableRow:
         //    ╞════════════╪═══════════════════════════════╪═══════════╪══════════╪═══╪═══╪═════╪═════════════════╡      printTableRowSeparator: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
         // 02═╪ 8685655988 │ Betrayal at House on the Hill │ Gamegenix │ $ 131.52 │ 9 │ 6 │ 2-6 │ 1. Barney Lugo  │      printTableRow:
         //    │            │                               │           │          │   │   │     │ 2. Yu Zimmerman │      printTableRow:
@@ -115,14 +115,14 @@ public class SearchResultsTable extends View {
         // " " + cellData + " ".repeat(Ά - cellData.length() - 1)
     }
 
-    private void printSearchResultsTable(ArrayList<Toy> toyList) {
+    private void printSearchResultsTable() {
         // Acquire the information needed for table display.
-        ascertainFieldWidths(this.searchResultsToyList);
+        ascertainFieldWidths();
 
         // Remove the last toy from the list so that each toy can be printed by
         // the toy row printer, then a separator printed. The final toy is
         // printed manually followed by an end of table separator.
-        Toy finalToy = toyList.remove(this.searchResultsToyList.size());
+        Toy finalToy = this.searchResultsToyList.remove(this.searchResultsToyList.size());
 
         printTableHeader();
 
@@ -132,6 +132,7 @@ public class SearchResultsTable extends View {
         }
 
         printTableRow(finalToy);
+
         printTableFooter();
     }
 
@@ -176,6 +177,7 @@ public class SearchResultsTable extends View {
             }
 
             System.out.print("\u2502 "); // Table cell separator: │␠
+            // FIXME: think hard about the calculation. It shouldn't be less the padding, the padding actually needs to be added to the length of the cell content.
             System.out.print(headerFieldString + " ".repeat(minimumFieldWidths[i] - headerFieldString.length() - 1)); // field width, less the field string length, less the left padding
         }
     };
@@ -191,7 +193,17 @@ public class SearchResultsTable extends View {
     };
 
     private void printTableRowSeparator() {
-        
+        // Part one: print the Serial No. field
+        System.out.print("\u255e" + "\u2550".repeat(12)); // ╞════════════
+
+        // Part two: variable field widths
+        for (int i = 0; i < minimumFieldWidths.length; i++) {
+            System.out.print("\u256a"); // ╪
+            System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // Minimum plus padding
+        }
+
+        // Part three: table end
+        System.out.println("\u2551") // ╡
     };
 
     private void printTableFooter() {
@@ -203,7 +215,7 @@ public class SearchResultsTable extends View {
      * in a pretty table. The 0th option (which is actually taken in as Q from the
      * user [digits are for purchasing a toy, and zero is for canceling a
      * "transaction" or lookup.])
-     * 
+     *
      * @author: Bryce Carson
      * @param toyList An array list of Toys to be printed in table format.
      * @return An integer indicating which toy in the array list the user wishes
