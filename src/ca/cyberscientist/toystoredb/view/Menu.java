@@ -4,9 +4,24 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import ca.cyberscientist.toystoredb.controller.Database;
 import ca.cyberscientist.toystoredb.exceptions.*;
+import ca.cyberscientist.toystoredb.model.Puzzle;
 
 public class Menu extends View {
+	
+	Scanner keyboard;
+	
+	Database db;
+	
+	/**
+	 * List of similar attributes of the given toy types
+	 */
+	String toyName;
+	String toyBrand;
+	double toyPrice;
+	int availableCount;
+	int appropiateAge;
 
 	/**
 	 * Inteded usage pattern: if the user searches by serial number, get the
@@ -71,7 +86,7 @@ public class Menu extends View {
 	// indicate a method throws an exception in a method header in this
 	// assignment.
 	private String getSerialNumber(String prompt) throws InvalidSerialNumberException {
-		Scanner keyboard = new Scanner(System.in);
+		keyboard = new Scanner(System.in);
 		System.out.print(prompt);
 		String serialNumber = keyboard.nextLine();
 
@@ -89,7 +104,7 @@ public class Menu extends View {
 	}
 
     public String promptToyName() {
-        Scanner keyboard = new Scanner(System.in);
+        keyboard = new Scanner(System.in);
 
         System.out.print("Enter a toy's name to search for it: ");
         String toyName = keyboard.nextLine();
@@ -154,5 +169,106 @@ public class Menu extends View {
 		// 	}
 		// }
 
+	}
+	
+	public void printAddToyMenu(){
+		
+		String serialNumber = promptSerialNumber();
+		
+		switch (serialNumber.charAt(0)) {
+			case 0: 
+			case 1:
+				promptAddFigure(serialNumber);
+				break;
+			case 2: 
+			case 3:
+				promptAddAnimal(serialNumber);
+				break;
+			case 4: 
+			case 5: 
+			case 6:
+				promptAddPuzzles(serialNumber);
+				break;
+			case 7: 
+			case 8: 
+			case 9:
+				promptAddBoardGames(serialNumber);
+				break;
+		}
+		
+	}
+	
+	public void promptAddPuzzles(String serialNumber) {
+		keyboard = new Scanner(System.in);
+		String puzzleType;
+		
+		System.out.print("\nEnter Toy Name: ");
+		toyName = keyboard.nextLine();
+		System.out.print("\nEnter Toy Brand: ");
+		toyBrand = keyboard.nextLine();
+		System.out.print("\nEnter Toy Price: ");
+		toyPrice = keyboard.nextDouble();
+		System.out.print("\nEnter Available Counts: ");
+		availableCount = keyboard.nextInt();
+		System.out.print("\nEnter Appropiate Age: ");
+		appropiateAge = keyboard.nextInt();
+		System.out.print("\nEnter Puzzle Type: ");
+		puzzleType = keyboard.nextLine();
+		
+		Puzzle newPuzzle = new Puzzle(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropiateAge, puzzleType);
+		db.addRecord(newPuzzle);
+		
+		System.out.println("New Toy Added!");
+	}
+	
+	public void promptAddFigure(String serialNumber) {
+		keyboard = new Scanner(System.in);
+		
+		System.out.print("\nEnter Toy Name: ");
+		toyName = keyboard.nextLine();
+		System.out.print("\nEnter Toy Brand: ");
+		toyBrand = keyboard.nextLine();
+		System.out.print("\nEnter Toy Price: ");
+		toyPrice = keyboard.nextDouble();
+		System.out.print("\nEnter Available Counts: ");
+		availableCount = keyboard.nextInt();
+		System.out.print("\nEnter Appropiate Age: ");
+		appropiateAge = keyboard.nextInt();
+		
+		System.out.println("New Toy Added!");
+	}
+	
+	public void promptAddBoardGames(String serialNumber) {
+		keyboard = new Scanner(System.in);
+		
+		System.out.print("\nEnter Toy Name: ");
+		toyName = keyboard.nextLine();
+		System.out.print("\nEnter Toy Brand: ");
+		toyBrand = keyboard.nextLine();
+		System.out.print("\nEnter Toy Price: ");
+		toyPrice = keyboard.nextDouble();
+		System.out.print("\nEnter Available Counts: ");
+		availableCount = keyboard.nextInt();
+		System.out.print("\nEnter Appropiate Age: ");
+		appropiateAge = keyboard.nextInt();
+		
+		System.out.println("New Toy Added!");
+	}
+	
+	public void promptAddAnimal(String serialNumber) {
+		keyboard = new Scanner(System.in);
+		
+		System.out.print("\nEnter Toy Name: ");
+		toyName = keyboard.nextLine();
+		System.out.println("\nEnter Toy Brand: ");
+		toyBrand = keyboard.nextLine();
+		System.out.println("\nEnter Toy Price: ");
+		toyPrice = keyboard.nextDouble();
+		System.out.println("\nEnter Available Counts: ");
+		availableCount = keyboard.nextInt();
+		System.out.println("\nEnter Appropiate Age: ");
+		appropiateAge = keyboard.nextInt();
+		
+		System.out.println("New Toy Added!");
 	}
 }
