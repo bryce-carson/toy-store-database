@@ -6,6 +6,9 @@ import java.util.Scanner;
 
 import ca.cyberscientist.toystoredb.controller.Database;
 import ca.cyberscientist.toystoredb.exceptions.*;
+import ca.cyberscientist.toystoredb.model.Animal;
+import ca.cyberscientist.toystoredb.model.BoardGame;
+import ca.cyberscientist.toystoredb.model.Figure;
 import ca.cyberscientist.toystoredb.model.Puzzle;
 
 public class Menu extends View {
@@ -21,7 +24,7 @@ public class Menu extends View {
 	String toyBrand;
 	double toyPrice;
 	int availableCount;
-	int appropiateAge;
+	int appropriateAge;
 
 	/**
 	 * Inteded usage pattern: if the user searches by serial number, get the
@@ -211,11 +214,12 @@ public class Menu extends View {
 		System.out.print("\nEnter Available Counts: ");
 		availableCount = keyboard.nextInt();
 		System.out.print("\nEnter Appropiate Age: ");
-		appropiateAge = keyboard.nextInt();
+		appropriateAge = keyboard.nextInt();
 		System.out.print("\nEnter Puzzle Type: ");
 		puzzleType = keyboard.nextLine();
+		keyboard.nextLine();
 		
-		Puzzle newPuzzle = new Puzzle(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropiateAge, puzzleType);
+		Puzzle newPuzzle = new Puzzle(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, puzzleType);
 		db.addRecord(newPuzzle);
 		
 		System.out.println("New Toy Added!");
@@ -223,6 +227,7 @@ public class Menu extends View {
 	
 	public void promptAddFigure(String serialNumber) {
 		keyboard = new Scanner(System.in);
+		String classification;
 		
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
@@ -233,13 +238,23 @@ public class Menu extends View {
 		System.out.print("\nEnter Available Counts: ");
 		availableCount = keyboard.nextInt();
 		System.out.print("\nEnter Appropiate Age: ");
-		appropiateAge = keyboard.nextInt();
+		appropriateAge = keyboard.nextInt();
+		System.out.print("\nEnter Classification:");
+		classification = keyboard.nextLine();
+		keyboard.nextLine();
+		
+		Figure newFigure = new Figure(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, classification);
+		db.addRecord(newFigure);
 		
 		System.out.println("New Toy Added!");
 	}
 	
 	public void promptAddBoardGames(String serialNumber) {
 		keyboard = new Scanner(System.in);
+		String designers;
+		int minPlayers;
+		int maxPlayers;
+		String numOfPlayers;
 		
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
@@ -250,13 +265,27 @@ public class Menu extends View {
 		System.out.print("\nEnter Available Counts: ");
 		availableCount = keyboard.nextInt();
 		System.out.print("\nEnter Appropiate Age: ");
-		appropiateAge = keyboard.nextInt();
+		appropriateAge = keyboard.nextInt();
+		System.out.print("\nEnter Designer Names (Use ',' to separate the names if there is more than one name): ");
+		designers = keyboard.nextLine();
+		System.out.print("\nEnter Minimum Number of Players: ");
+		minPlayers = keyboard.nextInt();
+		System.out.print("\nEnter Maximum Number of Players: ");
+		maxPlayers = keyboard.nextInt();
+		keyboard.nextLine();
+		
+		numOfPlayers = minPlayers + "-" + maxPlayers;
+		
+		BoardGame newBoardGame = new BoardGame(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, numOfPlayers, designers);
+		db.addRecord(newBoardGame);
 		
 		System.out.println("New Toy Added!");
 	}
 	
 	public void promptAddAnimal(String serialNumber) {
 		keyboard = new Scanner(System.in);
+		String material;
+		String size;
 		
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
@@ -267,7 +296,15 @@ public class Menu extends View {
 		System.out.println("\nEnter Available Counts: ");
 		availableCount = keyboard.nextInt();
 		System.out.println("\nEnter Appropiate Age: ");
-		appropiateAge = keyboard.nextInt();
+		appropriateAge = keyboard.nextInt();
+		System.out.print("\nEnter Material: ");
+		material = keyboard.nextLine();
+		System.out.print("\nEnter Size: ");
+		size = keyboard.nextLine();
+		keyboard.nextLine();
+		
+		Animal newAnimal = new Animal(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, material, size);
+		db.addRecord(newAnimal);
 		
 		System.out.println("New Toy Added!");
 	}
