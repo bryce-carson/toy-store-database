@@ -174,33 +174,44 @@ public class Menu extends View {
 
 	}
 	
+	/**
+	 * Method to print the add toy menu, it will later display the proper serial numbers
+	 */
 	public void printAddToyMenu(){
-		
 		String serialNumber = promptSerialNumber();
 		
 		switch (serialNumber.charAt(0)) {
 			case 0: 
 			case 1:
 				promptAddFigure(serialNumber);
+				promptEnterToContinue();
 				break;
 			case 2: 
 			case 3:
 				promptAddAnimal(serialNumber);
+				promptEnterToContinue();
 				break;
 			case 4: 
 			case 5: 
 			case 6:
 				promptAddPuzzles(serialNumber);
+				promptEnterToContinue();
 				break;
 			case 7: 
 			case 8: 
 			case 9:
 				promptAddBoardGames(serialNumber);
+				promptEnterToContinue();
 				break;
 		}
 		
 	}
 	
+	/**
+	 * Method to prompt user to add the properties of a puzzle to be added to the toy arraylist
+	 * 
+	 * @param serialNumber the serial number of that was already validated and checked
+	 */
 	public void promptAddPuzzles(String serialNumber) {
 		keyboard = new Scanner(System.in);
 		String puzzleType;
@@ -225,6 +236,11 @@ public class Menu extends View {
 		System.out.println("New Toy Added!");
 	}
 	
+	/**
+	 * Method to prompt user to add the properties of a figure to be added to the toy arraylist
+	 * 
+	 * @param serialNumber the serial number of that was already validated and checked
+	 */
 	public void promptAddFigure(String serialNumber) {
 		keyboard = new Scanner(System.in);
 		String classification;
@@ -249,6 +265,11 @@ public class Menu extends View {
 		System.out.println("New Toy Added!");
 	}
 	
+	/**
+	 * Method to prompt user to add the properties of a board game to be added to the toy arraylist
+	 * 
+	 * @param serialNumber the serial number of that was already validated and checked
+	 */
 	public void promptAddBoardGames(String serialNumber) {
 		keyboard = new Scanner(System.in);
 		String designers;
@@ -282,6 +303,11 @@ public class Menu extends View {
 		System.out.println("New Toy Added!");
 	}
 	
+	/**
+	 * Method to prompt user to add the properties of an animal to be added to the toy arraylist
+	 * 
+	 * @param serialNumber the serial number of that was already validated and checked
+	 */
 	public void promptAddAnimal(String serialNumber) {
 		keyboard = new Scanner(System.in);
 		String material;
@@ -307,5 +333,14 @@ public class Menu extends View {
 		db.addRecord(newAnimal);
 		
 		System.out.println("New Toy Added!");
+	}
+	
+	/**
+	 * Method to allow player to return back to main menu
+	 * 
+	 */
+	public void promptEnterToContinue() {
+		System.out.println("Press \"Enter\" to Continue...");
+		keyboard.nextLine();
 	}
 }
