@@ -11,6 +11,12 @@ import ca.cyberscientist.toystoredb.model.BoardGame;
 import ca.cyberscientist.toystoredb.model.Figure;
 import ca.cyberscientist.toystoredb.model.Puzzle;
 
+/**
+ * Class to manage all the print menus of the application
+ * 
+ * @author Bryce Carson, Koddy Rae Madriaga
+ *
+ */
 public class Menu extends View {
 	
 	Scanner keyboard;
@@ -175,7 +181,7 @@ public class Menu extends View {
 	}
 	
 	/**
-	 * Method to print the add toy menu, it will later display the proper serial numbers
+	 * Method to print the add toy menu, it will later display the proper toy prompts that follow the serial numbers
 	 */
 	public void printAddToyMenu(){
 		String serialNumber = promptSerialNumber();
@@ -343,4 +349,21 @@ public class Menu extends View {
 		System.out.println("Press \"Enter\" to Continue...");
 		keyboard.nextLine();
 	}
+	
+	/**
+	 * Method to print the remove toy menu with the proper prompts to show all items corresponding the serial number and a prompt to make sure you want to remove the toy from the database
+	 */
+	public void printRemoveToyMenu() {
+		String serialNumber = promptSerialNumber();
+		
+		/*
+		 * Steps for this method 
+		 * 1) Look through the project to find the proper method to check if the serial number is in the system
+		 * 2) Print the corresponding object that contains the serial number in string format
+		 * 3) Prompt yes/no to remove the object as confirmation
+		 * 4) Print item removed if yes
+		 * 5) Prompt enter to continue
+		 */
+	}
+	
 }
