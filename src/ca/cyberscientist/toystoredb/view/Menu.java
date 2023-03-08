@@ -309,7 +309,7 @@ public class Menu extends View {
 	}
 	
 	/**
-	 * Method to allow player to return back to main menu
+	 * Method to allow player to press enter to continue
 	 * 
 	 */
 	public void promptEnterToContinue() {
@@ -319,23 +319,15 @@ public class Menu extends View {
 	}
 	
 	/**
-	 * Method to print the remove toy menu with the proper prompts to show all items corresponding the serial number and a prompt to make sure you want to remove the toy from the database
+	 * Method to prompt the user for yes or no
 	 */
 	public char promptYesOrNo() {
 		Scanner keyboard = new Scanner(System.in);
 		char checker;
 		System.out.println("Do you want to remove it (Y\\N)");
 		checker = keyboard.nextLine().charAt(0);
+		keyboard.nextLine();
 		
 		return checker;
-		
-		/*
-		 * Steps for this method 
-		 * 1) Look through the project to find the proper method to check if the serial number is in the system
-		 * 2) Print the corresponding object that contains the serial number in string format
-		 * 3) Prompt yes/no to remove the object as confirmation
-		 * 4) Print item removed if yes
-		 * 5) Prompt enter to continue
-		 */
 	}
 }

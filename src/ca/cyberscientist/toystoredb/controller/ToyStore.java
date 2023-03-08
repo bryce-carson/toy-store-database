@@ -132,6 +132,9 @@ public class ToyStore {
 		}
 	}
 	
+	/**
+	 * Method to prompt the user and print the remove toy menu, confirming that the user wants to remove the toy 
+	 */
 	public void removeToyMenu() {
 		String serialNumberOfToyToRemove = STORE_MENU.promptSerialNumber();
 		char checker = STORE_MENU.promptYesOrNo();
