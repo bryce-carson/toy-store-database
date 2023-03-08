@@ -10,19 +10,6 @@ import ca.cyberscientist.toystoredb.model.Figure;
 import ca.cyberscientist.toystoredb.model.Puzzle;
 
 public class Menu extends View {
-	
-	/**
-	 * Common Variables used by majority of addToy prompt methods
-	 * 
-	 */
-	Database db;
-	Scanner keyboard;
-	private String toyName;
-	private String toyBrand;
-	private double toyPrice;
-	private int availableCount;
-	private int appropriateAge;
-	
 
 	/**
 	 * Inteded usage pattern: if the user searches by serial number, get the
@@ -87,7 +74,7 @@ public class Menu extends View {
 	// indicate a method throws an exception in a method header in this
 	// assignment.
 	private String getSerialNumber(String prompt) throws InvalidSerialNumberException {
-		keyboard = new Scanner(System.in);
+		Scanner keyboard = new Scanner(System.in);
 		System.out.print(prompt);
 		String serialNumber = keyboard.nextLine();
 
@@ -105,7 +92,7 @@ public class Menu extends View {
 	}
 
     public String promptToyName() {
-        keyboard = new Scanner(System.in);
+    	Scanner keyboard = new Scanner(System.in);
 
         System.out.print("Enter a toy's name to search for it: ");
         String toyName = keyboard.nextLine();
@@ -173,46 +160,18 @@ public class Menu extends View {
 	}
 	
 	/**
-	 * Method to print the add toy menu, it will later display the proper toy prompts that follow the serial numbers
-	 */
-	public void printAddToyMenu(){
-		String serialNumber = promptSerialNumber();
-		
-		switch (serialNumber.charAt(0)) {
-			case 0: 
-			case 1:
-				promptAddFigure(serialNumber);
-				promptEnterToContinue();
-				break;
-			case 2: 
-			case 3:
-				promptAddAnimal(serialNumber);
-				promptEnterToContinue();
-				break;
-			case 4: 
-			case 5: 
-			case 6:
-				promptAddPuzzles(serialNumber);
-				promptEnterToContinue();
-				break;
-			case 7: 
-			case 8: 
-			case 9:
-				promptAddBoardGames(serialNumber);
-				promptEnterToContinue();
-				break;
-		}
-		
-	}
-	
-	/**
 	 * Method to prompt user to add the properties of a puzzle to be added to the toy arraylist
 	 * 
 	 * @param serialNumber the serial number of that was already validated and checked
 	 */
-	public void promptAddPuzzles(String serialNumber) {
-		keyboard = new Scanner(System.in);
+	public Puzzle promptAddPuzzles(String serialNumber) {
+		Scanner keyboard = new Scanner(System.in);
 		String puzzleType;
+		String toyName;
+		String toyBrand;
+		double toyPrice;
+		int availableCount;
+		int appropriateAge;
 		
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
@@ -229,9 +188,10 @@ public class Menu extends View {
 		keyboard.nextLine();
 		
 		Puzzle newPuzzle = new Puzzle(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, puzzleType);
-		db.addRecord(newPuzzle);
 		
 		System.out.println("New Toy Added!");
+		
+		return newPuzzle;
 	}
 	
 	/**
@@ -239,9 +199,14 @@ public class Menu extends View {
 	 * 
 	 * @param serialNumber the serial number of that was already validated and checked
 	 */
-	public void promptAddFigure(String serialNumber) {
-		keyboard = new Scanner(System.in);
+	public Figure promptAddFigure(String serialNumber) {
+		Scanner keyboard = new Scanner(System.in);
 		String classification;
+		String toyName;
+		String toyBrand;
+		double toyPrice;
+		int availableCount;
+		int appropriateAge;
 		
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
@@ -258,9 +223,9 @@ public class Menu extends View {
 		keyboard.nextLine();
 		
 		Figure newFigure = new Figure(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, classification);
-		db.addRecord(newFigure);
-		
 		System.out.println("New Toy Added!");
+		return newFigure;
+		
 	}
 	
 	/**
@@ -268,12 +233,17 @@ public class Menu extends View {
 	 * 
 	 * @param serialNumber the serial number of that was already validated and checked
 	 */
-	public void promptAddBoardGames(String serialNumber) {
-		keyboard = new Scanner(System.in);
+	public BoardGame promptAddBoardGames(String serialNumber) {
+		Scanner keyboard = new Scanner(System.in);
 		String designers;
 		int minPlayers;
 		int maxPlayers;
 		String numOfPlayers;
+		String toyName;
+		String toyBrand;
+		double toyPrice;
+		int availableCount;
+		int appropriateAge;
 		
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
@@ -296,9 +266,9 @@ public class Menu extends View {
 		numOfPlayers = minPlayers + "-" + maxPlayers;
 		
 		BoardGame newBoardGame = new BoardGame(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, numOfPlayers, designers);
-		db.addRecord(newBoardGame);
 		
 		System.out.println("New Toy Added!");
+		return newBoardGame;
 	}
 	
 	/**
@@ -306,10 +276,15 @@ public class Menu extends View {
 	 * 
 	 * @param serialNumber the serial number of that was already validated and checked
 	 */
-	public void promptAddAnimal(String serialNumber) {
-		keyboard = new Scanner(System.in);
+	public Animal promptAddAnimal(String serialNumber) {
+		Scanner keyboard = new Scanner(System.in);
 		String material;
 		String size;
+		String toyName;
+		String toyBrand;
+		double toyPrice;
+		int availableCount;
+		int appropriateAge;
 		
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
@@ -328,9 +303,9 @@ public class Menu extends View {
 		keyboard.nextLine();
 		
 		Animal newAnimal = new Animal(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, material, size);
-		db.addRecord(newAnimal);
-		
 		System.out.println("New Toy Added!");
+		return newAnimal;
+		
 	}
 	
 	/**
@@ -338,6 +313,7 @@ public class Menu extends View {
 	 * 
 	 */
 	public void promptEnterToContinue() {
+		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Press \"Enter\" to Continue...");
 		keyboard.nextLine();
 	}
@@ -345,8 +321,13 @@ public class Menu extends View {
 	/**
 	 * Method to print the remove toy menu with the proper prompts to show all items corresponding the serial number and a prompt to make sure you want to remove the toy from the database
 	 */
-	public void printRemoveToyMenu() {
-		String serialNumber = promptSerialNumber();
+	public char promptYesOrNo() {
+		Scanner keyboard = new Scanner(System.in);
+		char checker;
+		System.out.println("Do you want to remove it (Y\\N)");
+		checker = keyboard.nextLine().charAt(0);
+		
+		return checker;
 		
 		/*
 		 * Steps for this method 

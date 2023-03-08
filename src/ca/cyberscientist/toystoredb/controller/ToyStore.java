@@ -41,33 +41,21 @@ public class ToyStore {
 		do { // do while because we need to see the menu atleast once
 			char mainMenuChoice = STORE_MENU.promptMainMenu(); // change this later to the proper main menu prompt in
 																// view
-
 			switch (mainMenuChoice) {
 			case 'S':
 				searchAndPurchaseMenu();
-
 				break;
-
 			case 'A':
-				// STORE_MENU.promptAddNewToy uncomment when implemented, this calls db.addToy
-
+				addToyMenu();
 				break;
-
 			case 'R':
-				String serialNumberOfToyToRemove = STORE_MENU.promptSerialNumber();
-				Toy toyToRemove = DATABASE_HANDLER
-						.searchRecords(serialNumberOfToyToRemove, DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER).get(0);
-				DATABASE_HANDLER.removeRecord(toyToRemove);
-
+				removeToyMenu();
 				break;
-
 			case 'Q':
 				DATABASE_HANDLER.writeToDisk();
 				continueLooping = false;
-
 				break;
 			}
-
 		} while (continueLooping); // Semantic flag for whether or not to continue looping.
 	}
 
@@ -110,5 +98,48 @@ public class ToyStore {
 		case 'Q':
 			break;
 		}
+	}
+	
+	/**
+	 * Method to print the add toy menu, it will later display the proper toy prompts that follow the serial numbers
+	 */
+	public void addToyMenu(){
+		String serialNumber = STORE_MENU.promptSerialNumber();
+		
+		switch (serialNumber.charAt(0)) {
+			case 0: 
+			case 1:
+				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddFigure(serialNumber));
+				STORE_MENU.promptEnterToContinue();
+				break;
+			case 2: 
+			case 3:
+				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddAnimal(serialNumber));
+				STORE_MENU.promptEnterToContinue();
+				break;
+			case 4: 
+			case 5: 
+			case 6:
+				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddPuzzles(serialNumber));
+				STORE_MENU.promptEnterToContinue();
+				break;
+			case 7: 
+			case 8: 
+			case 9:
+				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddBoardGames(serialNumber));
+				STORE_MENU.promptEnterToContinue();
+				break;
+		}
+	}
+	
+	public void removeToyMenu() {
+		String serialNumberOfToyToRemove = STORE_MENU.promptSerialNumber();
+		char checker = STORE_MENU.promptYesOrNo();
+		
+		if (checker == 'Y') {
+			Toy toyToRemove = DATABASE_HANDLER.searchRecords(serialNumberOfToyToRemove, DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER).get(0);
+			DATABASE_HANDLER.removeRecord(toyToRemove);
+		}
+		
 	}
 }
