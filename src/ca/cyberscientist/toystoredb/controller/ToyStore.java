@@ -43,32 +43,32 @@ public class ToyStore {
 																// view
 
 			switch (mainMenuChoice) {
-				case 'S':
-					searchAndPurchaseMenu();
+			case 'S':
+				searchAndPurchaseMenu();
 
-					break;
+				break;
 
-				case 'A':
-					// STORE_MENU.promptAddNewToy uncomment when implemented, this calls db.addToy
+			case 'A':
+				// STORE_MENU.promptAddNewToy uncomment when implemented, this calls db.addToy
 
-					break;
+				break;
 
-				case 'R':
-					String serialNumberOfToyToRemove = STORE_MENU.promptSerialNumber();
-          Toy toyToRemove = DATABASE_HANDLER.searchRecords(serialNumberOfToyToRemove,
-                                                           DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER).get(0);
-          DATABASE_HANDLER.removeRecord(toyToRemove);
+			case 'R':
+				String serialNumberOfToyToRemove = STORE_MENU.promptSerialNumber();
+				Toy toyToRemove = DATABASE_HANDLER
+						.searchRecords(serialNumberOfToyToRemove, DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER).get(0);
+				DATABASE_HANDLER.removeRecord(toyToRemove);
 
-					break;
+				break;
 
-				case 'Q':
-					DATABASE_HANDLER.writeToDisk();
-					continueLooping = false;
+			case 'Q':
+				DATABASE_HANDLER.writeToDisk();
+				continueLooping = false;
 
-					break;
+				break;
 			}
 
-		} while(continueLooping); // Semantic flag for whether or not to continue looping.
+		} while (continueLooping); // Semantic flag for whether or not to continue looping.
 	}
 
 	/**
@@ -85,37 +85,30 @@ public class ToyStore {
 
 		// Search by serial number, name, or type.
 		switch (searchMethod) {
-			case 'S':
-				String serialNumber = STORE_MENU.promptSerialNumber();
-				searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber,
-						DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
+		case 'S':
+			String serialNumber = STORE_MENU.promptSerialNumber();
+			searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber,
+					DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
+			searchResultsTable = new SearchResultsTable(searchResultsToyList);
+			searchResultsTable.promptPurchaseToyOrQuit();
+			break;
 
-				searchResultsTable = new SearchResultsTable(searchResultsToyList);
-				searchResultsTable.promptPurchaseToyOrQuit();
-				
-				break;
+		case 'N':
+			String toyName = STORE_MENU.promptToyName();
+			searchResultsToyList = DATABASE_HANDLER.searchRecords(toyName, DATABASE_HANDLER.SEARCH_BY_TOY_NAME);
+			searchResultsTable = new SearchResultsTable(searchResultsToyList);
+			searchResultsTable.promptPurchaseToyOrQuit();
+			break;
 
-			case 'N':
-				String toyName = STORE_MENU.promptToyName();
+		case 'T':
+			char toyType = STORE_MENU.promptToyType();
+			searchResultsToyList = DATABASE_HANDLER.searchRecords(toyType);
+			searchResultsTable = new SearchResultsTable(searchResultsToyList);
+			searchResultsTable.promptPurchaseToyOrQuit();
+			break;
 
-				searchResultsToyList = DATABASE_HANDLER.searchRecords(toyName, DATABASE_HANDLER.SEARCH_BY_TOY_NAME);
-
-				searchResultsTable = new SearchResultsTable(searchResultsToyList);
-				searchResultsTable.promptPurchaseToyOrQuit();
-				
-				break;
-
-			case 'T':
-				char toyType = STORE_MENU.promptToyType();
-				searchResultsToyList = DATABASE_HANDLER.searchRecords(toyType);
-
-				searchResultsTable = new SearchResultsTable(searchResultsToyList);
-				searchResultsTable.promptPurchaseToyOrQuit();
-
-				break;
-
-			case 'Q':
-				break;
+		case 'Q':
+			break;
 		}
 	}
 }
