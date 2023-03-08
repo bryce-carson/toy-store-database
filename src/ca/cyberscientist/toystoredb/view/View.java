@@ -36,7 +36,7 @@ public abstract class View {
             userInput = keyboard.nextLine().toUpperCase();
         }
 
-        keyboard.close();
+        //keyboard.close();
 
         return userInput.charAt(0);
     }

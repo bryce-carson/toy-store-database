@@ -45,21 +45,26 @@ public class ToyStore {
 			switch (mainMenuChoice) {
 				case 'S':
 					searchAndPurchaseMenu();
+
 					break;
 
 				case 'A':
-					// menu.promptAddNewToy uncomment when implemented, this calls db.addToy
+					// STORE_MENU.promptAddNewToy uncomment when implemented, this calls db.addToy
+
 					break;
 
 				case 'R':
-					String serialNumberToScrub = STORE_MENU.promptSerialNumber();
+					String serialNumberOfToyToRemove = STORE_MENU.promptSerialNumber();
+          Toy toyToRemove = DATABASE_HANDLER.searchRecords(serialNumberOfToyToRemove,
+                                                           DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER).get(0);
+          DATABASE_HANDLER.removeRecord(toyToRemove);
 
-					// db.removeToyFromList();
 					break;
 
 				case 'Q':
 					DATABASE_HANDLER.writeToDisk();
 					continueLooping = false;
+
 					break;
 			}
 
@@ -87,6 +92,7 @@ public class ToyStore {
 
 				searchResultsTable = new SearchResultsTable(searchResultsToyList);
 				searchResultsTable.promptPurchaseToyOrQuit();
+				
 				break;
 
 			case 'N':
@@ -96,6 +102,7 @@ public class ToyStore {
 
 				searchResultsTable = new SearchResultsTable(searchResultsToyList);
 				searchResultsTable.promptPurchaseToyOrQuit();
+				
 				break;
 
 			case 'T':

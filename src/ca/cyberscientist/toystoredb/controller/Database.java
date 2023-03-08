@@ -114,19 +114,19 @@ public class Database {
 
         for (Toy toy : this.records) {
             switch (query) {
-                case 'a':
+                case 'A':
                     if (toy instanceof Animal)
                         searchResults.add(toy);
                     break;
-                case 'b':
+                case 'B':
                     if (toy instanceof BoardGame)
                         searchResults.add(toy);
                     break;
-                case 'f':
+                case 'F':
                     if (toy instanceof Figure)
                         searchResults.add(toy);
                     break;
-                case 'p':
+                case 'P':
                     if (toy instanceof Puzzle)
                         searchResults.add(toy);
                     break;

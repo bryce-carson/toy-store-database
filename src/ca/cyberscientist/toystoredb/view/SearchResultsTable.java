@@ -6,10 +6,26 @@ import java.util.Scanner;
 import ca.cyberscientist.toystoredb.model.*;
 
 public class SearchResultsTable extends View {
+	
+    private int rowSelectorDigitLength;
 
-    // Set by the constructor and only used privately.
-    private final int NUMBER_PRINTABLE_FIELDS = 7;
-    private int[] minimumFieldWidths = new int[NUMBER_PRINTABLE_FIELDS]; // FIXME: this needs to be initialized as the widths of the header strings.
+	// FIXME: Eclipse is complaining HORRIBLY and apparently incorrectly about syntax.
+//    // Set by the constructor and only used privately.
+//	private final String[] FIELD_HEADER_STRINGS = {
+//			"Name", "Brand", "Price", "No. Available", "Minimum Age", "Misc. info", "Misc. info"
+//	};
+//    private final int NUMBER_PRINTABLE_FIELDS = FIELD_HEADER_STRINGS.length;
+//    
+//    private int[] minimumFieldWidths = new int[NUMBER_PRINTABLE_FIELDS];
+//    
+//    for(int i = 0 ; i < NUMBER_PRINTABLE_FIELDS ; i++) {
+//    	minimumFieldWidths[i] = FIELD_HEADER_STRINGS[i].length();
+//    }
+	
+	private int[] minimumFieldWidths = {
+			4, 5, 5, 13,
+			11, 10, 10
+	};
 
     // NOTE: TODO: The length of this array is important for printing the table.
     // The length must be consumed when determining the amount of padding to
@@ -84,7 +100,7 @@ public class SearchResultsTable extends View {
         }
 
         // Initialize an integer array of counters.
-        int[] fieldWidths = new int[6];
+        int[] fieldWidths = new int[7];
 
         // Determine the maximum through simple iteration. There's a better way, of
         // course, but this is dead simple.
@@ -95,7 +111,12 @@ public class SearchResultsTable extends View {
         }
 
         // Overwrite the object's array with the local data.
-        minimumFieldWidths = fieldWidths;
+        for(int i = 0 ; i < fieldWidths.length ; i++) {
+        	minimumFieldWidths[i] = (fieldWidths[i] > minimumFieldWidths[i]) ? fieldWidths[i] : minimumFieldWidths[i]; 
+        	// FIXME:
+        	System.out.println("[DEBUG]: " + minimumFieldWidths[i]);
+        }
+        //minimumFieldWidths = fieldWidths;
 
         // Headers define the actual minimum size of the table, but the cell content can expand a given field's width.
         //␠␠␠␠╒════════════╤═════Ά╤══════Β╤══════Γ╤══════════Δ╤════════════Ɛ╤═══════════Ζ╤═══════════Η╕                printTableHeader: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
@@ -125,44 +146,58 @@ public class SearchResultsTable extends View {
         // Remove the last toy from the list so that each toy can be printed by
         // the toy row printer, then a separator printed. The final toy is
         // printed manually followed by an end of table separator.
-        Toy finalToy = this.searchResultsToyList.remove(this.searchResultsToyList.size());
+        Toy finalToy;
+        if(this.searchResultsToyList.size() > 1) {
+        	finalToy = this.searchResultsToyList.remove(this.searchResultsToyList.size() - 1);
+        } else {
+        	// .remove is not appropriate because it throws an IndexOutOfBoundsException
+        	finalToy = this.searchResultsToyList.remove(0);
+        }
 
         printTableHeader();
 
-        for (Toy toy : this.searchResultsToyList) {
-            printTableRow(toy); // TODO: implement method.
-            printTableRowSeparator(); // TODO: implement method.
+        if(searchResultsToyList.size() >= 1) {
+            for (Toy toy : this.searchResultsToyList) {
+                printTableRow(toy); // TODO: implement method.
+                printTableRowSeparator(); // TODO: implement method.
+            }	
         }
 
+        searchResultsToyList.add(finalToy); // Add the toy back to the list so the index works.
         printTableRow(finalToy);
+        System.out.println(); // This needs to be done manually, because it's easier than overloading printTableRow for finalToy.
 
         printTableFooter();
     }
 
     private void printTableHeader() {
         // Part One: printing the header separator (top border)
-        System.out.print("\u2554");
+        System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2554"); // Left padding and the length of the array (e.g. 001 or 999).
         // ╔
-        System.out.print("\u2554".repeat(12));
-        // ═
-        System.out.print("\u2564");
-        // ╤ end of field 0: Serial No.
+        System.out.print("\u2550".repeat(12));
+        // ═ end of field 0: Serial No.
 
         // Algorithm for printing the header according to field widths 1:7
-        for(int fieldWidth : minimumFieldWidths) {
-            System.out.print("\u2554".repeat(fieldWidth));
-            // ═
-
+        for(int i = 0 ; i < minimumFieldWidths.length - 1 ; i++) {
             System.out.print("\u2564");
-            // ╤ end of i field
+            // ╤
+            
+            System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2));
+            // ═
         }
-
-        System.out.print("\u2557");
+        
+        System.out.print("\u2564");
+        // ╤
+        
+        System.out.print("\u2550".repeat(minimumFieldWidths[6] + 2));
+        // ═
+        
+        System.out.println("\u2557");
         // ╗
 
         // Part Two: printing the header row table cells
         // │ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│ Misc. infoΗ│
-        System.out.print("\u2502 Serial No. "); // │␠Serial No.␠
+        System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2502 Serial No. "); // │␠Serial No.␠
 
         // Field separator and padding, │␠, field name, padding
         for(int i = 0 ; i < minimumFieldWidths.length ; i++ ) {
@@ -170,21 +205,20 @@ public class SearchResultsTable extends View {
 
             // Which string to use
             switch(i) {
-            case 0: headerFieldString = "Name";
-            case 1: headerFieldString = "Brand";
-            case 2: headerFieldString = "Price";
-            case 3: headerFieldString = "Available";
-            case 4: headerFieldString = "Minimum age";
+            case 0: headerFieldString = "Name"; break;
+            case 1: headerFieldString = "Brand"; break;
+            case 2: headerFieldString = "Price"; break;
+            case 3: headerFieldString = "No. Available"; break;
+            case 4: headerFieldString = "Minimum age"; break;
             case 5:
-            case 6: headerFieldString = "Misc. info";
+            case 6: headerFieldString = "Misc. info"; break;
             }
 
             System.out.print("\u2502 "); // Table cell separator: │␠
-            // FIXME: think hard about the calculation. It shouldn't be less the padding, the padding actually needs to be added to the length of the cell content.
-            System.out.print(headerFieldString + " ".repeat(minimumFieldWidths[i] - headerFieldString.length() - 1)); // field width, less the field string length, less the left padding
+            System.out.print(headerFieldString + " ".repeat(minimumFieldWidths[i] - headerFieldString.length() + 1)); // field width, less the field string length, plus the right padding
         }
 
-        System.out.println(); // Just advance the line, do not print any content.
+        System.out.println("\u2502 "); // Terminate the line with the right-side table border.
     };
 
     // TODO: this method is more complex than the others. It must account for
@@ -195,54 +229,75 @@ public class SearchResultsTable extends View {
     // pass to the view without introducing and undue amount of code which would
     // be more difficult to maintain and debug.
     private void printTableRow(Toy toy) {
-        // Setup
-        String rowSelectorDigitLength = String.format("%02d", searchResultsToyList.length()).length(); // The first element is indexed with zero, but here we must not change the return value of the length method because we will not be using this number for indexing.
-
         // Part one: printing the information common to all toys.
         // Row selector and serial number: ␠###═╪␠##########␠
         System.out.print(String.format(" %02d", searchResultsToyList.indexOf(toy) + 1) + "\u2550\u256a "); // ␠###═╪
         System.out.print(toy.getSerialNumber() + " "); // ##########␠.
 
         // Other common fields
-        System.out.print ("\u2502 " +        toy.getName() + " ".repeat (minimumFieldWidths[0] -        toy.getName().length () + 1)); // │␠        toy.getName()Ά␠
-        System.out.print ("\u2502 " +       toy.getBrand() + " ".repeat (minimumFieldWidths[1] -       toy.getBrand().length () + 1)); // │␠       toy.getBrand()Β␠
-        System.out.print ("\u2502 " +       toy.getPrice() + " ".repeat (minimumFieldWidths[2] -       toy.getPrice().length () + 1)); // │␠       toy.getPrice()Γ␠
-        System.out.print ("\u2502 " +   toy.getAvailable() + " ".repeat (minimumFieldWidths[3] -   toy.getAvailable().length () + 1)); // │␠   toy.getAvailable()Δ␠
-        System.out.print ("\u2502 " +  toy.getMinimumAge() + " ".repeat (minimumFieldWidths[4] -  toy.getMinimumAge().length () + 1)); // │␠ toy.getMiniumumAge()Ɛ␠
- 
-  
+        System.out.print("\u2502 " + toy.getName()  + " ".repeat (minimumFieldWidths[0] - toy.getName().length() + 1)); // │␠toy.getName()Ά␠
+        System.out.print("\u2502 " + toy.getBrand() + " ".repeat (minimumFieldWidths[1] - toy.getBrand().length() + 1)); // │␠toy.getBrand()Β␠
+        System.out.print("\u2502 " + toy.getPrice() + " ".repeat (minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() + 1)); // │␠toy.getPrice()Γ␠
+        System.out.print("\u2502 " + toy.getAvailableCount() + " ".repeat (minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // │␠toy.getAvailable()Δ␠
+        System.out.print("\u2502 " + toy.getAppropriateAge() + " ".repeat (minimumFieldWidths[4] - Integer.toString(toy.getAppropriateAge()).length() + 1)); // │␠toy.getMiniumumAge()Ɛ␠
+
         // TODO: Part two: subclass-specific Misc. info 1 and Misc. info 2
         // The most rudimentary reflection; equivalent in complexity to instanceof, which was taught in class. Does not require an import.
         // NOTE: Board games are the only class which has a double-height row, so the printing is otherwise the same in each case.
-        switch(toy.getClass())  {
-        case Animal.class:
-            Animal a = (Animal)toy;
+        if(toy instanceof Animal) {
+            Animal a = (Animal) toy;
             String material = a.getMaterial();
             String size = a.getSize();
-            // TODO: print the material and size.
-            break;
+            System.out.print("\u2502 " + material + " ".repeat (minimumFieldWidths[5] - material.length() + 1));
+            System.out.print("\u2502 " + size + " ".repeat (minimumFieldWidths[6] - size.length() + 1) + "\u2502");
 
-        case BoardGame.class:
-            BoardGame b = (BoardGame)toy;
-            String players = b.getMinimumPlayers() + "-" + b.getMaximumPlayers();
+        } else if(toy instanceof BoardGame) {
+            BoardGame b = (BoardGame) toy;
+            String players = b.getMinNumPlayers() + "-" + b.getMaxNumPlayers();
             String[] designers = b.getDesigner().split(",");
-            for(int i = 0 ; i < designers.length ; i++) {
-                designers[i] = designers[i].trim(); // Ensure there are no leading or trailing spaces in the string containing the name.
+
+            for (int i = 0; i < designers.length; i++) {
+                designers[i] = designers[i].trim(); // Ensure there are no leading or trailing spaces in the string
+                                                    // containing the name.
             }
-            // Print the players and the designers. NOTE: the designers, if longer than 1, requires multi-line printing and we must print the rows in a loop.
-            break;
 
-        case Figure.class:
-            Figure f = (Figure)toy;
+            // Print the players and the designers. NOTE: the designers, if
+            // longer than 1, requires multi-line printing and we must print the
+            // rows in a loop.
+            System.out.print("\u2502 " + players + " ".repeat(minimumFieldWidths[5] - players.length() + 1));
+            System.out.print("\u2502 " + designers[0] + " ".repeat(minimumFieldWidths[6] - designers[0].length() + 1) + "\u2502");
+
+            // In the case there is more than one designer we need to print a
+            // row per additional designer, with empty fields, except for the
+            // last field.
+            if(designers.length > 1) {
+                for(int i = 1 ; i < designers.length ; i++) {
+                    // Print the empty serial number field
+                    //␠␠␠␠│
+                    System.out.print(" ".repeat(1 + rowSelectorDigitLength + 11) + "\u2502"); // Left padding that is always present, the field length of the row selector digit, and then the ten characters that would be the serial number, and the right padding.
+
+                    // Print empty fields for the inner six fields
+                    for(int field = 0 ; field < 6 ; field++) {
+                        System.out.print("\u2502" + " ".repeat(minimumFieldWidths[field] + 1));
+                    }
+
+                    // Print the designer name.
+                    System.out.print("\u2502 " + designers[i] + " ".repeat(minimumFieldWidths[6] - designers[i].length() + 1) + "\u2502");
+                }
+            }
+        } else if(toy instanceof Figure) {
+            Figure f = (Figure) toy;
             String classification = f.getClassification();
-            // TODO: print the classification and the empty Misc. info 2 table cell.
-            break;
 
-        case Puzzle.class:
-            Puzzle p = (Puzzle)toy;
+            System.out.print("\u2502 " + classification + " ".repeat(minimumFieldWidths[5] - classification.length() + 1));
+            System.out.print("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
+
+        } else if(toy instanceof Puzzle) {
+            Puzzle p = (Puzzle) toy;
             String puzzleType = p.getPuzzleType();
-            // TODO: print the puzzle type and the empty Misc. info 2 table cell.
-            break;
+
+            System.out.print("\u2502 " + puzzleType + " ".repeat(minimumFieldWidths[5] - puzzleType.length() + 1));
+            System.out.print("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
         }
     };
 
@@ -262,7 +317,7 @@ public class SearchResultsTable extends View {
 
     private void printTableFooter() {
         // Part one: print the Serial No. field
-        System.out.print("\u2558" + "\u2550".repeat(12)); // ╘════════════
+        System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2558" + "\u2550".repeat(12)); // ╘════════════
 
         // Part two: variable field widths
         for (int i = 0; i < minimumFieldWidths.length; i++) {
@@ -304,8 +359,8 @@ public class SearchResultsTable extends View {
             String input = keyboard.nextLine();
 
             // Only positive integers and lower or uppercase Q are valid input.
-            if (input.toUpperCase().charAt(0) == 'Q' || (input.matches("\\d*") && Integer.parseInt(input) > 0)) {
-                if (input.matches("\\d*")) {
+            if (input.toUpperCase().charAt(0) == 'Q' || (input.matches("\\d{10}") && Integer.parseInt(input) > 0)) {
+                if (input.matches("\\d{10}")) {
                     userSelection = Integer.parseInt(input);
                 } else {
                     userSelection = 0; // Let Q be 0.
@@ -325,5 +380,9 @@ public class SearchResultsTable extends View {
 
     public SearchResultsTable(ArrayList<Toy> toyList) {
         this.searchResultsToyList = toyList;
+        this.rowSelectorDigitLength = String.format("%02d", searchResultsToyList.size()).length(); // The first element is indexed with zero, but here we must not change the return value of the length method because we will not be using this number for indexing.
+
+        // Print the table.
+        printSearchResultsTable();
     }
 }

@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import ca.cyberscientist.toystoredb.model.Database;
+import ca.cyberscientist.toystoredb.controller.Database;
 
 /**
  * @author Bryce Carson

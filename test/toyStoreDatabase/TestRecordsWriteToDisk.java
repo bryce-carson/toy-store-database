@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import ca.cyberscientist.toystoredb.model.Animal;
-import ca.cyberscientist.toystoredb.model.Database;
+import ca.cyberscientist.toystoredb.controller.Database;
 import ca.cyberscientist.toystoredb.model.Toy;
 
 /**

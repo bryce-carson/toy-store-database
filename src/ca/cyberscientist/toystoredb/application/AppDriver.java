@@ -1,5 +1,9 @@
 package ca.cyberscientist.toystoredb.application;
 
+import java.io.FileNotFoundException;
+
+import ca.cyberscientist.toystoredb.controller.ToyStore;
+
 /**
  * The class which initializes the program and handles any command-line arguments.
  * @author Bryce Carson
@@ -10,10 +14,10 @@ public class AppDriver {
 	/**
 	 * 
 	 * @param args Command-line arguments, which are ignored.
+	 * @throws FileNotFoundException 
 	 */
-	public static void main(String[] args) {
-		// TODO Instantiate the controller.
-
+	public static void main(String[] args) throws FileNotFoundException {
+		new ToyStore();
 	}
 
 }

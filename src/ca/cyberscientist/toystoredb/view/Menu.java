@@ -1,7 +1,5 @@
 package ca.cyberscientist.toystoredb.view;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import ca.cyberscientist.toystoredb.exceptions.*;
