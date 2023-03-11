@@ -27,6 +27,9 @@ public class SearchResultsTable extends View {
 			11, 10, 10
 	};
 
+    // NOTE: TODO: The length of this array is important for printing the table.
+    // The length must be consumed when determining the amount of padding to
+    // print to the left of the table in each method.
     private final ArrayList<Toy> searchResultsToyList;
 
     private void ascertainFieldWidths() {
@@ -91,8 +94,8 @@ public class SearchResultsTable extends View {
                 int numberOfPlayersLength = Integer.toString(b.getMinNumPlayers()).length()
                         + Integer.toString(b.getMaxNumPlayers()).length() + 3;
 
-                workingArray[5][arrayIndex] = numberOfPlayersLength;
-                workingArray[6][arrayIndex] = boardGameDesignerLength;
+                workingArray[5][arrayIndex] = boardGameDesignerLength;
+                workingArray[6][arrayIndex] = numberOfPlayersLength;
             }
         }
 
@@ -109,8 +112,31 @@ public class SearchResultsTable extends View {
 
         // Overwrite the object's array with the local data.
         for(int i = 0 ; i < fieldWidths.length ; i++) {
-        	minimumFieldWidths[i] = (fieldWidths[i] > minimumFieldWidths[i]) ? fieldWidths[i] : minimumFieldWidths[i];
+        	minimumFieldWidths[i] = (fieldWidths[i] > minimumFieldWidths[i]) ? fieldWidths[i] : minimumFieldWidths[i]; 
+        	// FIXME:
+        	System.out.println("[DEBUG]: " + minimumFieldWidths[i]);
         }
+        //minimumFieldWidths = fieldWidths;
+
+        // Headers define the actual minimum size of the table, but the cell content can expand a given field's width.
+        //␠␠␠␠╒════════════╤═════Ά╤══════Β╤══════Γ╤══════════Δ╤════════════Ɛ╤═══════════Ζ╤═══════════Η╕                printTableHeader: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        //␠␠␠␠│ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│ Misc. infoΗ│                ....
+        //␠␠␠␠╞════════════╪═════Ά╪══════Β╪══════Γ╪══════════Δ╪════════════Ɛ╪═══════════Ζ╪═══════════Η╡                printTableRowSeparator
+        //␠01═╪ 0113513686 │ Toy soldier │ Gamen │ $ 14.06 │ 2 │ 5 │ Action figure │  │                                              printTableRow:
+        //    ╞════════════╪═══════════════════════════════╪═══════════╪══════════╪═══╪═══╪═════╪═════════════════╡      printTableRowSeparator: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        // 02═╪ 8685655988 │ Betrayal at House on the Hill │ Gamegenix │ $ 131.52 │ 9 │ 6 │ 2-6 │ 1. Barney Lugo  │      printTableRow:
+        //    │            │                               │           │          │   │   │     │ 2. Yu Zimmerman │      printTableRow:
+        //    ╘════════════╧═══════════════════════════════╧═══════════╧══════════╧═══╧═══╧═════╧═════════════════╛      printTableFooter: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
+        // The width of a row is 1 + 7 * (3 + xᵢ.length()), however, that is not
+        // a direct translation to algorithm because different parts of the
+        // table have different printing needs; some Toys must be printed with
+        // double height rows, or algorithmically determined row heights to fit
+        // in designers. There is also the issue of needing to print serial
+        // numbers and then also the selection for that row.
+        // Seven spacing variables, alpha, beta, gamma, delta, epsilon, zeta, eta; the first field, containing serial number, always has the same width. All variables begin with a value of three (padding for an empty value, printed as " ").
+        // The name column (ones are padding around data):
+        // 1 + fieldWidth[0] + 1 = Ά
+        // " " + cellData + " ".repeat(Ά - cellData.length() - 1)
     }
 
     private void printSearchResultsTable() {
@@ -129,26 +155,25 @@ public class SearchResultsTable extends View {
         }
 
         printTableHeader();
-        printTableRowSeparator();
 
         if(searchResultsToyList.size() >= 1) {
             for (Toy toy : this.searchResultsToyList) {
-                printTableRow(toy);
-                printTableRowSeparator();
-            }
+                printTableRow(toy); // TODO: implement method.
+                printTableRowSeparator(); // TODO: implement method.
+            }	
         }
 
         searchResultsToyList.add(finalToy); // Add the toy back to the list so the index works.
         printTableRow(finalToy);
-       // System.out.println(); // This needs to be done manually, because it's easier than overloading printTableRow for finalToy.
+        System.out.println(); // This needs to be done manually, because it's easier than overloading printTableRow for finalToy.
 
         printTableFooter();
     }
 
     private void printTableHeader() {
         // Part One: printing the header separator (top border)
-        System.out.print("\n" + " ".repeat(rowSelectorDigitLength + 2) + "\u2552"); // Left padding and the length of the array (e.g. 001 or 999).
-        // ╒
+        System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2554"); // Left padding and the length of the array (e.g. 001 or 999).
+        // ╔
         System.out.print("\u2550".repeat(12));
         // ═ end of field 0: Serial No.
 
@@ -156,19 +181,19 @@ public class SearchResultsTable extends View {
         for(int i = 0 ; i < minimumFieldWidths.length - 1 ; i++) {
             System.out.print("\u2564");
             // ╤
-
+            
             System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2));
             // ═
         }
-
+        
         System.out.print("\u2564");
         // ╤
-
+        
         System.out.print("\u2550".repeat(minimumFieldWidths[6] + 2));
         // ═
-
-        System.out.println("\u2555");
-        // ╕
+        
+        System.out.println("\u2557");
+        // ╗
 
         // Part Two: printing the header row table cells
         // │ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│ Misc. infoΗ│
@@ -196,6 +221,9 @@ public class SearchResultsTable extends View {
         System.out.println("\u2502 "); // Terminate the line with the right-side table border.
     };
 
+    // TODO: this method is more complex than the others. It must account for
+    // different toy types, and calculate the amount of padding to print from
+    // the table cell data and minimum field widths.
     // NOTE: this is a necessary and acceptable violation of the MVC pattern. In
     // this case, the controller cannot suitably generate the information to
     // pass to the view without introducing and undue amount of code which would
@@ -207,22 +235,21 @@ public class SearchResultsTable extends View {
         System.out.print(toy.getSerialNumber() + " "); // ##########␠.
 
         // Other common fields
-        System.out.print("\u2502 " + toy.getName()  + " ".repeat(minimumFieldWidths[0] - toy.getName().length() + 1)); // │␠toy.getName()Ά␠
-        System.out.print("\u2502 " + toy.getBrand() + " ".repeat(minimumFieldWidths[1] - toy.getBrand().length() + 1)); // │␠toy.getBrand()Β␠
+        System.out.print("\u2502 " + toy.getName()  + " ".repeat (minimumFieldWidths[0] - toy.getName().length() + 1)); // │␠toy.getName()Ά␠
+        System.out.print("\u2502 " + toy.getBrand() + " ".repeat (minimumFieldWidths[1] - toy.getBrand().length() + 1)); // │␠toy.getBrand()Β␠
+        System.out.print("\u2502 " + toy.getPrice() + " ".repeat (minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() + 1)); // │␠toy.getPrice()Γ␠
+        System.out.print("\u2502 " + toy.getAvailableCount() + " ".repeat (minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // │␠toy.getAvailable()Δ␠
+        System.out.print("\u2502 " + toy.getAppropriateAge() + " ".repeat (minimumFieldWidths[4] - Integer.toString(toy.getAppropriateAge()).length() + 1)); // │␠toy.getMiniumumAge()Ɛ␠
 
-        // Price printing, which is slightly more complex than printing the other common fields.
-        System.out.print("\u2502 " + printPrice(toy.getPrice()) + " "); // │␠$toy.getPrice()Γ␠
-
-        System.out.print("\u2502 " + toy.getAvailableCount() + " ".repeat(minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // │␠toy.getAvailable()Δ␠
-        System.out.print("\u2502 " + toy.getAppropriateAge() + " ".repeat(minimumFieldWidths[4] - Integer.toString(toy.getAppropriateAge()).length() + 1)); // │␠toy.getMiniumumAge()Ɛ␠
-
+        // TODO: Part two: subclass-specific Misc. info 1 and Misc. info 2
+        // The most rudimentary reflection; equivalent in complexity to instanceof, which was taught in class. Does not require an import.
         // NOTE: Board games are the only class which has a double-height row, so the printing is otherwise the same in each case.
         if(toy instanceof Animal) {
             Animal a = (Animal) toy;
             String material = a.getMaterial();
             String size = a.getSize();
             System.out.print("\u2502 " + material + " ".repeat (minimumFieldWidths[5] - material.length() + 1));
-            System.out.println("\u2502 " + size + " ".repeat (minimumFieldWidths[6] - size.length() + 1) + "\u2502");
+            System.out.print("\u2502 " + size + " ".repeat (minimumFieldWidths[6] - size.length() + 1) + "\u2502");
 
         } else if(toy instanceof BoardGame) {
             BoardGame b = (BoardGame) toy;
@@ -238,8 +265,7 @@ public class SearchResultsTable extends View {
             // longer than 1, requires multi-line printing and we must print the
             // rows in a loop.
             System.out.print("\u2502 " + players + " ".repeat(minimumFieldWidths[5] - players.length() + 1));
-            // Print the first (and possibly only) designer.
-            System.out.println("\u2502 " + designers[0] + " ".repeat(minimumFieldWidths[6] - designers[0].length() + 1) + "\u2502");
+            System.out.print("\u2502 " + designers[0] + " ".repeat(minimumFieldWidths[6] - designers[0].length() + 1) + "\u2502");
 
             // In the case there is more than one designer we need to print a
             // row per additional designer, with empty fields, except for the
@@ -247,19 +273,16 @@ public class SearchResultsTable extends View {
             if(designers.length > 1) {
                 for(int i = 1 ; i < designers.length ; i++) {
                     // Print the empty serial number field
-                    // Left padding that is always present, the field length of the row selector
-                    // digit, and then the ten characters that would be the serial number, and the
-                    // right padding.
-                    // ␠␠␠␠│␠1234567890␠
-                    System.out.print(" ".repeat(1 + rowSelectorDigitLength + 1) + "\u2502" + " ".repeat(12));
+                    //␠␠␠␠│
+                    System.out.print(" ".repeat(1 + rowSelectorDigitLength + 11) + "\u2502"); // Left padding that is always present, the field length of the row selector digit, and then the ten characters that would be the serial number, and the right padding.
 
                     // Print empty fields for the inner six fields
                     for(int field = 0 ; field < 6 ; field++) {
-                        System.out.print("\u2502" + " ".repeat(minimumFieldWidths[field] + 2)); //│␠minimumFieldWidths[field]␠
+                        System.out.print("\u2502" + " ".repeat(minimumFieldWidths[field] + 1));
                     }
 
                     // Print the designer name.
-                    System.out.println("\u2502 " + designers[i] + " ".repeat(minimumFieldWidths[6] - designers[i].length() + 1) + "\u2502");
+                    System.out.print("\u2502 " + designers[i] + " ".repeat(minimumFieldWidths[6] - designers[i].length() + 1) + "\u2502");
                 }
             }
         } else if(toy instanceof Figure) {
@@ -267,20 +290,19 @@ public class SearchResultsTable extends View {
             String classification = f.getClassification();
 
             System.out.print("\u2502 " + classification + " ".repeat(minimumFieldWidths[5] - classification.length() + 1));
-            System.out.println("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
+            System.out.print("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
 
         } else if(toy instanceof Puzzle) {
             Puzzle p = (Puzzle) toy;
             String puzzleType = p.getPuzzleType();
 
             System.out.print("\u2502 " + puzzleType + " ".repeat(minimumFieldWidths[5] - puzzleType.length() + 1));
-            System.out.println("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
+            System.out.print("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
         }
     };
 
     private void printTableRowSeparator() {
         // Part one: print the Serial No. field
-    	System.out.print(" ".repeat(1 + rowSelectorDigitLength + 1));
         System.out.print("\u255e" + "\u2550".repeat(12)); // ╞════════════
 
         // Part two: variable field widths
@@ -290,7 +312,7 @@ public class SearchResultsTable extends View {
         }
 
         // Part three: table end
-        System.out.println("\u2561"); // ╡
+        System.out.println("\u2551"); // ╡
     };
 
     private void printTableFooter() {
@@ -304,24 +326,9 @@ public class SearchResultsTable extends View {
         }
 
         // Part three: table end
-        System.out.println("\u255b\n"); // ╛
+        System.out.println("\u255b"); // ╛
+
     };
-
-    private String printPrice(Double price) {
-        String stringifiedPrice = Double.toString(price);
-
-        // Defensively prettify the price:
-        // 1. Ensure the price contains a decimal. If it does not contain a decimal, then the price is malformed.
-        // Justification: $##.## is the format of any dollar and cents amount, and representations such as $1 are typographic and must not be present in the database for conformity.
-        int centsLength = ( stringifiedPrice.split(".")[1] ).length();
-        if(centsLength < 1 || centsLength > 2) {
-            throw new RuntimeException("[DEBUG] The money representation from disk does not have a length of two in the fractional part (it appeared as \"$##.\"), which is incorrect.");
-        } else if(centsLength == 1) {
-            stringifiedPrice += "0";
-        }
-
-        return stringifiedPrice;
-    }
 
     /**
      * This method prints the search results from the search method performed
@@ -337,6 +344,8 @@ public class SearchResultsTable extends View {
      *         in-progress transaction.
      */
     public int promptPurchaseToyOrQuit() {
+        printSearchResultsTable();
+
         Scanner keyboard = new Scanner(System.in);
 
         System.out.println("Enter the digits corresponding to a row in the above table to finalize a purchase choice of one unit.");
@@ -350,8 +359,8 @@ public class SearchResultsTable extends View {
             String input = keyboard.nextLine();
 
             // Only positive integers and lower or uppercase Q are valid input.
-            if (input.toUpperCase().charAt(0) == 'Q' || (input.matches("\\d{2}") && Integer.parseInt(input) > 0)) {
-                if (input.matches("\\d{2}")) {
+            if (input.toUpperCase().charAt(0) == 'Q' || (input.matches("\\d{10}") && Integer.parseInt(input) > 0)) {
+                if (input.matches("\\d{10}")) {
                     userSelection = Integer.parseInt(input);
                 } else {
                     userSelection = 0; // Let Q be 0.
@@ -363,14 +372,14 @@ public class SearchResultsTable extends View {
             }
         }
 
-        //keyboard.close();
+        keyboard.close();
 
         return userSelection;
+
     }
 
     public SearchResultsTable(ArrayList<Toy> toyList) {
         this.searchResultsToyList = toyList;
-        // FIXME: Why is there a new off by one issue when the field width is three?
         this.rowSelectorDigitLength = String.format("%02d", searchResultsToyList.size()).length(); // The first element is indexed with zero, but here we must not change the return value of the length method because we will not be using this number for indexing.
 
         // Print the table.
