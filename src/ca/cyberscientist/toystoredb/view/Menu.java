@@ -22,15 +22,6 @@ public class Menu extends View {
 	private double toyPrice;
 	private int availableCount;
 	private int appropriateAge;
-	
-
-	/**
-	 * Inteded usage pattern: if the user searches by serial number, get the
-	 * toyTypeFilter and pass that to the same method used to search by type. After
-	 * search resuolts of that type have been returned, filter by the serial
-	 * number by calliing the serial number search method.
-	 */
-	private int toyTypeFilter;
 
 	public char promptMainMenu() {
 		System.out.println("You are in the main menu.\n");
@@ -48,7 +39,7 @@ public class Menu extends View {
 	}
 
 	public char promptSearchMenu() {
-		System.out.println("You are in the search menu.\n");
+		System.out.println("\nYou are in the search menu.\n");
 
 		System.out.println("\tS) Serial number");
 		System.out.println("\tN) Name");
@@ -77,9 +68,6 @@ public class Menu extends View {
 			}
 		} while (exceptionOccured);
 
-		// The first character of the user's input. This is used to permit filtering the
-		// records by type before searching by serial number for efficiency sake.
-		this.toyTypeFilter = Integer.parseInt(userInput.substring(0, 1));
     return userInput;
 	}
 
@@ -93,7 +81,7 @@ public class Menu extends View {
 
 		boolean isDigits = (serialNumber.matches("\\d*")) ? true : false;
 
-		keyboard.close();
+		//keyboard.close();
 
 		// If the user's input is incorrect we raise an exception, per the assignment
 		// instructions.
@@ -116,38 +104,13 @@ public class Menu extends View {
     }
 
 	public char promptToyType() {
-		char filter = 'A';
+		final char[] VALID_CHARACTERS = { 'A', 'B', 'F', 'P' };
+		char toyType = getValidatedCharInput("\nInput one of the following letters for a given toy type:\n\n\tA) Animal\n\tB) Board Game\n\tF) Figurine\n\tP) Puzzle\n\nToy type: ", VALID_CHARACTERS);
 
-
-
-		switch (this.toyTypeFilter) {
-			// FIXME: ensure character is correct for these numbers.
-			case 0:
-			case 1:
-				filter = 'A';
-				break;
-			case 2:
-			case 3:
-				filter = 'A';
-				break;
-			case 4:
-			case 5:
-			case 6:
-				filter = 'A';
-				break;
-			case 7:
-			case 8:
-			case 9:
-				filter = 'A';
-				break;
-		}
-
-		return filter;
+		return toyType;
 	}
 
 	public void recommendationMenu() {
-		final String[] VALID_TOY_TYPES = { "A", "B", "F", "P", "Animal", "Board Game", "Figure", "Puzzle" };
-
 		System.out.println("You are in the recommendation menu.\n");
 
 		System.out.println("\tA) Age");

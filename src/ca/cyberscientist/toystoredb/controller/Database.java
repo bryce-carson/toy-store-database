@@ -5,6 +5,8 @@ package ca.cyberscientist.toystoredb.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -27,7 +29,9 @@ public class Database {
     public final char SEARCH_BY_SERIAL_NUMBER = 's';
     public final char SEARCH_BY_TOY_NAME = 'n';
 
-    private final String FILENAME = "res/toys.txt";
+    // private final String FILENAME = "res/toys.txt";
+    // NOTE: this is the filename we use when we are exporting a runnable JAR file instead of the local filesystem path above.
+    private final String FILENAME = "/toys.txt";
 
     private ArrayList<Toy> records = new ArrayList<Toy>();
 
@@ -169,7 +173,10 @@ public class Database {
     }
 
     private ArrayList<Toy> toyListFromFile(String filename) throws FileNotFoundException {
-        File toys = new File(filename);
+    	// NOTE: when exporting as a runnable JAR, we must consume the file as a streaming resource, not a file on the file system.
+        // File toys = new File(filename);
+    	InputStream toysResourceStream = getClass().getResourceAsStream(filename);
+    	InputStreamReader toys = new InputStreamReader(toysResourceStream); 
         Scanner reader = new Scanner(toys);
 
         ArrayList<Toy> toyList = new ArrayList<Toy>();
