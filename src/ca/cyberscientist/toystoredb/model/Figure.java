@@ -57,7 +57,7 @@ public class Figure extends Toy {
 
 	@Override
 	public String toString() {
-		return super.toString() + ";" + getClassification();
+		return super.toString() + getClassification();
 	}
 
 	@Override

@@ -54,7 +54,7 @@ public class Puzzle extends Toy {
 
 	@Override
 	public String toString() {
-		return super.toString() + ";" + getPuzzleType();
+		return super.toString() + getPuzzleType();
 	}
 
 	/**

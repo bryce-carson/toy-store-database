@@ -79,7 +79,7 @@ public class Animal extends Toy {
 
 	@Override
 	public String toString() {
-		return super.toString() + ";" + getMaterial() + ";" + getSize();
+		return super.toString() + getMaterial() + ";" + getSize();
 	}
 
 	@Override
