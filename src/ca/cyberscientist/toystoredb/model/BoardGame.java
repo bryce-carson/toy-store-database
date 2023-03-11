@@ -82,7 +82,7 @@ public class BoardGame extends Toy {
 
 	@Override
 	public String toString() {
-		return super.toString() + ";" + getDesigner() + ";" + getMinNumPlayers() + ";" + getMaxNumPlayers();
+		return super.toString() + getDesigner() + ";" + getMinNumPlayers() + ";" + getMaxNumPlayers();
 	}
 
 	@Override
