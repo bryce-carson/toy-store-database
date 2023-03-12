@@ -160,7 +160,7 @@ public class Database {
     public void purchaseToy(Toy toy) {
         /* If the toy exists in the database (it should always exist in the
         database if we are purchasing, given the program logic) retrieve its
-        index in the records array list, obtain the toy itself, althought the
+        index in the records array list, obtain the toy itself, although the
         parameter TOY should already be the same object (in memory). Change its
         count on the shelf. */
         if (this.records.contains(toy)) {

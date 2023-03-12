@@ -70,6 +70,7 @@ public class ToyStore {
 		// must have one.
 		ArrayList<Toy> searchResultsToyList;
 		SearchResultsTable searchResultsTable;
+		int purchaseIndex = 0;
 
 		// Search by serial number, name, or type.
 		switch (searchMethod) {
@@ -78,26 +79,30 @@ public class ToyStore {
 			searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber,
 					DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
 			searchResultsTable = new SearchResultsTable(searchResultsToyList);
-			searchResultsTable.promptPurchaseToyOrQuit();
+			
 			break;
 
 		case 'N':
 			String toyName = STORE_MENU.promptToyName();
 			searchResultsToyList = DATABASE_HANDLER.searchRecords(toyName, DATABASE_HANDLER.SEARCH_BY_TOY_NAME);
 			searchResultsTable = new SearchResultsTable(searchResultsToyList);
-			searchResultsTable.promptPurchaseToyOrQuit();
+
 			break;
 
 		case 'T':
 			char toyType = STORE_MENU.promptToyType();
 			searchResultsToyList = DATABASE_HANDLER.searchRecords(toyType);
 			searchResultsTable = new SearchResultsTable(searchResultsToyList);
-			searchResultsTable.promptPurchaseToyOrQuit();
+
 			break;
 
 		case 'Q':
 			break;
 		}
+		
+		// Less one because the integer returned is the user selection; to convert to an index usable with the search results, it must be restored to zero-indexing.
+		purchaseIndex = searchResultsTable.promptPurchaseToyOrQuit() - 1;
+		DATABASE_HANDLER.purchaseToy(searchResultsToyList.get(purchaseIndex))
 	}
 	
 	/**
