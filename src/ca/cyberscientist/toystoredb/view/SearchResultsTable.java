@@ -3,6 +3,7 @@ package ca.cyberscientist.toystoredb.view;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import ca.cyberscientist.toystoredb.exceptions.IncorrectPlaceholderConstructorUsageException;
 import ca.cyberscientist.toystoredb.model.*;
 
 public class SearchResultsTable extends View {
@@ -372,8 +373,6 @@ public class SearchResultsTable extends View {
             }
         }
 
-        keyboard.close();
-
         return userSelection;
 
     }
@@ -385,4 +384,17 @@ public class SearchResultsTable extends View {
         // Print the table.
         printSearchResultsTable();
     }
+
+	/**This is a placeholder constructor. It should only be used when declaring a search results table which is truly initialized within conditional logic, and which thus causes compiler complaints. 
+	 * @throws IncorrectPlaceholderConstructorUsageException 
+	 * 
+	 */
+	public SearchResultsTable(ArrayList<Toy> placeholderToyList, boolean placeholderConstructorPredicate) throws IncorrectPlaceholderConstructorUsageException {
+		this.searchResultsToyList = placeholderToyList;
+		
+		// If the placeholder toy list is not empty, a critical misuse of this constructor has occured.
+		if(placeholderToyList.isEmpty() == false || placeholderConstructorPredicate == false) {
+			throw new IncorrectPlaceholderConstructorUsageException();
+		}
+	}
 }

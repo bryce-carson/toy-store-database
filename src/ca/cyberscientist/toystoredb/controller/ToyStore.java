@@ -9,6 +9,7 @@ import java.util.ArrayList;
 // The model is imported in the Database class, moreover, the Database is in the
 // same package and doesn't need to be imported.
 import ca.cyberscientist.toystoredb.view.*;
+import ca.cyberscientist.toystoredb.exceptions.IncorrectPlaceholderConstructorUsageException;
 import ca.cyberscientist.toystoredb.model.*;
 
 /**
@@ -23,6 +24,7 @@ public class ToyStore {
 
 	private final Menu STORE_MENU;
 	private final Database DATABASE_HANDLER;
+	public final boolean PLACEHOLDER_CONSTRUCTOR = true;
 
 	/**
 	 * TODO: check this when view is being implemented for name changes of methods
@@ -57,6 +59,9 @@ public class ToyStore {
 				break;
 			}
 		} while (continueLooping); // Semantic flag for whether or not to continue looping.
+		
+		// Exiting the program. Close the keyboard!
+		STORE_MENU.keyboard.close();
 	}
 
 	/**
@@ -68,8 +73,14 @@ public class ToyStore {
 
 		// Initialized by one of the search methodologies; declared here because we
 		// must have one.
-		ArrayList<Toy> searchResultsToyList;
-		SearchResultsTable searchResultsTable;
+		ArrayList<Toy> searchResultsToyList = new ArrayList<Toy>();
+		SearchResultsTable searchResultsTable = null;
+		try {
+			searchResultsTable = new SearchResultsTable(searchResultsToyList, PLACEHOLDER_CONSTRUCTOR);
+		} catch (IncorrectPlaceholderConstructorUsageException e) {
+			System.out.println("[FIXME] This exception should never be thrown during production. You introduced a regression by modifying the intializtion of the search results table in this method." + e.getMessage());
+			e.printStackTrace();
+		}
 		int purchaseIndex = 0;
 
 		// Search by serial number, name, or type.
@@ -102,7 +113,7 @@ public class ToyStore {
 		
 		// Less one because the integer returned is the user selection; to convert to an index usable with the search results, it must be restored to zero-indexing.
 		purchaseIndex = searchResultsTable.promptPurchaseToyOrQuit() - 1;
-		DATABASE_HANDLER.purchaseToy(searchResultsToyList.get(purchaseIndex))
+		DATABASE_HANDLER.purchaseToy(searchResultsToyList.get(purchaseIndex));
 	}
 	
 	/**

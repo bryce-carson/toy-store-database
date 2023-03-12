@@ -2,7 +2,6 @@ package ca.cyberscientist.toystoredb.view;
 
 import java.util.Scanner;
 
-import ca.cyberscientist.toystoredb.controller.Database;
 import ca.cyberscientist.toystoredb.exceptions.*;
 import ca.cyberscientist.toystoredb.model.Animal;
 import ca.cyberscientist.toystoredb.model.BoardGame;
@@ -10,17 +9,6 @@ import ca.cyberscientist.toystoredb.model.Figure;
 import ca.cyberscientist.toystoredb.model.Puzzle;
 
 public class Menu extends View {
-	/**
-	 * Common Variables used by majority of addToy prompt methods
-	 * 
-	 */
-	Database db;
-	Scanner keyboard;
-	private String toyName;
-	private String toyBrand;
-	private double toyPrice;
-	private int availableCount;
-	private int appropriateAge;
 
 	public char promptMainMenu() {
 		System.out.println("You are in the main menu.\n");
@@ -74,7 +62,6 @@ public class Menu extends View {
 	// indicate a method throws an exception in a method header in this
 	// assignment.
 	private String getSerialNumber(String prompt) throws InvalidSerialNumberException {
-		Scanner keyboard = new Scanner(System.in);
 		System.out.print(prompt);
 		String serialNumber = keyboard.nextLine();
 
@@ -96,8 +83,6 @@ public class Menu extends View {
 
         System.out.print("Enter a toy's name to search for it: ");
         String toyName = keyboard.nextLine();
-
-        keyboard.close();
         
         return toyName;
     }
@@ -108,31 +93,6 @@ public class Menu extends View {
 
 		return toyType;
 	}
-
-	public void recommendationMenu() {
-		System.out.println("You are in the recommendation menu.\n");
-
-		System.out.println("\tA) Age");
-		System.out.println("\tT) Type (animal, board game, figure, or puzzle)");
-		System.out.println("\tP) Price range ($0.00 - $XX.XX)");
-		System.out.println("\tS) Search using criteria");
-		System.out.println("\tC) Cancel search\n");
-
-		char[] validCharacterInput = { 'S', 'N', 'T', 'Q' };
-		char userInput = getValidatedCharInput("Enter your choice: ", validCharacterInput);
-
-		// boolean searchAgainFlag = true;
-		// while (searchAgainFlag) {
-		// 	switch (userInput) {
-		// 		case 'A': getValidatedIntInput("Enter an age (minimum age is zero): "); break;
-		// 		case 'T': getValidatedToyTypeInput("Enter a toy type: ", VALID_TOY_TYPES); break;
-		// 		case 'P': getValidatedPriceRangeInput("Enter a price range (0.00 XX.XX): "); break;
-		// 		case 'S': getRecommendations(); break;
-		// 		case 'C': searchAgainFlag = false; break; // Cancel?
-		// 	}
-		// }
-
-	}
 	
 	/**
 	 * Method to prompt user to add the properties of a puzzle to be added to the toy arraylist
@@ -140,7 +100,6 @@ public class Menu extends View {
 	 * @param serialNumber the serial number of that was already validated and checked
 	 */
 	public Puzzle promptAddPuzzles(String serialNumber) {
-		Scanner keyboard = new Scanner(System.in);
 		String puzzleType;
 		String toyName;
 		String toyBrand;
@@ -175,7 +134,6 @@ public class Menu extends View {
 	 * @param serialNumber the serial number of that was already validated and checked
 	 */
 	public Figure promptAddFigure(String serialNumber) {
-		Scanner keyboard = new Scanner(System.in);
 		String classification;
 		String toyName;
 		String toyBrand;
@@ -209,7 +167,6 @@ public class Menu extends View {
 	 * @param serialNumber the serial number of that was already validated and checked
 	 */
 	public BoardGame promptAddBoardGames(String serialNumber) {
-		Scanner keyboard = new Scanner(System.in);
 		String designers;
 		int minPlayers;
 		int maxPlayers;
@@ -252,7 +209,6 @@ public class Menu extends View {
 	 * @param serialNumber the serial number of that was already validated and checked
 	 */
 	public Animal promptAddAnimal(String serialNumber) {
-		Scanner keyboard = new Scanner(System.in);
 		String material;
 		String size;
 		String toyName;
@@ -288,7 +244,6 @@ public class Menu extends View {
 	 * 
 	 */
 	public void promptEnterToContinue() {
-		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Press \"Enter\" to Continue...");
 		keyboard.nextLine();
 	}
@@ -297,7 +252,6 @@ public class Menu extends View {
 	 * Method to prompt the user for yes or no
 	 */
 	public char promptYesOrNo() {
-		Scanner keyboard = new Scanner(System.in);
 		char checker;
 		System.out.println("Do you want to remove it (Y\\N)");
 		checker = keyboard.nextLine().charAt(0);

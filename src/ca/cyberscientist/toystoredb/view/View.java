@@ -10,6 +10,8 @@ import java.util.Scanner;
  *
  */
 public abstract class View {
+	
+	public Scanner keyboard = new Scanner(System.in);
 
     /** This function prints the prompt, accepts input, validates it, and asks for corrected input if neccessary.
      *
@@ -18,8 +20,6 @@ public abstract class View {
      * @return the expected valid input from the user.
      */
     public char getValidatedCharInput(String message, char[] validInputCharacters) {
-        Scanner keyboard = new Scanner(System.in);
-
         // Prompt the user for input.
         System.out.print(message);
 
@@ -72,8 +72,6 @@ public abstract class View {
             userInput = keyboard.nextInt();
             keyboard.nextLine(); // Flush the input.
         }
-
-        keyboard.close();
 
         return userInput;
     }
