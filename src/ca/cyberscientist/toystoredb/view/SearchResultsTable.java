@@ -1,399 +1,411 @@
 package ca.cyberscientist.toystoredb.view;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import ca.cyberscientist.toystoredb.exceptions.IncorrectPlaceholderConstructorUsageException;
 import ca.cyberscientist.toystoredb.model.*;
 
 public class SearchResultsTable extends View {
-	
-    private int rowSelectorDigitLength;
 
-	// FIXME: Eclipse is complaining HORRIBLY and apparently incorrectly about syntax.
-//    // Set by the constructor and only used privately.
-//	private final String[] FIELD_HEADER_STRINGS = {
-//			"Name", "Brand", "Price", "No. Available", "Minimum Age", "Misc. info", "Misc. info"
-//	};
-//    private final int NUMBER_PRINTABLE_FIELDS = FIELD_HEADER_STRINGS.length;
-//    
-//    private int[] minimumFieldWidths = new int[NUMBER_PRINTABLE_FIELDS];
-//    
-//    for(int i = 0 ; i < NUMBER_PRINTABLE_FIELDS ; i++) {
-//    	minimumFieldWidths[i] = FIELD_HEADER_STRINGS[i].length();
-//    }
-	
+	private int rowSelectorDigitLength;
+
 	private int[] minimumFieldWidths = {
 			4, 5, 5, 13,
 			11, 10, 10
 	};
 
-    // NOTE: TODO: The length of this array is important for printing the table.
-    // The length must be consumed when determining the amount of padding to
-    // print to the left of the table in each method.
-    private final ArrayList<Toy> searchResultsToyList;
+	private final ArrayList<Toy> searchResultsToyList;
 
-    private void ascertainFieldWidths() {
-        // The array is holds, at most, seven fields worth of data; the -1th (or
-        // 8th, both nonexistent) field is the length of all the serial numbers,
-        // which will always be ten. Therefore there is no point allocating
-        // memory for that, or using cycles ensuring this fact when it is
-        // already accounted for upon loading the database or updating it.
-        int[][] workingArray = new int[7][this.searchResultsToyList.size()];
+	private void ascertainFieldWidths() {
+		// The array is holds, at most, seven fields worth of data; the -1th (or
+		// 8th, both nonexistent) field is the length of all the serial numbers,
+		// which will always be ten. Therefore there is no point allocating
+		// memory for that, or using cycles ensuring this fact when it is
+		// already accounted for upon loading the database or updating it.
+		int[][] workingArray = new int[7][this.searchResultsToyList.size()];
 
-        // Leverage polymorphic references and type coercion to our advantage to reduce
-        // code duplication.
-        for (Toy toy : this.searchResultsToyList) {
-            int arrayIndex = this.searchResultsToyList.indexOf(toy);
+		// Leverage polymorphic references and type coercion to our advantage to reduce
+		// code duplication.
+		for (Toy toy : this.searchResultsToyList) {
+			int arrayIndex = this.searchResultsToyList.indexOf(toy);
 
-            int nameLength = toy.getName().length();
-            int brandLength = toy.getBrand().length();
+			int nameLength = toy.getName().length();
+			int brandLength = toy.getBrand().length();
 
-            // + $ ; math is more efficient than calculating the length of the string after
-            // concatenation, ie, concatenate later when we print. Not when we care about
-            // math only.
-            int priceLength = Double.toString(toy.getPrice()).length() + 1;
+			// + $ ; math is more efficient than calculating the length of the string after
+			// concatenation, ie, concatenate later when we print. Not when we care about
+			// math only.
+			int priceLength = Double.toString(toy.getPrice()).length() + 1;
 
-            int availableCountLength = Integer.toString(toy.getAvailableCount()).length();
-            int appropriateAgeLength = Integer.toString(toy.getAppropriateAge()).length();
+			int availableCountLength = Integer.toString(toy.getAvailableCount()).length();
+			int appropriateAgeLength = Integer.toString(toy.getAppropriateAge()).length();
 
-            workingArray[0][arrayIndex] = nameLength;
-            workingArray[1][arrayIndex] = brandLength;
-            workingArray[2][arrayIndex] = priceLength;
-            workingArray[3][arrayIndex] = availableCountLength;
-            workingArray[4][arrayIndex] = appropriateAgeLength;
+			workingArray[0][arrayIndex] = nameLength;
+			workingArray[1][arrayIndex] = brandLength;
+			workingArray[2][arrayIndex] = priceLength;
+			workingArray[3][arrayIndex] = availableCountLength;
+			workingArray[4][arrayIndex] = appropriateAgeLength;
 
-            if (toy instanceof Animal) {
-                Animal a = (Animal) toy;
-                int materialLength = a.getMaterial().length();
-                int sizeLength = a.getSize().length();
+			if (toy instanceof Animal) {
+				Animal a = (Animal) toy;
+				int materialLength = a.getMaterial().length();
+				int sizeLength = a.getSize().length();
 
-                workingArray[5][arrayIndex] = materialLength;
-                workingArray[6][arrayIndex] = sizeLength;
-            } else if (toy instanceof Figure) {
-                Figure f = (Figure) toy;
-                int classificationLength = f.getClassification().length();
+				workingArray[5][arrayIndex] = materialLength;
+				workingArray[6][arrayIndex] = sizeLength;
+			} else if (toy instanceof Figure) {
+				Figure f = (Figure) toy;
+				int classificationLength = f.getClassification().length();
 
-                workingArray[5][arrayIndex] = classificationLength;
-            } else if (toy instanceof Puzzle) {
-                Puzzle p = (Puzzle) toy;
-                int puzzleTypeLength = p.getPuzzleType().length();
+				workingArray[5][arrayIndex] = classificationLength;
+			} else if (toy instanceof Puzzle) {
+				Puzzle p = (Puzzle) toy;
+				int puzzleTypeLength = p.getPuzzleType().length();
 
-                workingArray[5][arrayIndex] = puzzleTypeLength;
-            } else if (toy instanceof BoardGame) {
-                BoardGame b = (BoardGame) toy;
+				workingArray[5][arrayIndex] = puzzleTypeLength;
+			} else if (toy instanceof BoardGame) {
+				BoardGame b = (BoardGame) toy;
 
-                int boardGameDesignerLength = 0;
-                String[] designers = b.getDesigner().split(",");
-                for (String designer : designers) {
-                    boardGameDesignerLength = (designer.length() > boardGameDesignerLength) ? designer.length()
-                            : boardGameDesignerLength;
-                }
+				int boardGameDesignerLength = 0;
+				String[] designers = b.getDesigner().split(",");
+				for (String designer : designers) {
+					boardGameDesignerLength = (designer.length() > boardGameDesignerLength) ? designer.length()
+							: boardGameDesignerLength;
+				}
 
-                // Number of players
-                // minimumNumber + " - " + maximumNumber
-                int numberOfPlayersLength = Integer.toString(b.getMinNumPlayers()).length()
-                        + Integer.toString(b.getMaxNumPlayers()).length() + 3;
+				// Number of players
+				// minimumNumber + " - " + maximumNumber
+				int numberOfPlayersLength = Integer.toString(b.getMinNumPlayers()).length()
+						+ Integer.toString(b.getMaxNumPlayers()).length() + 3;
 
-                workingArray[5][arrayIndex] = numberOfPlayersLength;
-                workingArray[6][arrayIndex] = boardGameDesignerLength;
-            }
-        }
+				workingArray[5][arrayIndex] = numberOfPlayersLength;
+				workingArray[6][arrayIndex] = boardGameDesignerLength;
+			}
+		}
 
-        // Initialize an integer array of counters.
-        int[] fieldWidths = new int[7];
+		// Initialize an integer array of counters.
+		int[] fieldWidths = new int[7];
 
-        // Determine the maximum through simple iteration. There's a better way, of
-        // course, but this is dead simple.
-        for (int i = 0; i < workingArray.length; i++) {
-            for (int j = 0; j < this.searchResultsToyList.size(); j++) {
-                fieldWidths[i] = (workingArray[i][j] > fieldWidths[i]) ? workingArray[i][j] : fieldWidths[i];
-            }
-        }
+		// Determine the maximum through simple iteration. There's a better way, of
+		// course, but this is dead simple.
+		for (int i = 0; i < workingArray.length; i++) {
+			for (int j = 0; j < this.searchResultsToyList.size(); j++) {
+				fieldWidths[i] = (workingArray[i][j] > fieldWidths[i]) ? workingArray[i][j] : fieldWidths[i];
+			}
+		}
 
-        // Overwrite the object's array with the local data.
-        for(int i = 0 ; i < fieldWidths.length ; i++) {
-        	minimumFieldWidths[i] = (fieldWidths[i] > minimumFieldWidths[i]) ? fieldWidths[i] : minimumFieldWidths[i]; 
-        	// FIXME:
-        	System.out.println("[DEBUG]: " + minimumFieldWidths[i]);
-        }
-        //minimumFieldWidths = fieldWidths;
+		// Overwrite the object's array with the local data.
+		for (int i = 0; i < fieldWidths.length; i++) {
+			minimumFieldWidths[i] = (fieldWidths[i] > minimumFieldWidths[i]) ? fieldWidths[i] : minimumFieldWidths[i];
+		}
+	}
 
-        // Headers define the actual minimum size of the table, but the cell content can expand a given field's width.
-        //␠␠␠␠╒════════════╤═════Ά╤══════Β╤══════Γ╤══════════Δ╤════════════Ɛ╤═══════════Ζ╤═══════════Η╕                printTableHeader: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
-        //␠␠␠␠│ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│ Misc. infoΗ│                ....
-        //␠␠␠␠╞════════════╪═════Ά╪══════Β╪══════Γ╪══════════Δ╪════════════Ɛ╪═══════════Ζ╪═══════════Η╡                printTableRowSeparator
-        //␠01═╪ 0113513686 │ Toy soldier │ Gamen │ $ 14.06 │ 2 │ 5 │ Action figure │  │                                              printTableRow:
-        //    ╞════════════╪═══════════════════════════════╪═══════════╪══════════╪═══╪═══╪═════╪═════════════════╡      printTableRowSeparator: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
-        // 02═╪ 8685655988 │ Betrayal at House on the Hill │ Gamegenix │ $ 131.52 │ 9 │ 6 │ 2-6 │ 1. Barney Lugo  │      printTableRow:
-        //    │            │                               │           │          │   │   │     │ 2. Yu Zimmerman │      printTableRow:
-        //    ╘════════════╧═══════════════════════════════╧═══════════╧══════════╧═══╧═══╧═════╧═════════════════╛      printTableFooter: 1_ ; 2 + xᵢ.length() ; _1_ ; ... ; _1
-        // The width of a row is 1 + 7 * (3 + xᵢ.length()), however, that is not
-        // a direct translation to algorithm because different parts of the
-        // table have different printing needs; some Toys must be printed with
-        // double height rows, or algorithmically determined row heights to fit
-        // in designers. There is also the issue of needing to print serial
-        // numbers and then also the selection for that row.
-        // Seven spacing variables, alpha, beta, gamma, delta, epsilon, zeta, eta; the first field, containing serial number, always has the same width. All variables begin with a value of three (padding for an empty value, printed as " ").
-        // The name column (ones are padding around data):
-        // 1 + fieldWidth[0] + 1 = Ά
-        // " " + cellData + " ".repeat(Ά - cellData.length() - 1)
-    }
+	private void printSearchResultsTable() {
+		// Acquire the information needed for table display.
+		ascertainFieldWidths();
 
-    private void printSearchResultsTable() {
-        // Acquire the information needed for table display.
-        ascertainFieldWidths();
+		// Remove the last toy from the list so that each toy can be printed by
+		// the toy row printer, then a separator printed. The final toy is
+		// printed manually followed by an end of table separator.
+		Toy finalToy;
+		if (this.searchResultsToyList.size() > 1) {
+			finalToy = this.searchResultsToyList.remove(this.searchResultsToyList.size() - 1);
+		} else {
+			// .remove is not appropriate because it throws an IndexOutOfBoundsException
+			finalToy = this.searchResultsToyList.remove(0);
+		}
 
-        // Remove the last toy from the list so that each toy can be printed by
-        // the toy row printer, then a separator printed. The final toy is
-        // printed manually followed by an end of table separator.
-        Toy finalToy;
-        if(this.searchResultsToyList.size() > 1) {
-        	finalToy = this.searchResultsToyList.remove(this.searchResultsToyList.size() - 1);
-        } else {
-        	// .remove is not appropriate because it throws an IndexOutOfBoundsException
-        	finalToy = this.searchResultsToyList.remove(0);
-        }
+		printTableHeader();
 
-        printTableHeader();
+		if (searchResultsToyList.size() >= 1) {
+			for (Toy toy : this.searchResultsToyList) {
+				printTableRow(toy);
+				printTableRowSeparator();
+			}
+		}
 
-        if(searchResultsToyList.size() >= 1) {
-            for (Toy toy : this.searchResultsToyList) {
-                printTableRow(toy); // TODO: implement method.
-                printTableRowSeparator(); // TODO: implement method.
-            }	
-        }
+		searchResultsToyList.add(finalToy); // Add the toy back to the list so the index works.
+		printTableRow(finalToy);
+		System.out.println(); // This needs to be done manually, because it's easier than overloading
+								// printTableRow for finalToy.
 
-        searchResultsToyList.add(finalToy); // Add the toy back to the list so the index works.
-        printTableRow(finalToy);
-        System.out.println(); // This needs to be done manually, because it's easier than overloading printTableRow for finalToy.
+		printTableFooter();
+	}
 
-        printTableFooter();
-    }
+	private void printTableHeader() {
+		// Part One: printing the header separator (top border)
+		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2554"); // Left padding and the length of the array
+																				// (e.g. 001 or 999).
+		// ╔
+		System.out.print("\u2550".repeat(12));
+		// ═ end of field 0: Serial No.
 
-    private void printTableHeader() {
-        // Part One: printing the header separator (top border)
-        System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2554"); // Left padding and the length of the array (e.g. 001 or 999).
-        // ╔
-        System.out.print("\u2550".repeat(12));
-        // ═ end of field 0: Serial No.
+		// Algorithm for printing the header according to field widths 1:7
+		for (int i = 0; i < minimumFieldWidths.length - 1; i++) {
+			System.out.print("\u2564");
+			// ╤
 
-        // Algorithm for printing the header according to field widths 1:7
-        for(int i = 0 ; i < minimumFieldWidths.length - 1 ; i++) {
-            System.out.print("\u2564");
-            // ╤
-            
-            System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2));
-            // ═
-        }
-        
-        System.out.print("\u2564");
-        // ╤
-        
-        System.out.print("\u2550".repeat(minimumFieldWidths[6] + 2));
-        // ═
-        
-        System.out.println("\u2557");
-        // ╗
+			System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2));
+			// ═
+		}
 
-        // Part Two: printing the header row table cells
-        // │ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│ Misc. infoΗ│
-        System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2502 Serial No. "); // │␠Serial No.␠
+		System.out.print("\u2564");
+		// ╤
 
-        // Field separator and padding, │␠, field name, padding
-        for(int i = 0 ; i < minimumFieldWidths.length ; i++ ) {
-            String headerFieldString = "";
+		System.out.print("\u2550".repeat(minimumFieldWidths[6] + 2));
+		// ═
 
-            // Which string to use
-            switch(i) {
-            case 0: headerFieldString = "Name"; break;
-            case 1: headerFieldString = "Brand"; break;
-            case 2: headerFieldString = "Price"; break;
-            case 3: headerFieldString = "No. Available"; break;
-            case 4: headerFieldString = "Minimum age"; break;
-            case 5:
-            case 6: headerFieldString = "Misc. info"; break;
-            }
+		System.out.println("\u2557");
+		// ╗
 
-            System.out.print("\u2502 "); // Table cell separator: │␠
-            System.out.print(headerFieldString + " ".repeat(minimumFieldWidths[i] - headerFieldString.length() + 1)); // field width, less the field string length, plus the right padding
-        }
+		// Part Two: printing the header row table cells
+		// │ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│
+		// Misc. infoΗ│
+		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2502 Serial No. "); // │␠Serial No.␠
 
-        System.out.println("\u2502 "); // Terminate the line with the right-side table border.
-    };
+		// Field separator and padding, │␠, field name, padding
+		for (int i = 0; i < minimumFieldWidths.length; i++) {
+			String headerFieldString = "";
 
-    // TODO: this method is more complex than the others. It must account for
-    // different toy types, and calculate the amount of padding to print from
-    // the table cell data and minimum field widths.
-    // NOTE: this is a necessary and acceptable violation of the MVC pattern. In
-    // this case, the controller cannot suitably generate the information to
-    // pass to the view without introducing and undue amount of code which would
-    // be more difficult to maintain and debug.
-    private void printTableRow(Toy toy) {
-        // Part one: printing the information common to all toys.
-        // Row selector and serial number: ␠###═╪␠##########␠
-        System.out.print(String.format(" %02d", searchResultsToyList.indexOf(toy) + 1) + "\u2550\u256a "); // ␠###═╪
-        System.out.print(toy.getSerialNumber() + " "); // ##########␠.
+			// Which string to use
+			switch (i) {
+				case 0:
+					headerFieldString = "Name";
+					break;
+				case 1:
+					headerFieldString = "Brand";
+					break;
+				case 2:
+					headerFieldString = "Price";
+					break;
+				case 3:
+					headerFieldString = "No. Available";
+					break;
+				case 4:
+					headerFieldString = "Minimum age";
+					break;
+				case 5:
+				case 6:
+					headerFieldString = "Misc. info";
+					break;
+			}
 
-        // Other common fields
-        System.out.print("\u2502 " + toy.getName()  + " ".repeat (minimumFieldWidths[0] - toy.getName().length() + 1)); // │␠toy.getName()Ά␠
-        System.out.print("\u2502 " + toy.getBrand() + " ".repeat (minimumFieldWidths[1] - toy.getBrand().length() + 1)); // │␠toy.getBrand()Β␠
-        System.out.print("\u2502 " + toy.getPrice() + " ".repeat (minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() + 1)); // │␠toy.getPrice()Γ␠
-        System.out.print("\u2502 " + toy.getAvailableCount() + " ".repeat (minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // │␠toy.getAvailable()Δ␠
-        System.out.print("\u2502 " + toy.getAppropriateAge() + " ".repeat (minimumFieldWidths[4] - Integer.toString(toy.getAppropriateAge()).length() + 1)); // │␠toy.getMiniumumAge()Ɛ␠
+			System.out.print("\u2502 "); // Table cell separator: │␠
+			System.out.print(headerFieldString + " ".repeat(minimumFieldWidths[i] - headerFieldString.length() + 1)); // field
+																														// width,
+																														// less
+																														// the
+																														// field
+																														// string
+																														// length,
+																														// plus
+																														// the
+																														// right
+																														// padding
+		}
 
-        // TODO: Part two: subclass-specific Misc. info 1 and Misc. info 2
-        // The most rudimentary reflection; equivalent in complexity to instanceof, which was taught in class. Does not require an import.
-        // NOTE: Board games are the only class which has a double-height row, so the printing is otherwise the same in each case.
-        if(toy instanceof Animal) {
-            Animal a = (Animal) toy;
-            String material = a.getMaterial();
-            String size = a.getSize();
-            System.out.print("\u2502 " + material + " ".repeat (minimumFieldWidths[5] - material.length() + 1));
-            System.out.print("\u2502 " + size + " ".repeat (minimumFieldWidths[6] - size.length() + 1) + "\u2502");
+		System.out.println("\u2502 "); // Terminate the line with the right-side table border.
+	};
 
-        } else if(toy instanceof BoardGame) {
-            BoardGame b = (BoardGame) toy;
-            String players = b.getMinNumPlayers() + "-" + b.getMaxNumPlayers();
-            String[] designers = b.getDesigner().split(",");
+	// NOTE: this is a necessary and acceptable violation of the MVC pattern. In
+	// this case, the controller cannot suitably generate the information to
+	// pass to the view without introducing and undue amount of code which would
+	// be more difficult to maintain and debug.
+	private void printTableRow(Toy toy) {
+		// Part one: printing the information common to all toys.
+		// Row selector and serial number: ␠###═╪␠##########␠
+		System.out.print(String.format(" %02d", searchResultsToyList.indexOf(toy) + 1) + "\u2550\u256a "); // ␠###═╪
+		System.out.print(toy.getSerialNumber() + " "); // ##########␠.
 
-            for (int i = 0; i < designers.length; i++) {
-                designers[i] = designers[i].trim(); // Ensure there are no leading or trailing spaces in the string
-                                                    // containing the name.
-            }
+		// Other common fields
+		System.out.print("\u2502 " + toy.getName() + " ".repeat(minimumFieldWidths[0] - toy.getName().length() + 1)); // │␠toy.getName()Ά␠
+		System.out.print("\u2502 " + toy.getBrand() + " ".repeat(minimumFieldWidths[1] - toy.getBrand().length() + 1)); // │␠toy.getBrand()Β␠
+		System.out.print("\u2502 " + toy.getPrice()
+				+ " ".repeat(minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() + 1)); // │␠toy.getPrice()Γ␠
+		System.out.print("\u2502 " + toy.getAvailableCount()
+				+ " ".repeat(minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // │␠toy.getAvailable()Δ␠
+		System.out.print("\u2502 " + toy.getAppropriateAge()
+				+ " ".repeat(minimumFieldWidths[4] - Integer.toString(toy.getAppropriateAge()).length() + 1)); // │␠toy.getMiniumumAge()Ɛ␠
 
-            // Print the players and the designers. NOTE: the designers, if
-            // longer than 1, requires multi-line printing and we must print the
-            // rows in a loop.
-            System.out.print("\u2502 " + players + " ".repeat(minimumFieldWidths[5] - players.length() + 1));
-            System.out.print("\u2502 " + designers[0] + " ".repeat(minimumFieldWidths[6] - designers[0].length() + 1) + "\u2502");
+		// The most rudimentary reflection; equivalent in complexity to instanceof,
+		// which was taught in class. Does not require an import.
+		// NOTE: Board games are the only class which has a double-height row, so the
+		// printing is otherwise the same in each case.
+		if (toy instanceof Animal) {
+			Animal a = (Animal) toy;
+			String material = a.getMaterial();
+			String size = a.getSize();
+			System.out.print("\u2502 " + material + " ".repeat(minimumFieldWidths[5] - material.length() + 1));
+			System.out.print("\u2502 " + size + " ".repeat(minimumFieldWidths[6] - size.length() + 1) + "\u2502");
 
-            // In the case there is more than one designer we need to print a
-            // row per additional designer, with empty fields, except for the
-            // last field.
-            if(designers.length > 1) {
-                for(int i = 1 ; i < designers.length ; i++) {
-                    // Print the empty serial number field
-                    //␠␠␠␠│
-                    System.out.print(" ".repeat(1 + rowSelectorDigitLength + 11) + "\u2502"); // Left padding that is always present, the field length of the row selector digit, and then the ten characters that would be the serial number, and the right padding.
+		} else if (toy instanceof BoardGame) {
+			BoardGame b = (BoardGame) toy;
+			String players = b.getMinNumPlayers() + "-" + b.getMaxNumPlayers();
+			String[] designers = b.getDesigner().split(",");
 
-                    // Print empty fields for the inner six fields
-                    for(int field = 0 ; field < 6 ; field++) {
-                        System.out.print("\u2502" + " ".repeat(minimumFieldWidths[field] + 1));
-                    }
+			for (int i = 0; i < designers.length; i++) {
+				designers[i] = designers[i].trim(); // Ensure there are no leading or trailing spaces in the string
+													// containing the name.
+			}
 
-                    // Print the designer name.
-                    System.out.print("\u2502 " + designers[i] + " ".repeat(minimumFieldWidths[6] - designers[i].length() + 1) + "\u2502");
-                }
-            }
-        } else if(toy instanceof Figure) {
-            Figure f = (Figure) toy;
-            String classification = f.getClassification();
+			// Print the players and the designers. NOTE: the designers, if
+			// longer than 1, requires multi-line printing and we must print the
+			// rows in a loop.
+			System.out.print("\u2502 " + players + " ".repeat(minimumFieldWidths[5] - players.length() + 1));
+			System.out.print("\u2502 " + designers[0] + " ".repeat(minimumFieldWidths[6] - designers[0].length() + 1)
+					+ "\u2502");
 
-            System.out.print("\u2502 " + classification + " ".repeat(minimumFieldWidths[5] - classification.length() + 1));
-            System.out.print("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
+			// In the case there is more than one designer we need to print a
+			// row per additional designer, with empty fields, except for the
+			// last field.
+			if (designers.length > 1) {
+				for (int i = 1; i < designers.length; i++) {
+					// Print the empty serial number field
+					// ␠␠␠␠│
+					System.out.print(" ".repeat(1 + rowSelectorDigitLength + 11) + "\u2502"); // Left padding that is
+																								// always present, the
+																								// field length of the
+																								// row selector digit,
+																								// and then the ten
+																								// characters that would
+																								// be the serial number,
+																								// and the right
+																								// padding.
 
-        } else if(toy instanceof Puzzle) {
-            Puzzle p = (Puzzle) toy;
-            String puzzleType = p.getPuzzleType();
+					// Print empty fields for the inner six fields
+					for (int field = 0; field < 6; field++) {
+						System.out.print("\u2502" + " ".repeat(minimumFieldWidths[field] + 1));
+					}
 
-            System.out.print("\u2502 " + puzzleType + " ".repeat(minimumFieldWidths[5] - puzzleType.length() + 1));
-            System.out.print("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
-        }
-    };
+					// Print the designer name.
+					System.out.print("\u2502 " + designers[i]
+							+ " ".repeat(minimumFieldWidths[6] - designers[i].length() + 1) + "\u2502");
+				}
+			}
+		} else if (toy instanceof Figure) {
+			Figure f = (Figure) toy;
+			String classification = f.getClassification();
 
-    private void printTableRowSeparator() {
-        // Part one: print the Serial No. field
-        System.out.print("\u255e" + "\u2550".repeat(12)); // ╞════════════
+			System.out.print(
+					"\u2502 " + classification + " ".repeat(minimumFieldWidths[5] - classification.length() + 1));
+			System.out.print("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
 
-        // Part two: variable field widths
-        for (int i = 0; i < minimumFieldWidths.length; i++) {
-            System.out.print("\u256a"); // ╪
-            System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // Minimum plus padding
-        }
+		} else if (toy instanceof Puzzle) {
+			Puzzle p = (Puzzle) toy;
+			String puzzleType = p.getPuzzleType();
 
-        // Part three: table end
-        System.out.println("\u2551"); // ╡
-    };
+			System.out.print("\u2502 " + puzzleType + " ".repeat(minimumFieldWidths[5] - puzzleType.length() + 1));
+			System.out.print("\u2502 " + " ".repeat(minimumFieldWidths[6] + 1) + "\u2502");
+		}
+	};
 
-    private void printTableFooter() {
-        // Part one: print the Serial No. field
-        System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2558" + "\u2550".repeat(12)); // ╘════════════
+	private void printTableRowSeparator() {
+		// Part one: print the Serial No. field
+		System.out.print("\u255e" + "\u2550".repeat(12)); // ╞════════════
 
-        // Part two: variable field widths
-        for (int i = 0; i < minimumFieldWidths.length; i++) {
-            System.out.print("\u2567"); // ╧
-            System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // Minimum plus padding
-        }
+		// Part two: variable field widths
+		for (int i = 0; i < minimumFieldWidths.length; i++) {
+			System.out.print("\u256a"); // ╪
+			System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // Minimum plus padding
+		}
 
-        // Part three: table end
-        System.out.println("\u255b"); // ╛
+		// Part three: table end
+		System.out.println("\u2551"); // ╡
+	};
 
-    };
+	private void printTableFooter() {
+		// Part one: print the Serial No. field
+		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2558" + "\u2550".repeat(12)); // ╘════════════
 
-    /**
-     * This method prints the search results from the search method performed
-     * in a pretty table. The 0th option (which is actually taken in as Q from the
-     * user [digits are for purchasing a toy, and zero is for canceling a
-     * "transaction" or lookup.])
-     *
-     * @author: Bryce Carson
-     * @param toyList An array list of Toys to be printed in table format.
-     * @return An integer indicating which toy in the array list the user wishes
-     *         to "purchase". A return value of 0 is reserved for voiding/canceling
-     *         the
-     *         in-progress transaction.
-     */
-    public int promptPurchaseToyOrQuit() {
-        printSearchResultsTable();
+		// Part two: variable field widths
+		for (int i = 0; i < minimumFieldWidths.length; i++) {
+			System.out.print("\u2567"); // ╧
+			System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // Minimum plus padding
+		}
 
-        Scanner keyboard = new Scanner(System.in);
+		// Part three: table end
+		System.out.println("\u255b"); // ╛
 
-        System.out.println("Enter the digits corresponding to a row in the above table to finalize a purchase choice of one unit.");
+	};
 
-        int userSelection = 0;
-        // No input and incorrect input are both invalid, so we continue _until_ we have
-        // valid input!
-        boolean acquireInput = true;
-        while (acquireInput) {
-            System.out.print("Integer selection (enter Q to cancel/void the transaction): ");
-            String input = keyboard.nextLine();
+	/**
+	 * This method prints the search results from the search method performed
+	 * in a pretty table. The 0th option (which is actually taken in as Q from the
+	 * user [digits are for purchasing a toy, and zero is for canceling a
+	 * "transaction" or lookup.])
+	 *
+	 * @author: Bryce Carson
+	 * @param toyList An array list of Toys to be printed in table format.
+	 * @return An integer indicating which toy in the array list the user wishes
+	 *         to "purchase". A return value of 0 is reserved for voiding/canceling
+	 *         the
+	 *         in-progress transaction.
+	 */
+	public int promptPurchaseToyOrQuit() {
+		printSearchResultsTable();
 
-            // Only positive integers and lower or uppercase Q are valid input.
-            if (input.toUpperCase().charAt(0) == 'Q' || (input.matches("\\d{10}") && Integer.parseInt(input) > 0)) {
-                if (input.matches("\\d{10}")) {
-                    userSelection = Integer.parseInt(input);
-                } else {
-                    userSelection = 0; // Let Q be 0.
-                }
+		System.out.println(
+				"Enter the digits corresponding to a row in the above table to finalize a purchase choice of one unit.");
 
-                acquireInput = false;
-            } else {
-                System.out.println("Input was invalid. Please ensure input matches the prompt or query. Your input was: " + input);
-            }
-        }
+		int userSelection = 0;
+		// No input and incorrect input are both invalid, so we continue _until_ we have
+		// valid input!
+		boolean acquireInput = true;
+		while (acquireInput) {
+			System.out.print("Integer selection (enter Q to cancel/void the transaction): ");
+			String input = keyboard.nextLine(); // Keyboard comes from the global scope.
 
-        return userSelection;
+			// Only positive integers and lower or uppercase Q are valid input.
+			if (input.toUpperCase().charAt(0) == 'Q' || (input.matches("\\d{10}") && Integer.parseInt(input) > 0)) {
+				if (input.matches("\\d{10}")) {
+					userSelection = Integer.parseInt(input);
+				} else {
+					userSelection = 0; // Let Q be 0.
+				}
 
-    }
+				acquireInput = false;
+			} else {
+				System.out.println(
+						"Input was invalid. Please ensure input matches the prompt or query. Your input was: " + input);
+			}
+		}
 
-    public SearchResultsTable(ArrayList<Toy> toyList) {
-        this.searchResultsToyList = toyList;
-        this.rowSelectorDigitLength = String.format("%02d", searchResultsToyList.size()).length(); // The first element is indexed with zero, but here we must not change the return value of the length method because we will not be using this number for indexing.
+		return userSelection;
 
-        // Print the table.
-        printSearchResultsTable();
-    }
+	}
 
-	/**This is a placeholder constructor. It should only be used when declaring a search results table which is truly initialized within conditional logic, and which thus causes compiler complaints. 
-	 * @throws IncorrectPlaceholderConstructorUsageException 
+	public SearchResultsTable(ArrayList<Toy> toyList) {
+		this.searchResultsToyList = toyList;
+		this.rowSelectorDigitLength = String.format("%02d", searchResultsToyList.size()).length(); // The first element
+																									// is indexed with
+																									// zero, but here we
+																									// must not change
+																									// the return value
+																									// of the length
+																									// method because we
+																									// will not be using
+																									// this number for
+																									// indexing.
+
+		// Print the table.
+		printSearchResultsTable();
+	}
+
+	/**
+	 * This is a placeholder constructor. It should only be used when declaring a
+	 * search results table which is truly initialized within conditional logic, and
+	 * which thus causes compiler complaints.
+	 * 
+	 * @throws IncorrectPlaceholderConstructorUsageException
 	 * 
 	 */
-	public SearchResultsTable(ArrayList<Toy> placeholderToyList, boolean placeholderConstructorPredicate) throws IncorrectPlaceholderConstructorUsageException {
+	public SearchResultsTable(ArrayList<Toy> placeholderToyList, boolean placeholderConstructorPredicate)
+			throws IncorrectPlaceholderConstructorUsageException {
 		this.searchResultsToyList = placeholderToyList;
-		
-		// If the placeholder toy list is not empty, a critical misuse of this constructor has occured.
-		if(placeholderToyList.isEmpty() == false || placeholderConstructorPredicate == false) {
+
+		// If the placeholder toy list is not empty, a critical misuse of this
+		// constructor has occured.
+		if (placeholderToyList.isEmpty() == false || placeholderConstructorPredicate == false) {
 			throw new IncorrectPlaceholderConstructorUsageException();
 		}
 	}
