@@ -356,8 +356,8 @@ public class SearchResultsTable extends View {
 			String input = keyboard.nextLine(); // Keyboard comes from the global scope.
 
 			// Only positive integers and lower or uppercase Q are valid input.
-			if (input.toUpperCase().charAt(0) == 'Q' || (input.matches("\\d{10}") && Integer.parseInt(input) > 0)) {
-				if (input.matches("\\d{10}")) {
+			if (input.toUpperCase().charAt(0) == 'Q' || (input.matches("\\d+") && Integer.parseInt(input) > 0)) {
+				if (input.matches("\\d+")) {
 					userSelection = Integer.parseInt(input);
 				} else {
 					userSelection = 0; // Let Q be 0.

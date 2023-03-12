@@ -35,31 +35,31 @@ public class ToyStore {
 	 **/
 	public ToyStore() throws FileNotFoundException {
 		STORE_MENU = new Menu(); // Instantiate a menu system for issuing prompts to the user and acquiring user
-									// input.
+		// input.
 		DATABASE_HANDLER = new Database(); // Instantiate the database.
 
 		boolean continueLooping = true;
 
 		do { // do while because we need to see the menu atleast once
 			char mainMenuChoice = STORE_MENU.promptMainMenu(); // change this later to the proper main menu prompt in
-																// view
+			// view
 			switch (mainMenuChoice) {
-			case 'S':
-				searchAndPurchaseMenu();
-				break;
-			case 'A':
-				addToyMenu();
-				break;
-			case 'R':
-				removeToyMenu();
-				break;
-			case 'Q':
-				DATABASE_HANDLER.writeToDisk();
-				continueLooping = false;
-				break;
+				case 'S':
+					searchAndPurchaseMenu();
+					break;
+				case 'A':
+					addToyMenu();
+					break;
+				case 'R':
+					removeToyMenu();
+					break;
+				case 'Q':
+					DATABASE_HANDLER.writeToDisk();
+					continueLooping = false;
+					break;
 			}
 		} while (continueLooping); // Semantic flag for whether or not to continue looping.
-		
+
 		// Exiting the program. Close the keyboard!
 		STORE_MENU.keyboard.close();
 	}
@@ -78,87 +78,93 @@ public class ToyStore {
 		try {
 			searchResultsTable = new SearchResultsTable(searchResultsToyList, PLACEHOLDER_CONSTRUCTOR);
 		} catch (IncorrectPlaceholderConstructorUsageException e) {
-			System.out.println("[FIXME] This exception should never be thrown during production. You introduced a regression by modifying the intializtion of the search results table in this method." + e.getMessage());
+			System.out.println(
+					"[DEBUG] This exception should never be thrown during production. You introduced a regression by modifying the intializtion of the search results table in this method."
+							+ e.getMessage());
 			e.printStackTrace();
 		}
 		int purchaseIndex = 0;
 
 		// Search by serial number, name, or type.
 		switch (searchMethod) {
-		case 'S':
-			String serialNumber = STORE_MENU.promptSerialNumber();
-			searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber,
-					DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
-			searchResultsTable = new SearchResultsTable(searchResultsToyList);
-			
-			break;
+			case 'S':
+				String serialNumber = STORE_MENU.promptSerialNumber();
+				searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber,
+						DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
+				searchResultsTable = new SearchResultsTable(searchResultsToyList);
 
-		case 'N':
-			String toyName = STORE_MENU.promptToyName();
-			searchResultsToyList = DATABASE_HANDLER.searchRecords(toyName, DATABASE_HANDLER.SEARCH_BY_TOY_NAME);
-			searchResultsTable = new SearchResultsTable(searchResultsToyList);
+				break;
 
-			break;
+			case 'N':
+				String toyName = STORE_MENU.promptToyName();
+				searchResultsToyList = DATABASE_HANDLER.searchRecords(toyName, DATABASE_HANDLER.SEARCH_BY_TOY_NAME);
+				searchResultsTable = new SearchResultsTable(searchResultsToyList);
 
-		case 'T':
-			char toyType = STORE_MENU.promptToyType();
-			searchResultsToyList = DATABASE_HANDLER.searchRecords(toyType);
-			searchResultsTable = new SearchResultsTable(searchResultsToyList);
+				break;
 
-			break;
+			case 'T':
+				char toyType = STORE_MENU.promptToyType();
+				searchResultsToyList = DATABASE_HANDLER.searchRecords(toyType);
+				searchResultsTable = new SearchResultsTable(searchResultsToyList);
 
-		case 'Q':
-			break;
+				break;
+
+			case 'Q':
+				break;
 		}
-		
-		// Less one because the integer returned is the user selection; to convert to an index usable with the search results, it must be restored to zero-indexing.
+
+		// Less one because the integer returned is the user selection; to convert to an
+		// index usable with the search results, it must be restored to zero-indexing.
 		purchaseIndex = searchResultsTable.promptPurchaseToyOrQuit() - 1;
 		DATABASE_HANDLER.purchaseToy(searchResultsToyList.get(purchaseIndex));
 	}
-	
+
 	/**
-	 * Method to print the add toy menu, it will later display the proper toy prompts that follow the serial numbers
+	 * Method to print the add toy menu, it will later display the proper toy
+	 * prompts that follow the serial numbers
 	 */
-	public void addToyMenu(){
+	public void addToyMenu() {
 		String serialNumber = STORE_MENU.promptSerialNumber();
-		
+
 		switch (serialNumber.charAt(0)) {
-			case 0: 
+			case 0:
 			case 1:
 				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddFigure(serialNumber));
 				STORE_MENU.promptEnterToContinue();
 				break;
-			case 2: 
+			case 2:
 			case 3:
 				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddAnimal(serialNumber));
 				STORE_MENU.promptEnterToContinue();
 				break;
-			case 4: 
-			case 5: 
+			case 4:
+			case 5:
 			case 6:
 				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddPuzzles(serialNumber));
 				STORE_MENU.promptEnterToContinue();
 				break;
-			case 7: 
-			case 8: 
+			case 7:
+			case 8:
 			case 9:
 				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddBoardGames(serialNumber));
 				STORE_MENU.promptEnterToContinue();
 				break;
 		}
 	}
-	
+
 	/**
-	 * Method to prompt the user and print the remove toy menu, confirming that the user wants to remove the toy 
+	 * Method to prompt the user and print the remove toy menu, confirming that the
+	 * user wants to remove the toy
 	 */
 	public void removeToyMenu() {
 		String serialNumberOfToyToRemove = STORE_MENU.promptSerialNumber();
 		char checker = STORE_MENU.promptYesOrNo();
-		
+
 		if (checker == 'Y') {
-			Toy toyToRemove = DATABASE_HANDLER.searchRecords(serialNumberOfToyToRemove, DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER).get(0);
+			Toy toyToRemove = DATABASE_HANDLER
+					.searchRecords(serialNumberOfToyToRemove, DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER).get(0);
 			DATABASE_HANDLER.removeRecord(toyToRemove);
 		}
-		
+
 	}
 }
