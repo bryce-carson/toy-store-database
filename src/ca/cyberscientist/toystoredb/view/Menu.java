@@ -1,7 +1,5 @@
 package ca.cyberscientist.toystoredb.view;
 
-import java.util.Scanner;
-
 import ca.cyberscientist.toystoredb.exceptions.*;
 import ca.cyberscientist.toystoredb.model.Animal;
 import ca.cyberscientist.toystoredb.model.BoardGame;
@@ -67,8 +65,6 @@ public class Menu extends View {
 
 		boolean isDigits = (serialNumber.matches("\\d*")) ? true : false;
 
-		//keyboard.close();
-
 		// If the user's input is incorrect we raise an exception, per the assignment
 		// instructions.
 		if (serialNumber.length() != 10 || !isDigits) {
@@ -79,7 +75,6 @@ public class Menu extends View {
 	}
 
     public String promptToyName() {
-    	Scanner keyboard = new Scanner(System.in);
 
         System.out.print("Enter a toy's name to search for it: ");
         String toyName = keyboard.nextLine();

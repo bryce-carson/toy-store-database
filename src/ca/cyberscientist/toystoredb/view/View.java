@@ -55,8 +55,6 @@ public abstract class View {
     public int getValidatedIntInput(String message) {
         final int MINIMUM_AGE = 0;
 
-        Scanner keyboard = new Scanner(System.in);
-
         // Prompt the user for input.
         System.out.print(message);
 

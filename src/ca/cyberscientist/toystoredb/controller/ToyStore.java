@@ -89,8 +89,7 @@ public class ToyStore {
 		switch (searchMethod) {
 			case 'S':
 				String serialNumber = STORE_MENU.promptSerialNumber();
-				searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber,
-						DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
+				searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber, DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
 				searchResultsTable = new SearchResultsTable(searchResultsToyList);
 
 				break;
@@ -112,11 +111,13 @@ public class ToyStore {
 			case 'Q':
 				break;
 		}
-
+		
 		// Less one because the integer returned is the user selection; to convert to an
 		// index usable with the search results, it must be restored to zero-indexing.
 		purchaseIndex = searchResultsTable.promptPurchaseToyOrQuit() - 1;
-		DATABASE_HANDLER.purchaseToy(searchResultsToyList.get(purchaseIndex));
+		if(purchaseIndex >= 0) {
+			DATABASE_HANDLER.purchaseToy(searchResultsToyList.get(purchaseIndex));
+		}
 	}
 
 	/**
