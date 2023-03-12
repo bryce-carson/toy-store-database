@@ -95,8 +95,8 @@ public class SearchResultsTable extends View {
                 int numberOfPlayersLength = Integer.toString(b.getMinNumPlayers()).length()
                         + Integer.toString(b.getMaxNumPlayers()).length() + 3;
 
-                workingArray[5][arrayIndex] = boardGameDesignerLength;
-                workingArray[6][arrayIndex] = numberOfPlayersLength;
+                workingArray[5][arrayIndex] = numberOfPlayersLength;
+                workingArray[6][arrayIndex] = boardGameDesignerLength;
             }
         }
 
