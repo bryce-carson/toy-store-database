@@ -70,21 +70,21 @@ public class BoardGame extends Toy {
 	 *               from.
 	 */
 	public BoardGame(String[] fields) {
-		this(fields[0],
-				fields[1],
-				fields[2],
-				Double.parseDouble(fields[3]),
-				Integer.parseInt(fields[4]),
-				Integer.parseInt(fields[5]),
-				fields[6],
-				fields[7]);
+		this(fields[0], fields[1], fields[2], Double.parseDouble(fields[3]), Integer.parseInt(fields[4]),
+				Integer.parseInt(fields[5]), fields[6], fields[7]);
 	}
 
+	/**
+	 * @return the string format of the puzzle suitable for logic purposes
+	 */
 	@Override
 	public String toString() {
 		return super.toString() + getDesigner() + ";" + getMinNumPlayers() + ";" + getMaxNumPlayers();
 	}
 
+	/**
+	 * @return the string format of the puzzle suitable for on-disk storage.
+	 */
 	@Override
 	public String format() {
 		return super.toString() + getMinNumPlayers() + "-" + getMaxNumPlayers() + ";" + getDesigner();

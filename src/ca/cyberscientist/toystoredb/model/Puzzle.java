@@ -43,15 +43,13 @@ public class Puzzle extends Toy {
 	 * @param fields The record from the on-disk "database" to create a puzzle from.
 	 */
 	public Puzzle(String[] fields) {
-		this(fields[0],
-				fields[1],
-				fields[2],
-				Double.parseDouble(fields[3]),
-				Integer.parseInt(fields[4]),
-				Integer.parseInt(fields[5]),
-				fields[6]);
+		this(fields[0], fields[1], fields[2], Double.parseDouble(fields[3]), Integer.parseInt(fields[4]),
+				Integer.parseInt(fields[5]), fields[6]);
 	}
 
+	/**
+	 * @return the string format of the puzzle suitable for logic purposes
+	 */
 	@Override
 	public String toString() {
 		return super.toString() + getPuzzleType();
