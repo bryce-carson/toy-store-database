@@ -27,13 +27,9 @@ public class ToyStore {
 	public final boolean PLACEHOLDER_CONSTRUCTOR = true;
 
 	/**
-	 * TODO: check this when view is being implemented for name changes of methods
-	 * Constructor for the toy store object
-	 *
-	 * @throws FileNotFoundException Exception thrown in case of error when file not
-	 *                               found in instantiating db
-	 **/
-	public ToyStore() throws FileNotFoundException {
+	 * Constructor for the toystore 
+	 */
+	public ToyStore() {
 		STORE_MENU = new Menu(); // Instantiate a menu system for issuing prompts to the user and acquiring user
 		// input.
 		DATABASE_HANDLER = new Database(); // Instantiate the database.
