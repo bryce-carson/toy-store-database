@@ -376,8 +376,7 @@ public class SearchResultsTable extends View {
 	 * @throws IncorrectPlaceholderConstructorUsageException
 	 * 
 	 */
-	public SearchResultsTable(ArrayList<Toy> placeholderToyList, boolean placeholderConstructorPredicate)
-			throws IncorrectPlaceholderConstructorUsageException {
+	public SearchResultsTable(ArrayList<Toy> placeholderToyList, boolean placeholderConstructorPredicate) throws IncorrectPlaceholderConstructorUsageException{
 		this.searchResultsToyList = placeholderToyList;
 
 		// If the placeholder toy list is not empty, a critical misuse of this
