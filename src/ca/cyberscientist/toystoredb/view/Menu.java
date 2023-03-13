@@ -6,8 +6,19 @@ import ca.cyberscientist.toystoredb.model.BoardGame;
 import ca.cyberscientist.toystoredb.model.Figure;
 import ca.cyberscientist.toystoredb.model.Puzzle;
 
+/**
+ * Class to deal with all the menus
+ * 
+ * @author Koddy Rae Madriaga, Bryce Carson
+ *
+ */
 public class Menu extends View {
 
+	/**
+	 * Method to print the main menu and prompt for user input
+	 * 
+	 * @return char user choice for where to go in menu
+	 */
 	public char promptMainMenu() {
 		System.out.println("You are in the main menu.\n");
 
@@ -23,6 +34,11 @@ public class Menu extends View {
 		return userInput;
 	}
 
+	/**
+	 * Method to print the search menu and prompt for user input
+	 * 
+	 * @return char user choice for where to go in menu
+	 */
 	public char promptSearchMenu() {
 		System.out.println("\nYou are in the search menu.\n");
 
@@ -37,6 +53,11 @@ public class Menu extends View {
 		return searchMethodOrQuitFlag;
 	}
 
+	/**
+	 * Method to prompt user for the serial number
+	 * 
+	 * @return serial number The serial number given by the user
+	 */
 	public String promptSerialNumber() {
 		boolean exceptionOccured; // Did an exception occur while getting user input?
 
@@ -53,12 +74,20 @@ public class Menu extends View {
 			}
 		} while (exceptionOccured);
 
-    return userInput;
+		return userInput;
 	}
 
 	// The only case in which we are logically allowed to, and necessarily must,
 	// indicate a method throws an exception in a method header in this
 	// assignment.
+	/**
+	 * Method to prompt the user for the serial number
+	 * 
+	 * @param prompt The prompt message
+	 * @return serialnumber The serial number from the user
+	 * @throws InvalidSerialNumberException Exception thrown if serial number is
+	 *                                      invalid
+	 */
 	private String getSerialNumber(String prompt) throws InvalidSerialNumberException {
 		System.out.print(prompt);
 		String serialNumber = keyboard.nextLine();
@@ -74,25 +103,39 @@ public class Menu extends View {
 		}
 	}
 
-    public String promptToyName() {
+	/**
+	 * Method to prompt user for the toy name
+	 * 
+	 * @return name The name of the toy
+	 */
+	public String promptToyName() {
 
-        System.out.print("Enter a toy's name to search for it: ");
-        String toyName = keyboard.nextLine();
-        
-        return toyName;
-    }
+		System.out.print("Enter a toy's name to search for it: ");
+		String toyName = keyboard.nextLine();
 
+		return toyName;
+	}
+
+	/**
+	 * Method to prompt user for the toy type
+	 * 
+	 * @return char The character that correlates to the toy type
+	 */
 	public char promptToyType() {
 		final char[] VALID_CHARACTERS = { 'A', 'B', 'F', 'P' };
-		char toyType = getValidatedCharInput("\nInput one of the following letters for a given toy type:\n\n\tA) Animal\n\tB) Board Game\n\tF) Figurine\n\tP) Puzzle\n\nToy type: ", VALID_CHARACTERS);
+		char toyType = getValidatedCharInput(
+				"\nInput one of the following letters for a given toy type:\n\n\tA) Animal\n\tB) Board Game\n\tF) Figurine\n\tP) Puzzle\n\nToy type: ",
+				VALID_CHARACTERS);
 
 		return toyType;
 	}
-	
+
 	/**
-	 * Method to prompt user to add the properties of a puzzle to be added to the toy arraylist
+	 * Method to prompt user to add the properties of a puzzle to be added to the
+	 * toy arraylist
 	 * 
-	 * @param serialNumber the serial number of that was already validated and checked
+	 * @param serialNumber the serial number of that was already validated and
+	 *                     checked
 	 */
 	public Puzzle promptAddPuzzles(String serialNumber) {
 		String puzzleType;
@@ -101,7 +144,7 @@ public class Menu extends View {
 		double toyPrice;
 		int availableCount;
 		int appropriateAge;
-		
+
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
 		System.out.print("\nEnter Toy Brand: ");
@@ -115,18 +158,21 @@ public class Menu extends View {
 		System.out.print("\nEnter Puzzle Type: ");
 		puzzleType = keyboard.nextLine();
 		keyboard.nextLine();
-		
-		Puzzle newPuzzle = new Puzzle(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, puzzleType);
-		
+
+		Puzzle newPuzzle = new Puzzle(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge,
+				puzzleType);
+
 		System.out.println("New Toy Added!");
-		
+
 		return newPuzzle;
 	}
-	
+
 	/**
-	 * Method to prompt user to add the properties of a figure to be added to the toy arraylist
+	 * Method to prompt user to add the properties of a figure to be added to the
+	 * toy arraylist
 	 * 
-	 * @param serialNumber the serial number of that was already validated and checked
+	 * @param serialNumber the serial number of that was already validated and
+	 *                     checked
 	 */
 	public Figure promptAddFigure(String serialNumber) {
 		String classification;
@@ -135,7 +181,7 @@ public class Menu extends View {
 		double toyPrice;
 		int availableCount;
 		int appropriateAge;
-		
+
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
 		System.out.print("\nEnter Toy Brand: ");
@@ -149,17 +195,20 @@ public class Menu extends View {
 		System.out.print("\nEnter Classification:");
 		classification = keyboard.nextLine();
 		keyboard.nextLine();
-		
-		Figure newFigure = new Figure(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, classification);
+
+		Figure newFigure = new Figure(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge,
+				classification);
 		System.out.println("New Toy Added!");
 		return newFigure;
-		
+
 	}
-	
+
 	/**
-	 * Method to prompt user to add the properties of a board game to be added to the toy arraylist
+	 * Method to prompt user to add the properties of a board game to be added to
+	 * the toy arraylist
 	 * 
-	 * @param serialNumber the serial number of that was already validated and checked
+	 * @param serialNumber the serial number of that was already validated and
+	 *                     checked
 	 */
 	public BoardGame promptAddBoardGames(String serialNumber) {
 		String designers;
@@ -171,7 +220,7 @@ public class Menu extends View {
 		double toyPrice;
 		int availableCount;
 		int appropriateAge;
-		
+
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
 		System.out.print("\nEnter Toy Brand: ");
@@ -189,19 +238,22 @@ public class Menu extends View {
 		System.out.print("\nEnter Maximum Number of Players: ");
 		maxPlayers = keyboard.nextInt();
 		keyboard.nextLine();
-		
+
 		numOfPlayers = minPlayers + "-" + maxPlayers;
-		
-		BoardGame newBoardGame = new BoardGame(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, numOfPlayers, designers);
-		
+
+		BoardGame newBoardGame = new BoardGame(serialNumber, toyName, toyBrand, toyPrice, availableCount,
+				appropriateAge, numOfPlayers, designers);
+
 		System.out.println("New Toy Added!");
 		return newBoardGame;
 	}
-	
+
 	/**
-	 * Method to prompt user to add the properties of an animal to be added to the toy arraylist
+	 * Method to prompt user to add the properties of an animal to be added to the
+	 * toy arraylist
 	 * 
-	 * @param serialNumber the serial number of that was already validated and checked
+	 * @param serialNumber the serial number of that was already validated and
+	 *                     checked
 	 */
 	public Animal promptAddAnimal(String serialNumber) {
 		String material;
@@ -211,7 +263,7 @@ public class Menu extends View {
 		double toyPrice;
 		int availableCount;
 		int appropriateAge;
-		
+
 		System.out.print("\nEnter Toy Name: ");
 		toyName = keyboard.nextLine();
 		System.out.println("\nEnter Toy Brand: ");
@@ -227,13 +279,14 @@ public class Menu extends View {
 		System.out.print("\nEnter Size: ");
 		size = keyboard.nextLine();
 		keyboard.nextLine();
-		
-		Animal newAnimal = new Animal(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge, material, size);
+
+		Animal newAnimal = new Animal(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge,
+				material, size);
 		System.out.println("New Toy Added!");
 		return newAnimal;
-		
+
 	}
-	
+
 	/**
 	 * Method to allow player to press enter to continue
 	 * 
@@ -242,7 +295,7 @@ public class Menu extends View {
 		System.out.println("Press \"Enter\" to Continue...");
 		keyboard.nextLine();
 	}
-	
+
 	/**
 	 * Method to prompt the user for yes or no
 	 */
@@ -251,7 +304,7 @@ public class Menu extends View {
 		System.out.println("Do you want to remove it (Y\\N)");
 		checker = keyboard.nextLine().charAt(0);
 		keyboard.nextLine();
-		
+
 		return checker;
 	}
 }
