@@ -20,7 +20,7 @@ import ca.cyberscientist.toystoredb.model.Figure;
 import ca.cyberscientist.toystoredb.model.Puzzle;
 
 /**
- * @author Bryce Carson
+ * @author Bryce Carson, Koddy Rae Madriaga
  *
  */
 public class Database {
@@ -37,8 +37,6 @@ public class Database {
 	/**
 	 * Instantiate the database by reading it from disk.
 	 *
-	 * @throws FileNotFoundException if the database is not found on-disk we must
-	 *                               throw an exception.
 	 */
 	public Database(){
 		this.records = toyListFromFile(this.FILENAME);
@@ -110,8 +108,8 @@ public class Database {
 	/**
 	 * Search the database records for toys of a particular type.
 	 *
-	 * @param query The type of toy to search for, one of 'a', 'b', 'f', or 'p'.
-	 * @return
+	 * @param query 		The type of toy to search for, one of 'a', 'b', 'f', or 'p'.
+	 * @return toylist		The toy list containing all the toys that came from the search method
 	 */
 	public ArrayList<Toy> searchRecords(char query) throws InvalidToyTypeQueryException {
 
@@ -154,6 +152,11 @@ public class Database {
 	}
 
 	// TODO: Write a test for this functionality!
+	/**
+	 * Removes an existing toy from the database
+	 * 
+	 * @param existingToy a toy from the list
+	 */
 	public void removeRecord(Toy existingToy) {
 		this.records.remove(existingToy);
 	}
@@ -182,8 +185,7 @@ public class Database {
 	 * 
 	 * @param filename The input file containing the toylist on disk
 	 * @return toyList The arraylist of toys
-	 * @throws FileNotFoundException If the database is not found on-disk we must
-	 *                               throw an exception.
+	 * 
 	 */
 	private ArrayList<Toy> toyListFromFile(String filename) {
 		// NOTE: when exporting as a runnable JAR, we must consume the file as a
@@ -243,6 +245,12 @@ public class Database {
 
 	}
 
+	/**
+	 * Method to append the toylist to the file
+	 * 
+	 * @param toyList		The toy list that is being added to the file
+	 * @param filename		The file that the toy list is being added to
+	 */
 	private void toyListToFile(ArrayList<Toy> toyList, String filename) {
 		File toys = new File(filename);
 
@@ -262,8 +270,6 @@ public class Database {
 	 * Write the in-memory database back to disk, overwriting any database file that
 	 * exists (as on-disk data would be out of date).
 	 *
-	 * @throws FileNotFoundException if the database is not found on-disk we must
-	 *                               throw an exception.
 	 */
 	public void writeToDisk(){
 		toyListToFile(this.records, this.FILENAME);
