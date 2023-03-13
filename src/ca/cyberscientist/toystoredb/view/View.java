@@ -41,6 +41,13 @@ public abstract class View {
         return userInput.charAt(0);
     }
 
+    /**
+     * Method to check if the user input is valid
+     * 
+     * @param input 					The user input
+     * @param validInputCharacters		The char array of valid characters
+     * @return boolean					True if valid, False if invalid
+     */
     private boolean isValidInput(char input, char[] validInputCharacters) {
         // Return true if the input is any one of the valid input characters.
         for (char validCharacter : validInputCharacters) {
@@ -52,6 +59,12 @@ public abstract class View {
         return false;
     }
 
+    /**
+     * Method to prompt user for integer inputs
+     * 
+     * @param message		The prompt message
+     * @return userinput	The validated user input
+     */
     public int getValidatedIntInput(String message) {
         final int MINIMUM_AGE = 0;
 
