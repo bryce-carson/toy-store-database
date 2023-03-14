@@ -92,7 +92,7 @@ public class Menu extends View {
 		System.out.print(prompt);
 		String serialNumber = keyboard.nextLine();
 
-		boolean isDigits = (serialNumber.matches("\\d*")) ? true : false;
+		boolean isDigits = (serialNumber.matches("\\d*"));
 
 		// If the user's input is incorrect we raise an exception, per the assignment
 		// instructions.
