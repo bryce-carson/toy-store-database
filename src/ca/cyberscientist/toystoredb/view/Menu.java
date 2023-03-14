@@ -150,8 +150,10 @@ public class Menu extends View {
 		System.out.print("\nEnter Toy Brand: ");
 		toyBrand = keyboard.nextLine();
 		System.out.print("\nEnter Toy Price: ");
+
 		toyPrice = keyboard.nextDouble();
 		System.out.print("\nEnter Available Counts: ");
+
 		availableCount = keyboard.nextInt();
 		System.out.print("\nEnter Appropiate Age: ");
 		appropriateAge = keyboard.nextInt();

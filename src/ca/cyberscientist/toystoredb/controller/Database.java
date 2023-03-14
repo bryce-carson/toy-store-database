@@ -9,9 +9,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import ca.cyberscientist.toystoredb.exceptions.InvalidSearchMethodException;
-import ca.cyberscientist.toystoredb.exceptions.InvalidToyTypeQueryException;
-import ca.cyberscientist.toystoredb.exceptions.ToyExistsInDatabaseException;
 // Import all of the toy stuff
 import ca.cyberscientist.toystoredb.model.Toy;
 import ca.cyberscientist.toystoredb.model.Animal;
@@ -27,7 +24,7 @@ public class Database {
 	public final char SEARCH_BY_SERIAL_NUMBER = 's';
 	public final char SEARCH_BY_TOY_NAME = 'n';
 
-	private final String FILENAME = "res/toys.txt";
+	public final String DEFAULT_FILENAME = "res/toys.txt";
 	// NOTE: this is the filename we use when we are exporting a runnable JAR file
 	// instead of the local filesystem path above.
 	// private final String FILENAME = "/toys.txt";
@@ -39,7 +36,15 @@ public class Database {
 	 *
 	 */
 	public Database() {
-		this.records = toyListFromFile(this.FILENAME);
+		this.records = toyListFromFile(this.DEFAULT_FILENAME);
+	}
+
+	/**
+	 * Instantiate a database by reading an arbitry file from disk.
+	 *
+	 */
+	public Database(String filename) {
+		this.records = toyListFromFile(filename);
 	}
 
 	/**
@@ -142,17 +147,16 @@ public class Database {
 
 	/**
 	 * Adds a new toy to the database.
-	 * 
+	 *
 	 * @param newToy a toy of any type.
 	 */
 	public void addRecord(Toy newToy) {
 		this.records.add(newToy);
 	}
 
-	// TODO: Write a test for this functionality!
 	/**
 	 * Removes an existing toy from the database
-	 * 
+	 *
 	 * @param existingToy a toy from the list
 	 */
 	public void removeRecord(Toy existingToy) {
@@ -160,30 +164,32 @@ public class Database {
 	}
 
 	/**
+	 * Purchases a toy from the database, decrementing it's available count if
+	 * the count is one or more.
+	 *
 	 * @param toy The toy that we are trying to buy
 	 */
 	public void purchaseToy(Toy toy) {
 		/*
-		 * If the toy exists in the database (it should always exist in the database if
-		 * we are purchasing, given the program logic) retrieve its index in the records
-		 * array list, obtain the toy itself, although the parameter TOY should already
-		 * be the same object (in memory). Change its count on the shelf.
+		 * If the toy exists in the database (it should always exist in the
+		 * database if we are purchasing, given the program logic) retrieve its
+		 * index in the records array list, obtain the toy itself, although the
+		 * parameter TOY should already be the same object (in memory). Change its
+		 * count on the shelf.
 		 */
 		if (this.records.contains(toy)) {
 			int indexOfToy = this.records.indexOf(toy);
 			Toy record = this.records.get(indexOfToy);
 			record.setAvailableCount(record.getAvailableCount() - 1);
-		} else {
-			throw new ToyExistsInDatabaseException(); // Indicate that the toy does not exist in the database.
 		}
 	}
 
 	/**
 	 * Method to create and return an arraylist from a file
-	 * 
+	 *
 	 * @param filename The input file containing the toylist on disk
 	 * @return toyList The arraylist of toys
-	 * 
+	 *
 	 */
 	private ArrayList<Toy> toyListFromFile(String filename) {
 		// NOTE: when exporting as a runnable JAR, we must consume the file as a
@@ -237,6 +243,12 @@ public class Database {
 			reader.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+		} catch (SecurityException e) {
+			System.out.println("The file is not writable or readable," +
+					"and the program likely doesn't have the ncessary " +
+					"access rights on the system.\n" +
+					"Abnormal exit.");
+			System.exit(1);
 		}
 
 		return toyList;
@@ -245,7 +257,7 @@ public class Database {
 
 	/**
 	 * Method to append the toylist to the file
-	 * 
+	 *
 	 * @param toyList  The toy list that is being added to the file
 	 * @param filename The file that the toy list is being added to
 	 */
@@ -259,7 +271,14 @@ public class Database {
 				writer.close();
 			}
 		} catch (FileNotFoundException e) {
+			System.out.println("Database not updated on disk.");
 			e.printStackTrace();
+		} catch (SecurityException e) {
+			System.out.println("The file is not writable or readable," +
+					"and the program likely doesn't have the ncessary " +
+					"access rights on the system.\n" +
+					"Abnormal exit.");
+			System.exit(1);
 		}
 
 	}
@@ -268,8 +287,9 @@ public class Database {
 	 * Write the in-memory database back to disk, overwriting any database file that
 	 * exists (as on-disk data would be out of date).
 	 *
+	 * @param filename The filename that the database will be written to.
 	 */
-	public void writeToDisk() {
-		toyListToFile(this.records, this.FILENAME);
+	public void writeToDisk(String filename) {
+		toyListToFile(this.records, filename);
 	}
 }

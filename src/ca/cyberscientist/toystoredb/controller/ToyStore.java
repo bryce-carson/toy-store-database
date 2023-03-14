@@ -3,13 +3,11 @@
  */
 package ca.cyberscientist.toystoredb.controller;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 // The model is imported in the Database class, moreover, the Database is in the
 // same package and doesn't need to be imported.
 import ca.cyberscientist.toystoredb.view.*;
-import ca.cyberscientist.toystoredb.exceptions.IncorrectPlaceholderConstructorUsageException;
 import ca.cyberscientist.toystoredb.model.*;
 
 /**
@@ -30,27 +28,37 @@ public class ToyStore {
 	 * Constructor for the toystore
 	 */
 	public ToyStore() {
-		STORE_MENU = new Menu(); // Instantiate a menu system for issuing prompts to the user and acquiring user
+		// Instantiate a menu system for issuing prompts to the user and acquiring user
 		// input.
-		DATABASE_HANDLER = new Database(); // Instantiate the database.
+		STORE_MENU = new Menu();
+
+		// Instantiate the database with the default filename.
+		DATABASE_HANDLER = new Database();
 
 		boolean continueLooping = true;
 
-		do { // do while because we need to see the menu atleast once
+		// Loop, displaying the main menu while we should continue looping and at
+		// least once.
+		do {
 			char mainMenuChoice = STORE_MENU.promptMainMenu();
-			// view
+
+			// Call other ToyStore methods, which have their own looping logic and
+			// call Menu class methods.
 			switch (mainMenuChoice) {
 				case 'S':
 					searchAndPurchaseMenu();
 					break;
+
 				case 'A':
 					addToyMenu();
 					break;
+
 				case 'R':
 					removeToyMaybeMenu();
 					break;
+
 				case 'Q':
-					DATABASE_HANDLER.writeToDisk();
+					DATABASE_HANDLER.writeToDisk(DATABASE_HANDLER.DEFAULT_FILENAME);
 					continueLooping = false;
 					break;
 			}
@@ -71,14 +79,7 @@ public class ToyStore {
 		// must have one.
 		ArrayList<Toy> searchResultsToyList = new ArrayList<Toy>();
 		SearchResultsTable searchResultsTable = null;
-		try {
-			searchResultsTable = new SearchResultsTable(searchResultsToyList, PLACEHOLDER_CONSTRUCTOR);
-		} catch (IncorrectPlaceholderConstructorUsageException e) {
-			System.out.println(
-					"[DEBUG] This exception should never be thrown during production. You introduced a regression by modifying the intializtion of the search results table in this method."
-							+ e.getMessage());
-			e.printStackTrace();
-		}
+		searchResultsTable = new SearchResultsTable(searchResultsToyList, PLACEHOLDER_CONSTRUCTOR);
 		int purchaseIndex = 0;
 
 		// Search by serial number, name, or type.
@@ -178,7 +179,7 @@ public class ToyStore {
 		if (maybe == 'Y') {
 			DATABASE_HANDLER.removeRecord(toyMaybeRemove);
 		} else {
-				System.out.println("Toy '" + toyMaybeRemove.getName() + "' not removed from database.");
+			System.out.println("Toy '" + toyMaybeRemove.getName() + "' not removed from database.");
 		}
 	}
 }

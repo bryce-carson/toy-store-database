@@ -2,7 +2,6 @@ package ca.cyberscientist.toystoredb.view;
 
 import java.util.ArrayList;
 
-import ca.cyberscientist.toystoredb.exceptions.IncorrectPlaceholderConstructorUsageException;
 import ca.cyberscientist.toystoredb.model.*;
 
 public class SearchResultsTable extends View {
@@ -361,6 +360,9 @@ public class SearchResultsTable extends View {
 
 	}
 
+    /** Constructs and pretty prints a table of toys.
+		 * @param toyList The array list of toys for which to display.
+		 */
 	public SearchResultsTable(ArrayList<Toy> toyList) {
 		this.searchResultsToyList = toyList;
 		this.rowSelectorDigitLength = String.format("%02d", searchResultsToyList.size()).length(); // The first element is indexed with
@@ -372,17 +374,9 @@ public class SearchResultsTable extends View {
 	 * This is a placeholder constructor. It should only be used when declaring a
 	 * search results table which is truly initialized within conditional logic, and
 	 * which thus causes compiler complaints.
-	 * 
-	 * @throws IncorrectPlaceholderConstructorUsageException
-	 * 
+	 * @param placeholderToyList A placeholder toylist which is only used to avoid compiler errors. In practice, the toy list
 	 */
-	public SearchResultsTable(ArrayList<Toy> placeholderToyList, boolean placeholderConstructorPredicate) throws IncorrectPlaceholderConstructorUsageException{
+	public SearchResultsTable(ArrayList<Toy> placeholderToyList, boolean placeholderConstructorPredicate) {
 		this.searchResultsToyList = placeholderToyList;
-
-		// If the placeholder toy list is not empty, a critical misuse of this
-		// constructor has occured.
-		if (placeholderToyList.isEmpty() == false || placeholderConstructorPredicate == false) {
-			throw new IncorrectPlaceholderConstructorUsageException();
-		}
 	}
 }
