@@ -27,7 +27,7 @@ public class ToyStore {
 	public final boolean PLACEHOLDER_CONSTRUCTOR = true;
 
 	/**
-	 * Constructor for the toystore 
+	 * Constructor for the toystore
 	 */
 	public ToyStore() {
 		STORE_MENU = new Menu(); // Instantiate a menu system for issuing prompts to the user and acquiring user
@@ -37,7 +37,7 @@ public class ToyStore {
 		boolean continueLooping = true;
 
 		do { // do while because we need to see the menu atleast once
-			char mainMenuChoice = STORE_MENU.promptMainMenu(); // change this later to the proper main menu prompt in
+			char mainMenuChoice = STORE_MENU.promptMainMenu();
 			// view
 			switch (mainMenuChoice) {
 				case 'S':
@@ -47,7 +47,7 @@ public class ToyStore {
 					addToyMenu();
 					break;
 				case 'R':
-					removeToyMenu();
+					removeToyMaybeMenu();
 					break;
 				case 'Q':
 					DATABASE_HANDLER.writeToDisk();
@@ -85,7 +85,8 @@ public class ToyStore {
 		switch (searchMethod) {
 			case 'S':
 				String serialNumber = STORE_MENU.promptSerialNumber();
-				searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber, DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
+				searchResultsToyList = DATABASE_HANDLER.searchRecords(serialNumber,
+						DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER);
 				searchResultsTable = new SearchResultsTable(searchResultsToyList);
 
 				break;
@@ -107,11 +108,11 @@ public class ToyStore {
 			case 'Q':
 				break;
 		}
-		
+
 		// Less one because the integer returned is the user selection; to convert to an
 		// index usable with the search results, it must be restored to zero-indexing.
 		purchaseIndex = searchResultsTable.promptPurchaseToyOrQuit() - 1;
-		if(purchaseIndex >= 0) {
+		if (purchaseIndex >= 0) {
 			DATABASE_HANDLER.purchaseToy(searchResultsToyList.get(purchaseIndex));
 		}
 	}
@@ -153,15 +154,31 @@ public class ToyStore {
 	 * Method to prompt the user and print the remove toy menu, confirming that the
 	 * user wants to remove the toy
 	 */
-	public void removeToyMenu() {
+	public void removeToyMaybeMenu() {
+		// Ask the user for the serial number of the toy they wish to remove,
+		// create an array list of toys to contain the toy, and then display the
+		// toy to the user so they can have as much information as possible to
+		// inform their choice of whether, maybe, the will remove the toy.
 		String serialNumberOfToyToRemove = STORE_MENU.promptSerialNumber();
-		char checker = STORE_MENU.promptYesOrNo();
+		Toy toyMaybeRemove = DATABASE_HANDLER
+				.searchRecords(serialNumberOfToyToRemove,
+						DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER)
+				.get(0);
 
-		if (checker == 'Y') {
-			Toy toyToRemove = DATABASE_HANDLER
-					.searchRecords(serialNumberOfToyToRemove, DATABASE_HANDLER.SEARCH_BY_SERIAL_NUMBER).get(0);
-			DATABASE_HANDLER.removeRecord(toyToRemove);
+		ArrayList<Toy> toyDisplay = new ArrayList<Toy>();
+		// Add the toy to the database because there's no constructor macro for
+		// arbitrary types.
+		toyDisplay.add(toyMaybeRemove);
+
+		// We only need to call the constructor. A local variable is unnecessary and may
+		// generate IDE warnings.
+		new SearchResultsTable(toyDisplay);
+
+		char maybe = STORE_MENU.promptYesOrNo();
+		if (maybe == 'Y') {
+			DATABASE_HANDLER.removeRecord(toyMaybeRemove);
+		} else {
+				System.out.println("Toy '" + toyMaybeRemove.getName() + "' not removed from database.");
 		}
-
 	}
 }
