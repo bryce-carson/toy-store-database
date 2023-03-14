@@ -402,7 +402,7 @@ public class Menu extends View {
 	 * Method to acquire a valid price for a toy, checks if it is above 0
 	 * @return price the price of the new toy
 	 */
-	private double promptToyPriceForNewToy() throws InvalidPriceException {
+	private double promptToyPriceForNewToy() {
 		double price = 00.00;
 		while (price <= 00.00) {
 			System.out.print("Enter a positive price (##.##): ");
