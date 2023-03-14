@@ -150,10 +150,7 @@ public class Menu extends View {
 		double toyPrice = Double.parseDouble(toyData[3]);
 		int toyAvailableCount = Integer.parseInt(toyData[4]);
 		int toyAppropriateAge = Integer.parseInt(toyData[5]);
-
-		System.out.print("\nEnter Puzzle Type: ");
-		String puzzleType = keyboard.nextLine();
-		keyboard.nextLine();
+		String puzzleType = promptPuzzleType();
 
 		Puzzle newPuzzle = new Puzzle(toySerialNumber, toyName, toyBrand, toyPrice, toyAvailableCount,
 				toyAppropriateAge, puzzleType);
@@ -161,6 +158,21 @@ public class Menu extends View {
 		System.out.println("New Toy Added!");
 
 		return newPuzzle;
+	}
+	
+	/**
+	 * Method to prompt the user for the puzzle type
+	 * @return type the type of the puzzle
+	 */
+	public String promptPuzzleType() {
+		String puzzleType = "";
+		do {
+			System.out.print("\nEnter Puzzle Type: ");
+			puzzleType = keyboard.nextLine();
+			keyboard.nextLine();
+		}
+		while(puzzleType != "M" ||puzzleType != "C" ||puzzleType != "L" ||puzzleType != "T" ||puzzleType != "R");
+		return puzzleType;
 	}
 
 	/**
@@ -183,16 +195,27 @@ public class Menu extends View {
 		double toyPrice = Double.parseDouble(toyData[3]);
 		int toyAvailableCount = Integer.parseInt(toyData[4]);
 		int toyAppropriateAge = Integer.parseInt(toyData[5]);
-
-		System.out.print("\nEnter Classification:");
-		String classification = keyboard.nextLine();
-		keyboard.nextLine();
+		String classification = promptClassification();
 
 		Figure newFigure = new Figure(toySerialNumber, toyName, toyBrand, toyPrice, toyAvailableCount,
 				toyAppropriateAge, classification);
 		System.out.println("New Toy Added!");
 		return newFigure;
 
+	}
+	
+	/**
+	 * Method to prompt the user for the classification of the toy
+	 * @return classification the classification of the toy
+	 */
+	public String promptClassification() {
+		String classification = "";
+		do {
+			System.out.print("\nEnter Classification:");
+			classification = keyboard.next();
+			keyboard.nextLine();
+		} while (classification != "A" || classification != "D" || classification != "H");
+		return classification;
 	}
 
 	/**
@@ -215,12 +238,9 @@ public class Menu extends View {
 		double toyPrice = Double.parseDouble(toyData[3]);
 		int toyAvailableCount = Integer.parseInt(toyData[4]);
 		int toyAppropriateAge = Integer.parseInt(toyData[5]);
-		System.out.print("\nEnter Designer Names (Use ',' to separate the names if there is more than one name): ");
-		String designers = keyboard.nextLine();
-		System.out.print("\nEnter Minimum Number of Players: ");
-		int minPlayers = keyboard.nextInt();
-		System.out.print("\nEnter Maximum Number of Players: ");
-		int maxPlayers = keyboard.nextInt();
+		String designers = promptDesigners();
+		int minPlayers = promptMinPlayers();
+		int maxPlayers = promptMaxPlayers();
 		keyboard.nextLine();
 
 		if (minPlayers > maxPlayers) {
@@ -234,6 +254,48 @@ public class Menu extends View {
 
 		System.out.println("New Toy Added!");
 		return newBoardGame;
+	}
+	
+	/**
+	 * Method to prompt user for the designers
+	 * @return designers The designers of the toy
+	 */
+	public String promptDesigners() {
+		String designers = "";
+		do {
+			System.out.print("\nEnter Designer Names (Use ',' to separate the names if there is more than one name): ");
+			designers = keyboard.nextLine();
+			keyboard.nextLine();
+		} while (designers.length() < 0);
+		return designers;
+	}
+	
+	/**
+	 * Method to prompt user for the minimum players of the toy
+	 * @return minPlayers the minimum amount of players needed for the toy
+	 */
+	public int promptMinPlayers() {
+		int minPlayers = 0;
+		do {
+			System.out.print("\nEnter Minimum Number of Players: ");
+			minPlayers = keyboard.nextInt();
+			keyboard.nextLine();
+		} while (minPlayers < 1);
+		return minPlayers;
+	}
+	
+	/**
+	 * Method to prompt user for the maximum players of the toy
+	 * @return maxPlayers the maximum amount of players needed for the toy
+	 */
+	public int promptMaxPlayers() {
+		int maxPlayers = 0;
+		do {
+			System.out.print("\nEnter Maximum Number of Players: ");
+			maxPlayers = keyboard.nextInt();
+			keyboard.nextLine();
+		} while (maxPlayers < 1);
+		return maxPlayers;
 	}
 
 	/**
@@ -256,13 +318,9 @@ public class Menu extends View {
 		double toyPrice = Double.parseDouble(toyData[3]);
 		int toyAvailableCount = Integer.parseInt(toyData[4]);
 		int toyAppropriateAge = Integer.parseInt(toyData[5]);
-		String animalMaterial;
-		System.out.print("\nEnter Material: ");
-		animalMaterial = keyboard.nextLine();
-		String animalSize;
-		System.out.print("\nEnter Size: ");
-		animalSize = keyboard.nextLine();
-		keyboard.nextLine(); // Flush keyboard
+		String animalMaterial = promptAnimalMaterial();
+		String animalSize = promptAnimalSize();
+
 
 		Animal newAnimal = new Animal(toySerialNumber, toyName, toyBrand, toyPrice, toyAvailableCount,
 				toyAppropriateAge,animalMaterial, animalSize);
@@ -270,6 +328,34 @@ public class Menu extends View {
 		System.out.println("\nNew Toy Added!");
 
 		return newAnimal;
+	}
+	
+	/**
+	 * Method to prompt the user for the material of the toy
+	 * @return material the material of the toy
+	 */
+	public String promptAnimalMaterial() {
+		String material = "";
+		do {
+			System.out.print("\nEnter Material: ");
+			material = keyboard.nextLine();
+			keyboard.nextLine();
+		} while (material.length() < 1);
+		return material;
+	}
+	
+	/**
+	 * Method to prompt the user for the size of the toy
+	 * @return size the size of the toy
+	 */
+	public String promptAnimalSize() {
+		String size = "";
+		do {
+			System.out.print("\nEnter Size (S, M, L): ");
+			size = keyboard.nextLine();
+			keyboard.nextLine();
+		} while (size != "S" || size != "M"  || size != "L" );
+		return size;
 	}
 
 	/**
