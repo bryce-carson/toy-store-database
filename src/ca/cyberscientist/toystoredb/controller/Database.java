@@ -30,7 +30,7 @@ public class Database {
 	private final String FILENAME = "res/toys.txt";
 	// NOTE: this is the filename we use when we are exporting a runnable JAR file
 	// instead of the local filesystem path above.
-//    private final String FILENAME = "/toys.txt";
+	// private final String FILENAME = "/toys.txt";
 
 	private ArrayList<Toy> records = new ArrayList<Toy>();
 
@@ -38,7 +38,7 @@ public class Database {
 	 * Instantiate the database by reading it from disk.
 	 *
 	 */
-	public Database(){
+	public Database() {
 		this.records = toyListFromFile(this.FILENAME);
 	}
 
@@ -55,30 +55,30 @@ public class Database {
 	 * @return searchResult An arraylist of toys that include the toys following the
 	 *         provided search method
 	 */
-	public ArrayList<Toy> searchRecords(String query, char searchMethod) throws InvalidSearchMethodException {
+	public ArrayList<Toy> searchRecords(String query, char searchMethod) {
 
 		ArrayList<Toy> searchResults = new ArrayList<Toy>();
 
 		iterateOverRecords: for (Toy toy : this.records) {
 			// Dispatch based on the method of the search (by name, type, or serial number).
 			switch (searchMethod) {
-			case 's': // Searching by serial number; utilizes an early return.
-				if (toy.getSerialNumber().equals(query)) {
-					searchResults.add(toy);
-					break iterateOverRecords;
-				}
+				// Searching by serial number; utilizes a named loop to break from the loop
+				// cleanly rather than using an early return.
+				case 's':
+					if (toy.getSerialNumber().equals(query)) {
+						searchResults.add(toy);
+						break iterateOverRecords;
+					}
 
-				break;
+					break;
 
-			case 'n': // Searching by name: remove the toys that don't contain the search query from
-						// the list of results we will be returning.
-				if (toy.getName().toUpperCase().contains(query.toUpperCase()))
-					searchResults.add(toy);
+				// Searching by name: remove the toys that don't contain the search query from
+				// the list of results we will be returning.
+				case 'n':
+					if (toy.getName().toUpperCase().contains(query.toUpperCase()))
+						searchResults.add(toy);
 
-				break;
-
-			default:
-				throw new InvalidSearchMethodException();
+					break;
 			}
 		}
 
@@ -108,8 +108,9 @@ public class Database {
 	/**
 	 * Search the database records for toys of a particular type.
 	 *
-	 * @param query 		The type of toy to search for, one of 'a', 'b', 'f', or 'p'.
-	 * @return toylist		The toy list containing all the toys that came from the search method
+	 * @param query The type of toy to search for, one of 'a', 'b', 'f', or 'p'.
+	 * @return toylist The toy list containing all the toys that came from the
+	 *         search method
 	 */
 	public ArrayList<Toy> searchRecords(char query) throws InvalidToyTypeQueryException {
 
@@ -117,25 +118,25 @@ public class Database {
 
 		for (Toy toy : this.records) {
 			switch (query) {
-			case 'A':
-				if (toy instanceof Animal)
-					searchResults.add(toy);
-				break;
-			case 'B':
-				if (toy instanceof BoardGame)
-					searchResults.add(toy);
-				break;
-			case 'F':
-				if (toy instanceof Figure)
-					searchResults.add(toy);
-				break;
-			case 'P':
-				if (toy instanceof Puzzle)
-					searchResults.add(toy);
-				break;
-			default: // The view validated the input passed to this function, but if an exception to
-						// that occurs, throw an exception!
-				throw new InvalidToyTypeQueryException();
+				case 'A':
+					if (toy instanceof Animal)
+						searchResults.add(toy);
+					break;
+				case 'B':
+					if (toy instanceof BoardGame)
+						searchResults.add(toy);
+					break;
+				case 'F':
+					if (toy instanceof Figure)
+						searchResults.add(toy);
+					break;
+				case 'P':
+					if (toy instanceof Puzzle)
+						searchResults.add(toy);
+					break;
+				default: // The view validated the input passed to this function, but if an exception to
+							// that occurs, throw an exception!
+					throw new InvalidToyTypeQueryException();
 			}
 		}
 
@@ -192,8 +193,8 @@ public class Database {
 		// streaming resource, not a file on the file system.
 		File toys = new File(filename);
 		ArrayList<Toy> toyList = new ArrayList<>();
-//    	InputStream toysResourceStream = getClass().getResourceAsStream(filename);
-//    	InputStreamReader toys = new InputStreamReader(toysResourceStream); 
+		// InputStream toysResourceStream = getClass().getResourceAsStream(filename);
+		// InputStreamReader toys = new InputStreamReader(toysResourceStream);
 
 		try (Scanner reader = new Scanner(toys)) {
 
@@ -206,31 +207,31 @@ public class Database {
 				Toy currentToy = new Animal();
 
 				switch (toyType) {
-				case 0:
-				case 1:
-					fields = line.split(";", 7);
-					currentToy = new Figure(fields);
-					break;
+					case 0:
+					case 1:
+						fields = line.split(";", 7);
+						currentToy = new Figure(fields);
+						break;
 
-				case 2:
-				case 3:
-					fields = line.split(";", 8);
-					currentToy = new Animal(fields);
-					break;
+					case 2:
+					case 3:
+						fields = line.split(";", 8);
+						currentToy = new Animal(fields);
+						break;
 
-				case 4:
-				case 5:
-				case 6:
-					fields = line.split(";", 7);
-					currentToy = new Puzzle(fields);
-					break;
+					case 4:
+					case 5:
+					case 6:
+						fields = line.split(";", 7);
+						currentToy = new Puzzle(fields);
+						break;
 
-				case 7:
-				case 8:
-				case 9:
-					fields = line.split(";", 8);
-					currentToy = new BoardGame(fields);
-					break;
+					case 7:
+					case 8:
+					case 9:
+						fields = line.split(";", 8);
+						currentToy = new BoardGame(fields);
+						break;
 				}
 
 				toyList.add(currentToy);
@@ -239,8 +240,8 @@ public class Database {
 			reader.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		} 
-		
+		}
+
 		return toyList;
 
 	}
@@ -248,8 +249,8 @@ public class Database {
 	/**
 	 * Method to append the toylist to the file
 	 * 
-	 * @param toyList		The toy list that is being added to the file
-	 * @param filename		The file that the toy list is being added to
+	 * @param toyList  The toy list that is being added to the file
+	 * @param filename The file that the toy list is being added to
 	 */
 	private void toyListToFile(ArrayList<Toy> toyList, String filename) {
 		File toys = new File(filename);
@@ -271,7 +272,7 @@ public class Database {
 	 * exists (as on-disk data would be out of date).
 	 *
 	 */
-	public void writeToDisk(){
+	public void writeToDisk() {
 		toyListToFile(this.records, this.FILENAME);
 	}
 }
