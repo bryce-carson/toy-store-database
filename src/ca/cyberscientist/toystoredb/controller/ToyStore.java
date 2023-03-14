@@ -133,7 +133,7 @@ public class ToyStore {
 				break;
 			case 2:
 			case 3:
-				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddAnimal(serialNumber));
+				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddAnimal());
 				STORE_MENU.promptEnterToContinue();
 				break;
 			case 4:
