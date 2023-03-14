@@ -112,7 +112,7 @@ public class Database {
 	 * @return toylist The toy list containing all the toys that came from the
 	 *         search method
 	 */
-	public ArrayList<Toy> searchRecords(char query) throws InvalidToyTypeQueryException {
+	public ArrayList<Toy> searchRecords(char query) {
 
 		ArrayList<Toy> searchResults = new ArrayList<Toy>();
 
@@ -134,9 +134,6 @@ public class Database {
 					if (toy instanceof Puzzle)
 						searchResults.add(toy);
 					break;
-				default: // The view validated the input passed to this function, but if an exception to
-							// that occurs, throw an exception!
-					throw new InvalidToyTypeQueryException();
 			}
 		}
 
