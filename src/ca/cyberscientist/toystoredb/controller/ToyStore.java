@@ -128,7 +128,7 @@ public class ToyStore {
 		switch (serialNumber.charAt(0)) {
 			case 0:
 			case 1:
-				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddFigure(serialNumber));
+				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddFigure());
 				STORE_MENU.promptEnterToContinue();
 				break;
 			case 2:
@@ -139,13 +139,13 @@ public class ToyStore {
 			case 4:
 			case 5:
 			case 6:
-				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddPuzzles(serialNumber));
+				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddPuzzles());
 				STORE_MENU.promptEnterToContinue();
 				break;
 			case 7:
 			case 8:
 			case 9:
-				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddBoardGames(serialNumber));
+				DATABASE_HANDLER.addRecord(STORE_MENU.promptAddBoardGames());
 				STORE_MENU.promptEnterToContinue();
 				break;
 		}
