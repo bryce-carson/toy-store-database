@@ -8,7 +8,7 @@ import ca.cyberscientist.toystoredb.model.Puzzle;
 
 /**
  * Class to deal with all the menus
- * 
+ *
  * @author Koddy Rae Madriaga, Bryce Carson
  *
  */
@@ -16,7 +16,7 @@ public class Menu extends View {
 
 	/**
 	 * Method to print the main menu and prompt for user input
-	 * 
+	 *
 	 * @return char user choice for where to go in menu
 	 */
 	public char promptMainMenu() {
@@ -36,7 +36,7 @@ public class Menu extends View {
 
 	/**
 	 * Method to print the search menu and prompt for user input
-	 * 
+	 *
 	 * @return char user choice for where to go in menu
 	 */
 	public char promptSearchMenu() {
@@ -55,7 +55,7 @@ public class Menu extends View {
 
 	/**
 	 * Method to prompt user for the serial number
-	 * 
+	 *
 	 * @return serial number The serial number given by the user
 	 */
 	public String promptSerialNumber() {
@@ -82,7 +82,7 @@ public class Menu extends View {
 	// assignment.
 	/**
 	 * Method to prompt the user for the serial number
-	 * 
+	 *
 	 * @param prompt The prompt message
 	 * @return serialnumber The serial number from the user
 	 * @throws InvalidSerialNumberException Exception thrown if serial number is
@@ -105,10 +105,10 @@ public class Menu extends View {
 
 	/**
 	 * Method to prompt user for the toy name
-	 * 
+	 *
 	 * @return name The name of the toy
 	 */
-	public String promptToyName() {
+	public String promptToyNameForSearching() {
 
 		System.out.print("Enter a toy's name to search for it: ");
 		String toyName = keyboard.nextLine();
@@ -118,7 +118,7 @@ public class Menu extends View {
 
 	/**
 	 * Method to prompt user for the toy type
-	 * 
+	 *
 	 * @return char The character that correlates to the toy type
 	 */
 	public char promptToyType() {
@@ -133,7 +133,7 @@ public class Menu extends View {
 	/**
 	 * Method to prompt user to add the properties of a puzzle to be added to the
 	 * toy arraylist
-	 * 
+	 *
 	 * @param serialNumber the serial number of that was already validated and
 	 *                     checked
 	 */
@@ -149,11 +149,10 @@ public class Menu extends View {
 		toyName = keyboard.nextLine();
 		System.out.print("\nEnter Toy Brand: ");
 		toyBrand = keyboard.nextLine();
-		System.out.print("\nEnter Toy Price: ");
 
-		toyPrice = keyboard.nextDouble();
+		toyPrice = promptPrice();
+
 		System.out.print("\nEnter Available Counts: ");
-
 		availableCount = keyboard.nextInt();
 		System.out.print("\nEnter Appropiate Age: ");
 		appropriateAge = keyboard.nextInt();
@@ -172,7 +171,7 @@ public class Menu extends View {
 	/**
 	 * Method to prompt user to add the properties of a figure to be added to the
 	 * toy arraylist
-	 * 
+	 *
 	 * @param serialNumber the serial number of that was already validated and
 	 *                     checked
 	 */
@@ -188,8 +187,9 @@ public class Menu extends View {
 		toyName = keyboard.nextLine();
 		System.out.print("\nEnter Toy Brand: ");
 		toyBrand = keyboard.nextLine();
-		System.out.print("\nEnter Toy Price: ");
-		toyPrice = keyboard.nextDouble();
+
+		toyPrice = promptPrice();
+
 		System.out.print("\nEnter Available Counts: ");
 		availableCount = keyboard.nextInt();
 		System.out.print("\nEnter Appropiate Age: ");
@@ -208,7 +208,7 @@ public class Menu extends View {
 	/**
 	 * Method to prompt user to add the properties of a board game to be added to
 	 * the toy arraylist
-	 * 
+	 *
 	 * @param serialNumber the serial number of that was already validated and
 	 *                     checked
 	 */
@@ -227,8 +227,10 @@ public class Menu extends View {
 		toyName = keyboard.nextLine();
 		System.out.print("\nEnter Toy Brand: ");
 		toyBrand = keyboard.nextLine();
-		System.out.print("\nEnter Toy Price: ");
-		toyPrice = keyboard.nextDouble();
+
+		// Loop until a valid price is entered.
+		toyPrice = promptPrice();
+
 		System.out.print("\nEnter Available Counts: ");
 		availableCount = keyboard.nextInt();
 		System.out.print("\nEnter Appropiate Age: ");
@@ -253,45 +255,116 @@ public class Menu extends View {
 	/**
 	 * Method to prompt user to add the properties of an animal to be added to the
 	 * toy arraylist
-	 * 
+	 *
 	 * @param serialNumber the serial number of that was already validated and
 	 *                     checked
 	 */
-	public Animal promptAddAnimal(String serialNumber) {
-		String material;
-		String size;
-		String toyName;
-		String toyBrand;
-		double toyPrice;
-		int availableCount;
-		int appropriateAge;
+	public Animal promptAddAnimal() {
+		String[] toyData = promptForToyInformation();
 
-		System.out.print("\nEnter Toy Name: ");
-		toyName = keyboard.nextLine();
-		System.out.println("\nEnter Toy Brand: ");
-		toyBrand = keyboard.nextLine();
-		System.out.println("\nEnter Toy Price: ");
-		toyPrice = keyboard.nextDouble();
-		System.out.println("\nEnter Available Counts: ");
-		availableCount = keyboard.nextInt();
-		System.out.println("\nEnter Appropiate Age: ");
-		appropriateAge = keyboard.nextInt();
+		if (toyData.length != 6) {
+			System.out.println("Improper length of prompt add toy argument array.");
+			System.exit(1);
+		}
+
+		String toySerialNumber = toyData[0];
+		String toyName = toyData[1];
+		String toyBrand = toyData[2];
+		double toyPrice = Double.parseDouble(toyData[3]);
+		int toyAvailableCount = Integer.parseInt(toyData[4]);
+		int toyAppropriateAge = Integer.parseInt(toyData[5]);
+
+		String animalMaterial;
 		System.out.print("\nEnter Material: ");
-		material = keyboard.nextLine();
+		animalMaterial = keyboard.nextLine();
+
+		String animalSize;
 		System.out.print("\nEnter Size: ");
-		size = keyboard.nextLine();
-		keyboard.nextLine();
+		animalSize = keyboard.nextLine();
 
-		Animal newAnimal = new Animal(serialNumber, toyName, toyBrand, toyPrice, availableCount, appropriateAge,
-				material, size);
-		System.out.println("New Toy Added!");
+		Animal newAnimal = new Animal(toySerialNumber,
+				toyName,
+				toyBrand,
+				toyPrice,
+				toyAvailableCount,
+				toyAppropriateAge,
+
+				animalMaterial,
+				animalSize);
+
+		System.out.println("\nNew Toy Added!");
+
 		return newAnimal;
+	}
 
+	private String[] promptForToyInformation() {
+		String[] toyData = new String[6];
+
+		toyData[0] = promptSerialNumber();
+		toyData[1] = promptToyNameForNewToy();
+		toyData[2] = promptToyBrandForNewToy();
+		toyData[3] = Double.toString(promptToyPriceForNewToy());
+		toyData[4] = promptToyAvailableCountForNewToy();
+		toyData[5] = promptToyAppropriateAgeForNewToy();
+
+		return toyData;
+	}
+
+	private String promptToyNameForNewToy() {
+		System.out.print("\nEnter Toy Name: ");
+		String toyName = keyboard.nextLine();
+
+		return toyName;
+	}
+
+	private String promptToyBrandForNewToy() {
+		System.out.print("\nEnter Toy Brand: ");
+		String toyBrand = keyboard.nextLine();
+
+		return toyBrand;
+	}
+
+	/** Acquire a valid price for a toy. */
+	private double promptToyPriceForNewToy() throws InvalidPriceException {
+		double price = 00.00;
+		while (price <= 00.00) {
+			System.out.print("Enter a positive price (##.##): ");
+			price = keyboard.nextDouble();
+			keyboard.nextLine(); // Flush keyboard
+
+			if (price <= 00.00) {
+				throw new InvalidPriceException("The price was less than or equal to zero (non-[positive)!");
+			}
+		}
+
+		return price;
+	}
+
+	private String promptToyAvailableCountForNewToy() {
+		int availableCount = -1;
+		while (availableCount < 0) {
+			System.out.print("\nEnter the number of this item in stock: ");
+			availableCount = keyboard.nextInt();
+			keyboard.nextLine(); // Flush keyboard
+		}
+
+		return Integer.toString(availableCount);
+	}
+
+	private String promptToyAppropriateAgeForNewToy() {
+		int appropriateAge = 0;
+		while (appropriateAge < 0) {
+			System.out.print("\nEnter an appropiate age for the toy (>= 0): ");
+			appropriateAge = keyboard.nextInt();
+			keyboard.nextLine(); // Flush keyboard
+		}
+
+		return Integer.toString(appropriateAge);
 	}
 
 	/**
 	 * Method to allow player to press enter to continue
-	 * 
+	 *
 	 */
 	public void promptEnterToContinue() {
 		System.out.println("Press \"Enter\" to Continue...");

@@ -93,7 +93,7 @@ public class ToyStore {
 				break;
 
 			case 'N':
-				String toyName = STORE_MENU.promptToyName();
+				String toyName = STORE_MENU.promptToyNameForSearching();
 				searchResultsToyList = DATABASE_HANDLER.searchRecords(toyName, DATABASE_HANDLER.SEARCH_BY_TOY_NAME);
 				searchResultsTable = new SearchResultsTable(searchResultsToyList);
 
