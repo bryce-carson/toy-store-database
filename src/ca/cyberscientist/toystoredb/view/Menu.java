@@ -31,7 +31,7 @@ public class Menu extends View {
 
 		System.out.println("\tQ) Save the database to disk and quit. [End of shift]\n");
 
-		char[] validCharacterInput = { 'S', 'A', 'R', 'G', 'Q' };
+		char[] validCharacterInput = { 'S', 'A', 'R', 'Q' };
 		char userInput = getValidatedCharInput("Enter your choice: ", validCharacterInput);
 
 		return userInput;
