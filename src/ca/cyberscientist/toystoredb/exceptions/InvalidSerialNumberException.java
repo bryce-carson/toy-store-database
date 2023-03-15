@@ -15,7 +15,6 @@ public class InvalidSerialNumberException extends NumberFormatException {
     	super();
     }
 
-    // TODO: implement a proper exception constructor.
 	/**
 	 * Constructor for exception
 	 */
