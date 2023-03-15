@@ -264,7 +264,9 @@ public class Database {
 	private void toyListToFile(ArrayList<Toy> toyList, String filename) {
 		File toys = new File(filename);
 
-		try (PrintWriter writer = new PrintWriter(toys)) {
+		try {
+			PrintWriter writer = new PrintWriter(toys);
+
 			for (Toy toy : toyList) {
 				writer.append(toy.format() + "\n");
 
