@@ -14,9 +14,9 @@
 <tbody>
 <tr>
 <td>Koddy Rae Madriaga</td>
-<td></td>
-<td></td>
-<td></td>
+<td>Responsible for controller and documentation</td>
+<td>Wrote the majority of the controller, and then contributed to view menus and unit testing for model classes</td>
+<td>The last one</td>
 </tr>
 <tr>
 <td>Bryce Carson</td>
