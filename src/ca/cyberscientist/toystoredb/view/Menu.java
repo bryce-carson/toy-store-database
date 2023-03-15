@@ -25,7 +25,10 @@ public class Menu extends View {
 		System.out.println("\tS) Search and purchase a toy.");
 		System.out.println("\tA) Add a toy to the database.");
 		System.out.println("\tR) Remove a toy from the database.");
-		System.out.println("\tG) Generate a toy suggestion for a customer.");
+
+    // NOTE: not implemented
+		// System.out.println("\tG) Generate a toy suggestion for a customer.");
+
 		System.out.println("\tQ) Save the database to disk and quit. [End of shift]\n");
 
 		char[] validCharacterInput = { 'S', 'A', 'R', 'G', 'Q' };
