@@ -21,14 +21,27 @@ import ca.cyberscientist.toystoredb.model.Puzzle;
  *
  */
 public class Database {
+    /**A magic character used to determine which branch of the program to execute. Using this char causes one otherwise identically named constructors to be used.
+     * It could be anything, as long as the logic checks for whatever value is assigned to it. 
+     */
     public final char SEARCH_BY_SERIAL_NUMBER = 's';
+    
+    /**A magic character used to determine which branch of the program to execute. Using this char causes one otherwise identically named constructors to be used.
+     * It could be anything, as long as the logic checks for whatever value is assigned to it. 
+     */
     public final char SEARCH_BY_TOY_NAME = 'n';
 
+    /**The default filename to use. This filename is used when the application is running inside the Eclipse console, and when it has not been exported to a runnable JAR.
+     * 
+     */
     public final String DEFAULT_FILENAME = "res/toys.txt";
     // NOTE: this is the filename we use when we are exporting a runnable JAR file
     // instead of the local filesystem path above.
     // private final String FILENAME = "/toys.txt";
 
+    /**The toylist which will hold the toys for the whole program. This is the in-memory database.
+     * 
+     */
     private ArrayList<Toy> records = new ArrayList<Toy>();
 
     /**
@@ -39,9 +52,10 @@ public class Database {
         this.records = toyListFromFile(this.DEFAULT_FILENAME);
     }
 
-    /**
-     * Instantiate a database by reading an arbitry file from disk.
-     *
+
+    /**Instatiate a database from an arbitrary file form disk.
+     * 
+     * @param filename The path and name of the filename to create a database from.
      */
     public Database(String filename) {
         this.records = toyListFromFile(filename);
@@ -93,8 +107,7 @@ public class Database {
     /**
      * Search the database records for toys with a given minimum age recommendation.
      *
-     * @param query The query for the database, an integer, which is the toy's
-     *              minimum age recommendation.
+     * @param age The minimum age requirement of the toy, in years.
      * @return searchResult The arraylist of toys that are searched through the
      *         appropriate age field
      */

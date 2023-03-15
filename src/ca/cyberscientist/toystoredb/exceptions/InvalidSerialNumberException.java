@@ -5,6 +5,9 @@ package ca.cyberscientist.toystoredb.exceptions;
  * correct format for conversion to a serial number (a sort of integer).
  */
 public class InvalidSerialNumberException extends NumberFormatException {
+	/**The universal identification for the serializable form of this exception.
+	 * 
+	 */
     private static final long serialVersionUID = 6638557996982295242L;
 
 	/**
@@ -15,8 +18,9 @@ public class InvalidSerialNumberException extends NumberFormatException {
     	super();
     }
 
-	/**
-	 * Constructor for exception
+	/**Constructor for exception with a message which can be fetched using the standard .getMessage method of the parent class.
+	 * 
+	 * @param message The message to display to the user.
 	 */
     public InvalidSerialNumberException(String message) {
     	super(message);

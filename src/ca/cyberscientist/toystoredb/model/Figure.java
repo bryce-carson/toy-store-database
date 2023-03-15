@@ -12,6 +12,9 @@ package ca.cyberscientist.toystoredb.model;
  */
 public class Figure extends Toy {
 
+	/** The classification of this figurine. It can be "action," as in action figure, a doll, or a "historical" figure.
+	 * 
+	 */
 	String classification;
 
 	/**

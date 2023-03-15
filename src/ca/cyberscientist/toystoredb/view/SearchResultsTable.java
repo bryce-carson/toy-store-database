@@ -4,15 +4,29 @@ import java.util.ArrayList;
 
 import ca.cyberscientist.toystoredb.model.*;
 
+/**
+ * This large class is used to construct a table of toys, pretty printed for the user, with indexes for user selection or differnetiation.
+ * @author Bryce Carson
+ *
+ */
 public class SearchResultsTable extends View {
 
+	/**The length of the longest digits, zero-padded, which are used to select a row and which are printed to the left of a row.
+	 * 
+	 */
 	private int rowSelectorDigitLength;
 
+	/**The minimum width of the field widths, if the content of the fields are never longer than the headers. That is, the width of the headers in the field.
+	 * 
+	 */
 	private int[] minimumFieldWidths = {
 			4, 5, 5, 13,
 			11, 10, 10
 	};
 
+	/**The toylist which this search results table will display.
+	 * 
+	 */
 	private final ArrayList<Toy> searchResultsToyList;
 
 	/**
@@ -342,8 +356,7 @@ public class SearchResultsTable extends View {
 	 * user [digits are for purchasing a toy, and zero is for canceling a
 	 * "transaction" or lookup.])
 	 *
-	 * @author: Bryce Carson
-	 * @param toyList An array list of Toys to be printed in table format.
+	 * @author Bryce Carson
 	 * @return An integer indicating which toy in the array list the user wishes
 	 *         to "purchase". A return value of 0 is reserved for voiding/canceling
 	 *         the
@@ -396,7 +409,8 @@ public class SearchResultsTable extends View {
 	 * This is a placeholder constructor. It should only be used when declaring a
 	 * search results table which is truly initialized within conditional logic, and
 	 * which thus causes compiler complaints.
-	 * @param placeholderToyList A placeholder toylist which is only used to avoid compiler errors. In practice, the toy list
+	 * @param placeholderToyList A placeholder toylist which is only used to avoid compiler errors.
+	 * @param placeholderConstructorPredicate A boolean value, which can be true or false, it doesn't matter, to force the use of this constructor vs the other constructor.
 	 */
 	public SearchResultsTable(ArrayList<Toy> placeholderToyList, boolean placeholderConstructorPredicate) {
 		this.searchResultsToyList = placeholderToyList;

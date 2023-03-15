@@ -19,9 +19,19 @@ import ca.cyberscientist.toystoredb.model.*;
  *
  */
 public class ToyStore {
-
+	/**
+	 * The store menu, containing methods which are used to prompt the user for things.
+	 */
 	private final Menu STORE_MENU;
+	
+	/**
+	 * The database, which represents the on-disk data in-memory 
+	 */
 	private final Database DATABASE_HANDLER;
+	
+	/**
+	 * A magic boolean value; it can have any value. It is used to select an alternate constructor with a different method signature, but the same name (ie, overloaded).
+	 */
 	public final boolean PLACEHOLDER_CONSTRUCTOR = true;
 
 	/**

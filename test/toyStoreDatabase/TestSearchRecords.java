@@ -17,7 +17,9 @@ import ca.cyberscientist.toystoredb.controller.Database;
  *
  */
 class TestSearchRecords {
-	
+	/** The database.
+	 * 
+	 */
 	private Database records;
 	
 	/**Create a single database for these tests.

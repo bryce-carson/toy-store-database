@@ -9,12 +9,34 @@ package ca.cyberscientist.toystoredb.model;
  *
  */
 public abstract class Toy {
-
+	/**The serial number of the toy. This is a ten digit number.
+	 * 
+	 */
 	private String serialNumber;
+	
+	/**The name of the toy. It could be anything.
+	 * 
+	 */
 	private String name;
+	
+	/**The brand on the toy. The name of the manufacturer or maker of the toy. It could be anything.
+	 * 
+	 */
 	private String brand;
+	
+	/** The price of the toy. It could be any positive, non-zero monetary amount.
+	 * 
+	 */
 	private double price;
+	
+	/**The number of a toy in stock and for sale.
+	 * 
+	 */
 	private int availableCount;
+	
+	/**The minimum age, in years, for which the manufacturer says the toy is intended for or for which it is appropriate.
+	 * 
+	 */
 	private int appropriateAge;
 
 	/**

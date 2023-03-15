@@ -10,7 +10,14 @@ package ca.cyberscientist.toystoredb.model;
  */
 public class Animal extends Toy {
 
+	/**The material which the toy animal is made out of. Common materials include wood, plastic, or fabric.
+	 * 
+	 */
 	private String material;
+	
+	/**The size of the toy animal, which may be small, medium, or large.
+	 * 
+	 */
 	private String size;
 
 	/**

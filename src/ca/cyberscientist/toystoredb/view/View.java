@@ -10,7 +10,9 @@ import java.util.Scanner;
  *
  */
 public abstract class View {
-	
+	/**
+	 * The global scanner object, used by all the menus.
+	 */
 	public Scanner keyboard = new Scanner(System.in);
 
     /** This function prints the prompt, accepts input, validates it, and asks for corrected input if neccessary.

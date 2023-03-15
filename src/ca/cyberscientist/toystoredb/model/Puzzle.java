@@ -10,6 +10,9 @@ package ca.cyberscientist.toystoredb.model;
  */
 public class Puzzle extends Toy {
 
+	/**The type of puzzle this puzzle can be. Such types are "logical," "brain-teaser," etc.
+	 * 
+	 */
 	private String puzzleType;
 
 	/**

@@ -10,8 +10,19 @@ package ca.cyberscientist.toystoredb.model;
  */
 public class BoardGame extends Toy {
 
+	/**The comma-separated list of designers of this board game.
+	 * 
+	 */
 	private String designer;
+	
+	/**The minimum number of people required to play this game. You may think it is zero, but without the player there is no game.
+	 * 
+	 */
 	private int minNumOfPlayers;
+	
+	/**The maximum number of people able to play this game. You may think there is no limit, but some games are difficult to play if they have no maximum.
+	 * 
+	 */
 	private int maxNumOfPlayers;
 
 	/**
