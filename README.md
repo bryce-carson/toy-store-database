@@ -20,8 +20,8 @@
 </tr>
 <tr>
 <td>Bryce Carson</td>
-<td></td>
-<td></td>
+<td>Responsible for model and view</td>
+<td>Wrote the majority of the model and the view, and then contributed fixes to documentation and helped with controller logic after contributing the exceptions.</td>
 <td>e992401e310317229667ec991ec18fdbfe7d3873</td>
 </tr>
 </tbody>
