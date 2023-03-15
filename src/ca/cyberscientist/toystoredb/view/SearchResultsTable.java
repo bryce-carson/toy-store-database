@@ -207,8 +207,7 @@ public class SearchResultsTable extends View {
 
 		// Price should be right-aligned, so it must be wrapped in a helper method to
 		// abstract the logic.
-		System.out.print("\u2502 " + toy.getPrice()
-				+ " ".repeat(minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() + 1)); // │␠toy.getPrice()Γ␠
+		System.out.print("\u2502 " + "$" + " ".repeat(minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() + 1) + toy.getPrice()); // │␠toy.getPrice()Γ␠
 
 		System.out.print("\u2502 " + toy.getAvailableCount()
 				+ " ".repeat(minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // │␠toy.getAvailable()Δ␠
