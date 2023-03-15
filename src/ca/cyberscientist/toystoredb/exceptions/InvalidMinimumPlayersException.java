@@ -6,11 +6,15 @@ package ca.cyberscientist.toystoredb.exceptions;
  */
 public class InvalidMinimumPlayersException extends NumberFormatException {
     private static final long serialVersionUID = 4484804861673876932L;
-
+    /**
+	 * Constructor for exception
+	 */
 	public InvalidMinimumPlayersException() {
         super();
     }
-
+	/**
+	 * Constructor for exception
+	 */
     public InvalidMinimumPlayersException(String message) {
         super(message);
     }

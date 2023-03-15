@@ -15,6 +15,9 @@ public class SearchResultsTable extends View {
 
 	private final ArrayList<Toy> searchResultsToyList;
 
+	/**
+	 * Method to check the data lengths
+	 */
 	private void ascertainFieldWidths() {
 		// The array is holds, at most, seven fields worth of data; the -1th (or
 		// 8th, both nonexistent) field is the length of all the serial numbers,
@@ -99,6 +102,9 @@ public class SearchResultsTable extends View {
 		}
 	}
 
+	/**
+	 * Method to print the search results
+	 */
 	private void printSearchResultsTable() {
 		// Acquire the information needed for table display.
 		ascertainFieldWidths();
@@ -130,34 +136,37 @@ public class SearchResultsTable extends View {
 		printTableFooter();
 	}
 
+	/**
+	 * Method to print the table header
+	 */
 	private void printTableHeader() {
 		System.out.println(); // Ensure vertical padding.
 		
 		// Part One: printing the header separator (top border)
 		// Left padding and the length of the array (e.g. 001 or 999).
-		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2552"); // ╒
+		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2552"); // â•’
 
-		System.out.print("\u2550".repeat(12)); // ═ end of field 0: Serial No.
+		System.out.print("\u2550".repeat(12)); // â•� end of field 0: Serial No.
 
 		// Algorithm for printing the header according to field widths 1:7
 		for (int i = 0; i < minimumFieldWidths.length - 1; i++) {
-			System.out.print("\u2564"); // ╤
+			System.out.print("\u2564"); // â•¤
 
-			System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // ═
+			System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // â•�
 		}
 
-		System.out.print("\u2564"); // ╤
+		System.out.print("\u2564"); // â•¤
 
-		System.out.print("\u2550".repeat(minimumFieldWidths[6] + 2)); // ═
+		System.out.print("\u2550".repeat(minimumFieldWidths[6] + 2)); // â•�
 
-		System.out.println("\u2555"); // ╕
+		System.out.println("\u2555"); // â••
 
 		// Part Two: printing the header row table cells
-		// │ Serial No. │ NameΆ│ BrandΒ│ PriceΓ│ AvailableΔ│ Minimum AgeƐ│ Misc. infoΖ│
-		// Misc. infoΗ│
-		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2502 Serial No. "); // │␠Serial No.␠
+		// â”‚ Serial No. â”‚ NameÎ†â”‚ BrandÎ’â”‚ PriceÎ“â”‚ AvailableÎ”â”‚ Minimum AgeÆ�â”‚ Misc. infoÎ–â”‚
+		// Misc. infoÎ—â”‚
+		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2502 Serial No. "); // â”‚â� Serial No.â� 
 
-		// Field separator and padding, │␠, field name, padding
+		// Field separator and padding, â”‚â� , field name, padding
 		for (int i = 0; i < minimumFieldWidths.length; i++) {
 			String headerFieldString = "";
 
@@ -184,7 +193,7 @@ public class SearchResultsTable extends View {
 					break;
 			}
 
-			System.out.print("\u2502 "); // Table cell separator: │␠
+			System.out.print("\u2502 "); // Table cell separator: â”‚â� 
 			System.out.print(headerFieldString + " ".repeat(minimumFieldWidths[i] - headerFieldString.length() + 1)); // field
 																														// //
 																														// padding
@@ -197,24 +206,28 @@ public class SearchResultsTable extends View {
 	// this case, the controller cannot suitably generate the information to
 	// pass to the view without introducing and undue amount of code which would
 	// be more difficult to maintain and debug.
+	/**
+	 * Method to print the table row
+	 * @param toy the toy in the row
+	 */
 	private void printTableRow(Toy toy) {
 		// Part one: printing the information common to all toys.
-		// Row selector and serial number: ␠###═╪␠##########␠
-		System.out.print(String.format(" %02d", searchResultsToyList.indexOf(toy) + 1) + "\u2550\u256a "); // ␠###═╪
-		System.out.print(toy.getSerialNumber() + " "); // ##########␠.
+		// Row selector and serial number: â� ###â•�â•ªâ� ##########â� 
+		System.out.print(String.format(" %02d", searchResultsToyList.indexOf(toy) + 1) + "\u2550\u256a "); // â� ###â•�â•ª
+		System.out.print(toy.getSerialNumber() + " "); // ##########â� .
 
 		// Other common fields
-		System.out.print("\u2502 " + toy.getName() + " ".repeat(minimumFieldWidths[0] - toy.getName().length() + 1)); // │␠toy.getName()Ά␠
-		System.out.print("\u2502 " + toy.getBrand() + " ".repeat(minimumFieldWidths[1] - toy.getBrand().length() + 1)); // │␠toy.getBrand()Β␠
+		System.out.print("\u2502 " + toy.getName() + " ".repeat(minimumFieldWidths[0] - toy.getName().length() + 1)); // â”‚â� toy.getName()Î†â� 
+		System.out.print("\u2502 " + toy.getBrand() + " ".repeat(minimumFieldWidths[1] - toy.getBrand().length() + 1)); // â”‚â� toy.getBrand()Î’â� 
 
 		// Price should be right-aligned, so it must be wrapped in a helper method to
 		// abstract the logic.
-		System.out.print("\u2502 " + "$" + " ".repeat(minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() - 1) + toy.getPrice() + " "); // │␠toy.getPrice()Γ␠
+		System.out.print("\u2502 " + "$" + " ".repeat(minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() - 1) + toy.getPrice() + " "); // â”‚â� toy.getPrice()Î“â� 
 
 		System.out.print("\u2502 " + toy.getAvailableCount()
-				+ " ".repeat(minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // │␠toy.getAvailable()Δ␠
+				+ " ".repeat(minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // â”‚â� toy.getAvailable()Î”â� 
 		System.out.print("\u2502 " + toy.getAppropriateAge()
-				+ " ".repeat(minimumFieldWidths[4] - Integer.toString(toy.getAppropriateAge()).length() + 1)); // │␠toy.getMiniumumAge()Ɛ␠
+				+ " ".repeat(minimumFieldWidths[4] - Integer.toString(toy.getAppropriateAge()).length() + 1)); // â”‚â� toy.getMiniumumAge()Æ�â� 
 
 		// The most rudimentary reflection; equivalent in complexity to instanceof,
 		// which was taught in class. Does not require an import.
@@ -285,35 +298,41 @@ public class SearchResultsTable extends View {
 		}
 	};
 
+	/**
+	 * Method to print the row separators
+	 */
 	private void printTableRowSeparator() {
 		// Part zero: print the left padding
 		System.out.print(" ".repeat(rowSelectorDigitLength + 2));
 
 		// Part one: print the Serial No. field
-		System.out.print("\u255e" + "\u2550".repeat(12)); // ╞════════════
+		System.out.print("\u255e" + "\u2550".repeat(12)); // â•žâ•�â•�â•�â•�â•�â•�â•�â•�â•�â•�â•�â•�
 
 		// Part two: variable field widths
 		for (int i = 0; i < minimumFieldWidths.length; i++) {
-			System.out.print("\u256a"); // ╪
+			System.out.print("\u256a"); // â•ª
 			System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // Minimum plus padding
 		}
 
 		// Part three: table end
-		System.out.println("\u2561"); // ╡
+		System.out.println("\u2561"); // â•¡
 	};
 
+	/**
+	 * Method to print the table footer
+	 */
 	private void printTableFooter() {
 		// Part one: print the Serial No. field
-		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2558" + "\u2550".repeat(12)); // ╘════════════
+		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2558" + "\u2550".repeat(12)); // â•˜â•�â•�â•�â•�â•�â•�â•�â•�â•�â•�â•�â•�
 
 		// Part two: variable field widths
 		for (int i = 0; i < minimumFieldWidths.length; i++) {
-			System.out.print("\u2567"); // ╧
+			System.out.print("\u2567"); // â•§
 			System.out.print("\u2550".repeat(minimumFieldWidths[i] + 2)); // Minimum plus padding
 		}
 
 		// Part three: table end
-		System.out.println("\u255b"); // ╛
+		System.out.println("\u255b"); // â•›
 
 	};
 

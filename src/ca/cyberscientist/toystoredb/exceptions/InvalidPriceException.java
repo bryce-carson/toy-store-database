@@ -6,11 +6,16 @@ package ca.cyberscientist.toystoredb.exceptions;
  */
 public class InvalidPriceException extends NumberFormatException {
 	private static final long serialVersionUID = 6729263749787865861L;
-
+	/**
+	 * Constructor for exception
+	 */
 	public InvalidPriceException() {
 		super();
 	}
 
+	/**
+	 * Constructor for exception
+	 */
 	public InvalidPriceException(String message) {
 		super(message);
 	}

@@ -4,6 +4,7 @@
 package ca.cyberscientist.toystoredb.model;
 
 /**
+ * Class dealing with the subclass Animal
  * @author Bryce Carson
  *
  */

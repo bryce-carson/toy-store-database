@@ -7,12 +7,18 @@ package ca.cyberscientist.toystoredb.exceptions;
 public class InvalidSerialNumberException extends NumberFormatException {
     private static final long serialVersionUID = 6638557996982295242L;
 
+	/**
+	 * Constructor for exception
+	 */
 	public InvalidSerialNumberException() {
         // Empty, no-args constructor.
     	super();
     }
 
     // TODO: implement a proper exception constructor.
+	/**
+	 * Constructor for exception
+	 */
     public InvalidSerialNumberException(String message) {
     	super(message);
     }

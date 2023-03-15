@@ -4,6 +4,7 @@
 package ca.cyberscientist.toystoredb.model;
 
 /**
+ * Abstract class for Toy objects
  * @author Bryce Carson
  *
  */
