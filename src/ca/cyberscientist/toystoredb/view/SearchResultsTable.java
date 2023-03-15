@@ -131,6 +131,8 @@ public class SearchResultsTable extends View {
 	}
 
 	private void printTableHeader() {
+		System.out.println(); // Ensure vertical padding.
+		
 		// Part One: printing the header separator (top border)
 		// Left padding and the length of the array (e.g. 001 or 999).
 		System.out.print(" ".repeat(rowSelectorDigitLength + 2) + "\u2552"); // ╒
@@ -207,7 +209,7 @@ public class SearchResultsTable extends View {
 
 		// Price should be right-aligned, so it must be wrapped in a helper method to
 		// abstract the logic.
-		System.out.print("\u2502 " + "$" + " ".repeat(minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() + 1) + toy.getPrice()); // │␠toy.getPrice()Γ␠
+		System.out.print("\u2502 " + "$" + " ".repeat(minimumFieldWidths[2] - Double.toString(toy.getPrice()).length() - 1) + toy.getPrice() + " "); // │␠toy.getPrice()Γ␠
 
 		System.out.print("\u2502 " + toy.getAvailableCount()
 				+ " ".repeat(minimumFieldWidths[3] - Integer.toString(toy.getAvailableCount()).length() + 1)); // │␠toy.getAvailable()Δ␠
@@ -355,6 +357,8 @@ public class SearchResultsTable extends View {
 			}
 		}
 
+		System.out.println();
+		
 		return userSelection;
 
 	}

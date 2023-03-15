@@ -113,8 +113,16 @@ public class ToyStore {
 		// Less one because the integer returned is the user selection; to convert to an
 		// index usable with the search results, it must be restored to zero-indexing.
 		purchaseIndex = searchResultsTable.promptPurchaseToyOrQuit() - 1;
-		if (purchaseIndex >= 0) {
+		if (purchaseIndex >= 0 && searchResultsToyList.get(purchaseIndex).getAvailableCount() > 0) {
 			DATABASE_HANDLER.purchaseToy(searchResultsToyList.get(purchaseIndex));
+
+			String toyName = searchResultsToyList.get(purchaseIndex).getName();
+			System.out.println("\n1 " + toyName + " purchases successfully.\n");
+
+		} else if (purchaseIndex < 0) {
+			System.out.println("The input was invalid. The input must be a positive integer.");
+		} else {
+			System.out.println("There are no units available for purchase.");
 		}
 	}
 

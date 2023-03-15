@@ -5,6 +5,8 @@ package ca.cyberscientist.toystoredb.exceptions;
  * correct format for conversion to a serial number (a sort of integer).
  */
 public class InvalidPriceException extends NumberFormatException {
+	private static final long serialVersionUID = 6729263749787865861L;
+
 	public InvalidPriceException() {
 		super();
 	}
