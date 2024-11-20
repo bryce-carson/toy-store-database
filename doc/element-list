@@ -1,0 +1,5 @@
+ca.cyberscientist.toystoredb.application
+ca.cyberscientist.toystoredb.controller
+ca.cyberscientist.toystoredb.exceptions
+ca.cyberscientist.toystoredb.model
+ca.cyberscientist.toystoredb.view
